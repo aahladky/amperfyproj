@@ -541,6 +541,7 @@
 		C4B348899E574B96E876D5AD /* DeejAISyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A245C791B42C706E0CB13C /* DeejAISyncer.swift */; };
 		D93C42E393827BC5CA081DC0 /* DeejAIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9984433E9DA062BC1735A994 /* DeejAIModels.swift */; };
 		DCD34E648E3AB9D7E416CFC8 /* DeejAIPlayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6194D798255CEEFC13AB674 /* DeejAIPlayerState.swift */; };
+		E1614CE08C953882B1DB3D7E /* DeejAIForYouView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDBE49869E7605A90652DE54 /* DeejAIForYouView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1168,6 +1169,7 @@
 		A6194D798255CEEFC13AB674 /* DeejAIPlayerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIPlayerState.swift; path = Amperfy/SwiftUI/DeejAINowPlaying/DeejAIPlayerState.swift; sourceTree = "<group>"; };
 		B5A5CE010000000000000002 /* ShareSongActionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSongActionTest.swift; sourceTree = "<group>"; };
 		C0A1B0022EEE000000000002 /* MacWindowHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacWindowHelper.swift; sourceTree = "<group>"; };
+		FDBE49869E7605A90652DE54 /* DeejAIForYouView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIForYouView.swift; path = Amperfy/SwiftUI/DeejAIForYou/DeejAIForYouView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1467,6 +1469,7 @@
 				5BB342E8AEB852C8FBFCB3BA /* DeejAINowPlayingView.swift */,
 				82DF48A893F7ACE224EAF028 /* RatingView.swift */,
 				A6194D798255CEEFC13AB674 /* DeejAIPlayerState.swift */,
+				FDBE49869E7605A90652DE54 /* DeejAIForYouView.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2655,6 +2658,7 @@
 				27F043D0B278D38815F214A1 /* DeejAIColors.swift in Sources */,
 				375545738DEDCA9FA7F7C7E7 /* DeejAINowPlayingView.swift in Sources */,
 				DCD34E648E3AB9D7E416CFC8 /* DeejAIPlayerState.swift in Sources */,
+				E1614CE08C953882B1DB3D7E /* DeejAIForYouView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
