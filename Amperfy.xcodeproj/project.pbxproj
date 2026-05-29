@@ -540,6 +540,7 @@
 		C0A1B0032EEE000000000003 /* MacWindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A1B0022EEE000000000002 /* MacWindowHelper.swift */; };
 		C4B348899E574B96E876D5AD /* DeejAISyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A245C791B42C706E0CB13C /* DeejAISyncer.swift */; };
 		D93C42E393827BC5CA081DC0 /* DeejAIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9984433E9DA062BC1735A994 /* DeejAIModels.swift */; };
+		DCD34E648E3AB9D7E416CFC8 /* DeejAIPlayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6194D798255CEEFC13AB674 /* DeejAIPlayerState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1164,6 +1165,7 @@
 		8641427181EE4179E8E941BE /* DeejAIApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIApi.swift; path = AmperfyKit/Api/DeejAI/DeejAIApi.swift; sourceTree = "<group>"; };
 		87A245C791B42C706E0CB13C /* DeejAISyncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAISyncer.swift; path = AmperfyKit/Player/DeejAISyncer.swift; sourceTree = "<group>"; };
 		9984433E9DA062BC1735A994 /* DeejAIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIModels.swift; path = AmperfyKit/Api/DeejAI/DeejAIModels.swift; sourceTree = "<group>"; };
+		A6194D798255CEEFC13AB674 /* DeejAIPlayerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIPlayerState.swift; path = Amperfy/SwiftUI/DeejAINowPlaying/DeejAIPlayerState.swift; sourceTree = "<group>"; };
 		B5A5CE010000000000000002 /* ShareSongActionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSongActionTest.swift; sourceTree = "<group>"; };
 		C0A1B0022EEE000000000002 /* MacWindowHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacWindowHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1464,6 +1466,7 @@
 				809647C395BA4C47828ADC05 /* DeejAIColors.swift */,
 				5BB342E8AEB852C8FBFCB3BA /* DeejAINowPlayingView.swift */,
 				82DF48A893F7ACE224EAF028 /* RatingView.swift */,
+				A6194D798255CEEFC13AB674 /* DeejAIPlayerState.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2651,6 +2654,7 @@
 				50DE29EB2B8FCEB700ABA78E /* LibraryNavigatorConfigurator.swift in Sources */,
 				27F043D0B278D38815F214A1 /* DeejAIColors.swift in Sources */,
 				375545738DEDCA9FA7F7C7E7 /* DeejAINowPlayingView.swift in Sources */,
+				DCD34E648E3AB9D7E416CFC8 /* DeejAIPlayerState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

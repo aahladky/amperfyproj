@@ -22,6 +22,7 @@
 import AmperfyKit
 import CoreMedia
 import UIKit
+import SwiftUI
 
 // MARK: - PopupPlayerVC
 
@@ -55,6 +56,7 @@ class PopupPlayerVC: UIViewController, UIScrollViewDelegate {
   var controlView: PlayerControlView?
   var largeCurrentlyPlayingView: LargeCurrentlyPlayingPlayerView?
   var accountNotificationHandler: AccountNotificationHandler?
+  var deejaiHostingController: UIHostingController<DeejAINowPlayingView>?
 
   var currentlyPlayingTableCell: CurrentlyPlayingTableCell?
   var contextPrevQueueSectionHeader: ContextQueuePrevSectionHeader?
@@ -80,6 +82,9 @@ class PopupPlayerVC: UIViewController, UIScrollViewDelegate {
     player = appDelegate.player
     player.addNotifier(notifier: self)
     playerHandler = PlayerUIHandler(player: player, style: .popupPlayer)
+
+    // DeejAI MCM Replacement Logic
+    setupDeejAIPlayer()
 
     backgroundImage.setBackgroundBlur(style: .prominent)
 
@@ -393,4 +398,40 @@ extension PopupPlayerVC: MusicPlayable {
   func didShuffleChange() {}
   func didRepeatChange() {}
   func didPlaybackRateChange() {}
+
+  private func setupDeejAIPlayer() {
+    // Hide standard Amperfy UI elements
+    tableView.isHidden = true
+    backgroundImage.isHidden = true
+    controlPlaceholderView.isHidden = true
+    largePlayerPlaceholderView.isHidden = true
+    
+    // Set our solid cream background
+    view.backgroundColor = UIColor(red: 0.96, green: 0.94, blue: 0.88, alpha: 1.0)
+
+    // Initialize DeejAI Bridge
+    let playerState = DeejAIPlayerState(player: player)
+    let deejaiView = DeejAINowPlayingView(state: playerState, player: player)
+    let hostingController = UIHostingController(rootView: deejaiView)
+    
+    // Ensure hosting controller background is transparent so our view color shows through
+    hostingController.view.backgroundColor = .clear
+    
+    self.deejaiHostingController = hostingController
+    
+    // Add as child VC
+    addChild(hostingController)
+    view.addSubview(hostingController.view)
+    hostingController.didMove(toParent: self)
+    
+    // Layout constraints to fill screen
+    hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+      hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+      hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+      hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+    ])
+  }
+
 }
