@@ -25,13 +25,13 @@ import UIKit
 // MARK: - RatingViewDelegate
 
 @MainActor
-protocol RatingViewDelegate: AnyObject {
+public protocol RatingViewDelegate: AnyObject {
   func ratingView(_ ratingView: RatingView, didChangeRating rating: Int)
 }
 
 // MARK: - RatingView
 
-class RatingView: UIView {
+public class RatingView: UIView {
   // MARK: - Properties
 
   weak var delegate: RatingViewDelegate?
