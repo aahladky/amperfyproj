@@ -34,7 +34,7 @@ public protocol RatingViewDelegate: AnyObject {
 public class RatingView: UIView {
   // MARK: - Properties
 
-  weak var delegate: RatingViewDelegate?
+  public weak var delegate: RatingViewDelegate?
 
   private var starButtons: [UIButton] = []
   private let starCount = 5
@@ -60,7 +60,7 @@ public class RatingView: UIView {
 
   /// Whether the rating view is enabled for interaction
   /// When disabled, opacity is reduced and touches are ignored
-  var isRatingEnabled: Bool = true {
+  public var isRatingEnabled: Bool = true {
     didSet {
       updateEnabledState()
     }
@@ -160,7 +160,7 @@ public class RatingView: UIView {
 
   // MARK: - Public Methods
 
-  func setRating(_ newRating: Int, animated: Bool = false) {
+  public func setRating(_ newRating: Int, animated: Bool = false) {
     let clampedRating = max(0, min(starCount, newRating))
 
     if animated, clampedRating != rating {
