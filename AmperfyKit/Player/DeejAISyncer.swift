@@ -53,8 +53,8 @@ public class DeejAISyncer {
   private func startTracking() {
     guard let playable = player.currentlyPlaying else { return }
 
-    currentTrackTitle = playable.title ?? ""
-    currentTrackArtist = playable.creatorName ?? ""
+    currentTrackTitle = playable.title
+    currentTrackArtist = playable.creatorName
     currentTrackAlbum = playable.subsubtitle ?? ""
     currentTrackDuration = TimeInterval(playable.duration)
     currentTrackStart = Date()

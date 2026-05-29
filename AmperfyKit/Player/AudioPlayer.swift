@@ -214,10 +214,14 @@ public class AudioPlayer: NSObject, BackendAudioPlayerNotifiable {
               let song = currentlyPlaying?.asSong,
               let cb = autoInstantMixCB,
               !backendAudioPlayer.isOfflineMode {
+      let songId = song.managedObject.objectID
+      let storage = self.storage
       Task { @MainActor [weak self] in
         guard let self else { return }
         do {
-          let similarSongs = try await cb(song)
+          let songMO = storage.main.context.object(with: songId) as! SongMO
+          let songRefetched = Song(managedObject: songMO)
+          let similarSongs = try await cb(songRefetched)
           guard !similarSongs.isEmpty else { self.stop(); return }
           self.queueHandler.appendContextQueue(playables: similarSongs)
           self.play(playerIndex: PlayerIndex(queueType: .next, index: 0))
