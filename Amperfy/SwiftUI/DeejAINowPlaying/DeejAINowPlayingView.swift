@@ -40,10 +40,11 @@ struct DeejAINowPlayingView: View {
         ZStack {
             // Background: cream with warm tint bleed from album art
             backgroundGradient
-                .ignoresSafeArea()
+                .ignoresSafeArea(.all)
 
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 0) {
+            GeometryReader { _ in
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: 0) {
 
                     // 1. Context header
                     contextHeader
@@ -79,9 +80,14 @@ struct DeejAINowPlayingView: View {
                     // 8. Bottom: infinity + feel pill
                     bottomBar
                         .padding(.bottom, 40)
+
+                    // Spacer to ensure content fills the screen
+                    Spacer(minLength: 0)
                 }
+                .frame(minHeight: UIScreen.main.bounds.height - 100)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     // MARK: - Background
@@ -259,7 +265,7 @@ struct DeejAINowPlayingView: View {
     // MARK: - 6. Playback Controls
 
     private var playbackControls: some View {
-        HStack(spacing: 40) {
+        HStack(alignment: .center, spacing: 48) {
             // Previous
             Button { } label: {
                 Image(systemName: "backward.fill")
@@ -298,6 +304,8 @@ struct DeejAINowPlayingView: View {
             }
             .buttonStyle(.plain)
         }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 20)
     }
 
     // MARK: - 7. Up Next Card
