@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		"'50RA71NG2F5A01240085CBB3'" = {isa = PBXBuildFile; fileRef = 50RA71NG2F5A01230085CBB3; };
 		09EB5F102F93B96E00B1C71C /* ShareSongAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB5F0D2F93B65400B1C71C /* ShareSongAction.swift */; };
+		27F043D0B278D38815F214A1 /* DeejAIColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809647C395BA4C47828ADC05 /* DeejAIColors.swift */; };
+		375545738DEDCA9FA7F7C7E7 /* DeejAINowPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB342E8AEB852C8FBFCB3BA /* DeejAINowPlayingView.swift */; };
 		43FBE27F250D4DFD00D5F9B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43FBE27E250D4DFD00D5F9B3 /* LaunchScreen.storyboard */; };
 		5003D8FB267B3390006946BF /* LibrarySyncPopupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5003D8FA267B3390006946BF /* LibrarySyncPopupVC.swift */; };
 		5005938928E2D4EF008C8DF6 /* CommonCollectionSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5005938828E2D4EF008C8DF6 /* CommonCollectionSectionHeader.xib */; };
@@ -1143,6 +1145,7 @@
 		50FE808D26A55CEA00CB434D /* DownloadMO+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DownloadMO+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		50FF31192BBB27AC00C2C3B9 /* Amperfy v36.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v36.xcdatamodel"; sourceTree = "<group>"; };
 		50FF311A2BBC4D8000C2C3B9 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		5BB342E8AEB852C8FBFCB3BA /* DeejAINowPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAINowPlayingView.swift; path = Amperfy/SwiftUI/DeejAINowPlaying/DeejAINowPlayingView.swift; sourceTree = "<group>"; };
 		631C166A2C6D3D9A0085F62E /* SettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRow.swift; sourceTree = "<group>"; };
 		631C166C2C6D61110085F62E /* NavigationTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationTarget.swift; sourceTree = "<group>"; };
 		631C166E2C6D63510085F62E /* SettingsSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsSection.swift; sourceTree = "<group>"; };
@@ -1155,6 +1158,7 @@
 		641708582C13BF5100BA2619 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		643A04712CD29AB20012DEA3 /* Amperfy v39.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v39.xcdatamodel"; sourceTree = "<group>"; };
 		64C433822E1391FA0082A165 /* Amperfy v46.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v46.xcdatamodel"; sourceTree = "<group>"; };
+		809647C395BA4C47828ADC05 /* DeejAIColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIColors.swift; path = Amperfy/SwiftUI/DeejAINowPlaying/DeejAIColors.swift; sourceTree = "<group>"; };
 		8641427181EE4179E8E941BE /* DeejAIApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIApi.swift; path = AmperfyKit/Api/DeejAI/DeejAIApi.swift; sourceTree = "<group>"; };
 		87A245C791B42C706E0CB13C /* DeejAISyncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAISyncer.swift; path = AmperfyKit/Player/DeejAISyncer.swift; sourceTree = "<group>"; };
 		9984433E9DA062BC1735A994 /* DeejAIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIModels.swift; path = AmperfyKit/Api/DeejAI/DeejAIModels.swift; sourceTree = "<group>"; };
@@ -1455,6 +1459,8 @@
 				8641427181EE4179E8E941BE /* DeejAIApi.swift */,
 				9984433E9DA062BC1735A994 /* DeejAIModels.swift */,
 				87A245C791B42C706E0CB13C /* DeejAISyncer.swift */,
+				809647C395BA4C47828ADC05 /* DeejAIColors.swift */,
+				5BB342E8AEB852C8FBFCB3BA /* DeejAINowPlayingView.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2640,6 +2646,8 @@
 				50AB3B3C2F01D5AC00556CE4 /* OpenAppWithConfigurationIntent.swift in Sources */,
 				50C171482D10644600C0C53A /* PlaylistAddAlbumDetailVC.swift in Sources */,
 				50DE29EB2B8FCEB700ABA78E /* LibraryNavigatorConfigurator.swift in Sources */,
+				27F043D0B278D38815F214A1 /* DeejAIColors.swift in Sources */,
+				375545738DEDCA9FA7F7C7E7 /* DeejAINowPlayingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
