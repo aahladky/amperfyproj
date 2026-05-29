@@ -12,6 +12,7 @@
 		27F043D0B278D38815F214A1 /* DeejAIColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809647C395BA4C47828ADC05 /* DeejAIColors.swift */; };
 		375545738DEDCA9FA7F7C7E7 /* DeejAINowPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB342E8AEB852C8FBFCB3BA /* DeejAINowPlayingView.swift */; };
 		43FBE27F250D4DFD00D5F9B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43FBE27E250D4DFD00D5F9B3 /* LaunchScreen.storyboard */; };
+		48CE41CB989BF7903C1EA60D /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82DF48A893F7ACE224EAF028 /* RatingView.swift */; };
 		5003D8FB267B3390006946BF /* LibrarySyncPopupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5003D8FA267B3390006946BF /* LibrarySyncPopupVC.swift */; };
 		5005938928E2D4EF008C8DF6 /* CommonCollectionSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5005938828E2D4EF008C8DF6 /* CommonCollectionSectionHeader.xib */; };
 		5005938B28E2D4FB008C8DF6 /* CommonCollectionSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5005938A28E2D4FB008C8DF6 /* CommonCollectionSectionHeader.swift */; };
@@ -1159,6 +1160,7 @@
 		643A04712CD29AB20012DEA3 /* Amperfy v39.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v39.xcdatamodel"; sourceTree = "<group>"; };
 		64C433822E1391FA0082A165 /* Amperfy v46.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v46.xcdatamodel"; sourceTree = "<group>"; };
 		809647C395BA4C47828ADC05 /* DeejAIColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIColors.swift; path = Amperfy/SwiftUI/DeejAINowPlaying/DeejAIColors.swift; sourceTree = "<group>"; };
+		82DF48A893F7ACE224EAF028 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RatingView.swift; path = Amperfy/Screens/View/RatingView.swift; sourceTree = "<group>"; };
 		8641427181EE4179E8E941BE /* DeejAIApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIApi.swift; path = AmperfyKit/Api/DeejAI/DeejAIApi.swift; sourceTree = "<group>"; };
 		87A245C791B42C706E0CB13C /* DeejAISyncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAISyncer.swift; path = AmperfyKit/Player/DeejAISyncer.swift; sourceTree = "<group>"; };
 		9984433E9DA062BC1735A994 /* DeejAIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIModels.swift; path = AmperfyKit/Api/DeejAI/DeejAIModels.swift; sourceTree = "<group>"; };
@@ -1461,6 +1463,7 @@
 				87A245C791B42C706E0CB13C /* DeejAISyncer.swift */,
 				809647C395BA4C47828ADC05 /* DeejAIColors.swift */,
 				5BB342E8AEB852C8FBFCB3BA /* DeejAINowPlayingView.swift */,
+				82DF48A893F7ACE224EAF028 /* RatingView.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2851,6 +2854,7 @@
 				8C4A4BE5B47200CA82A9184C /* DeejAIApi.swift in Sources */,
 				D93C42E393827BC5CA081DC0 /* DeejAIModels.swift in Sources */,
 				C4B348899E574B96E876D5AD /* DeejAISyncer.swift in Sources */,
+				48CE41CB989BF7903C1EA60D /* RatingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

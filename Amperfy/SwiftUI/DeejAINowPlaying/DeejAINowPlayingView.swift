@@ -170,7 +170,7 @@ struct DeejAINowPlayingView: View {
     }
 
     /// Placeholder gradient for album art — warm, Harvest-Moon inspired tones.
-    private var artPlaceholderGradient: some View {
+    private var artPlaceholderGradient: LinearGradient {
         LinearGradient(
             colors: [
                 DeejAIColors.brownMedium,
