@@ -3091,7 +3091,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LYR46R6M5A;
 				INFOPLIST_FILE = Amperfy/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = MusicV2;
+				INFOPLIST_KEY_CFBundleDisplayName = DeejAI;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3132,7 +3132,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LYR46R6M5A;
 				INFOPLIST_FILE = Amperfy/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = MusicV2;
+				INFOPLIST_KEY_CFBundleDisplayName = DeejAI;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
