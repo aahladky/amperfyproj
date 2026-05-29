@@ -131,7 +131,9 @@ public class MetaManager {
     player: PlayerFacade
   ) -> DeejAISyncer {
     if let deejAISyncer { return deejAISyncer }
-    let api = DeejAIApi()
+    // DeejAI server config — hardcoded for now, move to settings later
+    let baseURL = URL(string: "https://music.myhouse.fyi")!
+    let api = DeejAIApi(baseURL: baseURL, apiKey: "")
     deejAISyncer = DeejAISyncer(player: player, api: api)
     return deejAISyncer!
   }

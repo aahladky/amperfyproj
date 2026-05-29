@@ -55,7 +55,7 @@ public class DeejAISyncer {
 
     currentTrackTitle = playable.title ?? ""
     currentTrackArtist = playable.creatorName ?? ""
-    currentTrackAlbum = playable.albumName ?? ""
+    currentTrackAlbum = playable.subsubtitle ?? ""
     currentTrackDuration = TimeInterval(playable.duration)
     currentTrackStart = Date()
     isPlaying = true
