@@ -126,6 +126,16 @@ public class MetaManager {
     return scrobbleSyncer!
   }
 
+  private var deejAISyncer: DeejAISyncer?
+  internal func createDeejAISyncer(
+    player: PlayerFacade
+  ) -> DeejAISyncer {
+    if let deejAISyncer { return deejAISyncer }
+    let api = DeejAIApi()
+    deejAISyncer = DeejAISyncer(player: player, api: api)
+    return deejAISyncer!
+  }
+
   public lazy var playableDownloadManager: DownloadManageable = {
     let getDownloadDelegateCB = { @MainActor in
       return self.playableDownloadDelegate
@@ -284,6 +294,8 @@ public class MetaManager {
     backgroundLibrarySyncer.start()
     let scrobbler = createScrobbleSyncer(player: player)
     player.addNotifier(notifier: scrobbler)
+    let deejai = createDeejAISyncer(player: player)
+    player.addNotifier(notifier: deejai)
   }
 
   public func startManagerForNormalOperation(player: PlayerFacade) {
@@ -295,6 +307,8 @@ public class MetaManager {
     let scrobbler = createScrobbleSyncer(player: player)
     player.addNotifier(notifier: scrobbler)
     scrobbler.start()
+    let deejai = createDeejAISyncer(player: player)
+    player.addNotifier(notifier: deejai)
   }
 
   public func stopManager() {
