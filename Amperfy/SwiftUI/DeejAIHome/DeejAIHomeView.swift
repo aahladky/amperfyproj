@@ -271,17 +271,10 @@ struct DeejAIHomeView: View {
             // TODO: Wire to real skip-to-next action
         } label: {
             VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 8) {
-                    Text("UP NEXT")
-                        .font(DeejAIFonts.sansCaption)
-                        .tracking(2.5)
-                        .foregroundStyle(DeejAIColors.textTertiaryColor)
-
-                    Text("· flows on")
-                        .font(DeejAIFonts.sansCaption)
-                        .tracking(1.5)
-                        .foregroundStyle(DeejAIColors.accentSecondaryColor)
-                }
+                Text("UP NEXT")
+                    .font(DeejAIFonts.sansCaption)
+                    .tracking(2.5)
+                    .foregroundStyle(DeejAIColors.textTertiaryColor)
 
                 HStack(spacing: 16) {
                     // Mini art swatch

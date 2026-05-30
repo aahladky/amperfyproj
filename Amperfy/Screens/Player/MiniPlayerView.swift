@@ -881,12 +881,19 @@ class MiniPlayerView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  public lazy var glassContainer: UIVisualEffectView = {
-    let container = UIVisualEffectView()
-    let glassEffect = UIGlassEffect(style: .regular)
-    glassEffect.isInteractive = false
-    container.effect = glassEffect
-    container.contentView.addSubview(self)
+  public lazy var glassContainer: UIView = {
+    let container = UIView()
+    container.backgroundColor = DeejAIColors.surfaceElevated
+    container.layer.cornerRadius = 14
+    container.layer.cornerCurve = .continuous
+    // Warm shadow: warm-shifted dark tone, 12% opacity, y-offset 4, blur 12
+    let warmShadow = UIColor(red: 0.15, green: 0.10, blue: 0.05, alpha: 0.12)
+    container.layer.shadowColor = warmShadow.cgColor
+    container.layer.shadowOpacity = 1.0
+    container.layer.shadowOffset = CGSize(width: 0, height: 4)
+    container.layer.shadowRadius = 12
+
+    container.addSubview(self)
 
     container.translatesAutoresizingMaskIntoConstraints = false
     self.translatesAutoresizingMaskIntoConstraints = false
