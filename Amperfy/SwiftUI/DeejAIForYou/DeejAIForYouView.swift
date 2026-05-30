@@ -15,10 +15,10 @@ struct DeejAIForYouView: View {
 
     /// Placeholder mixes until we wire up real data.
     @State private var mixes: [MixCard] = [
-        MixCard(name: "Daily Mix 1", subtitle: "Radiohead, Sigur Rós, Bon Iver", colors: [DeejAIColors.accentSecondaryColor, DeejAIColors.accentSecondaryMutedColor]),
-        MixCard(name: "Daily Mix 2", subtitle: "Khruangbin, Tame Impala, Men I Trust", colors: [DeejAIColors.accentPrimaryColor, DeejAIColors.accentPrimaryDarkColor]),
-        MixCard(name: "Daily Mix 3", subtitle: "Nils Frahm, Ólafur Arnalds, Max Richter", colors: [DeejAIColors.textSecondaryColor, DeejAIColors.accentSecondaryColor]),
-        MixCard(name: "Mellow Flow", subtitle: "The National, Iron & Wine, Sufjan Stevens", colors: [DeejAIColors.accentPrimaryColor, DeejAIColors.accentSecondaryMutedColor])
+        MixCard(name: "Everything In Its Right Place Mix", subtitle: "Radiohead, Sigur Rós, Bon Iver", colors: [DeejAIColors.accentSecondaryColor, DeejAIColors.accentSecondaryMutedColor]),
+        MixCard(name: "Evan Finds the Third Room Mix", subtitle: "Khruangbin, Tame Impala, Men I Trust", colors: [DeejAIColors.accentPrimaryColor, DeejAIColors.accentPrimaryDarkColor]),
+        MixCard(name: "Says Mix", subtitle: "Nils Frahm, Ólafur Arnalds, Max Richter", colors: [DeejAIColors.textSecondaryColor, DeejAIColors.accentSecondaryColor]),
+        MixCard(name: "Pink Rabbits Mix", subtitle: "The National, Iron & Wine, Sufjan Stevens", colors: [DeejAIColors.accentPrimaryColor, DeejAIColors.accentSecondaryMutedColor])
     ]
 
     /// Placeholder top artists until DeejAI /home endpoint is wired.
