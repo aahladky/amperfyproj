@@ -137,6 +137,55 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     UINavigationBar.appearance().shadowImage = UIImage()
   }
 
+  // MARK: - DeejAI Appearance Proxies
+
+  /// Configures UIKit appearance proxies with DeejAI semantic color tokens.
+  /// This ensures all UIKit chrome (nav bars, tab bars, switches, table selection,
+  /// search cursor) uses the MCM palette instead of system blue.
+  func configureDeejAIAppearance() {
+    // UINavigationBar
+    let navAppearance = UINavigationBarAppearance()
+    navAppearance.configureWithOpaqueBackground()
+    navAppearance.backgroundColor = DeejAIColors.surface
+    navAppearance.titleTextAttributes = [.foregroundColor: DeejAIColors.textPrimary]
+    navAppearance.largeTitleTextAttributes = [.foregroundColor: DeejAIColors.textPrimary]
+    UINavigationBar.appearance().standardAppearance = navAppearance
+    UINavigationBar.appearance().scrollEdgeAppearance = navAppearance
+    UINavigationBar.appearance().compactAppearance = navAppearance
+    UINavigationBar.appearance().tintColor = DeejAIColors.accentPrimary
+
+    // UITabBar
+    let tabAppearance = UITabBarAppearance()
+    tabAppearance.configureWithOpaqueBackground()
+    tabAppearance.backgroundColor = DeejAIColors.surface
+    tabAppearance.stackedLayoutAppearance.normal.iconColor = DeejAIColors.textTertiary
+    tabAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [
+      .foregroundColor: DeejAIColors.textTertiary
+    ]
+    tabAppearance.stackedLayoutAppearance.selected.iconColor = DeejAIColors.accentPrimary
+    tabAppearance.stackedLayoutAppearance.selected.titleTextAttributes = [
+      .foregroundColor: DeejAIColors.accentPrimary
+    ]
+    UITabBar.appearance().standardAppearance = tabAppearance
+    UITabBar.appearance().scrollEdgeAppearance = tabAppearance
+
+    // UISwitch
+    UISwitch.appearance().onTintColor = DeejAIColors.accentSecondary
+    UISwitch.appearance().thumbTintColor = DeejAIColors.surface
+
+    // UITableView selection
+    UITableView.appearance().tintColor = DeejAIColors.accentPrimary
+    UITableViewCell.appearance().selectedBackgroundView = {
+      let view = UIView()
+      view.backgroundColor = DeejAIColors.accentSecondary.withAlphaComponent(0.12)
+      return view
+    }()
+
+    // Search bar cursor
+    UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self])
+      .tintColor = DeejAIColors.accentPrimary
+  }
+
   func configureBatteryMonitoring() {
     UIDevice.current.isBatteryMonitoringEnabled =
       (AmperKit.shared.storage.settings.user.screenLockPreventionPreference == .onlyIfCharging)
@@ -267,6 +316,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     libraryUpdater.performAccountCleanUpIfNeccessaryInBackground()
 
     configureDefaultNavigationBarStyle()
+    configureDeejAIAppearance()
     configureBatteryMonitoring()
     configureBackgroundFetch()
     configureNotificationHandling()

@@ -25,7 +25,7 @@ struct DeejAINowPlayingView: View {
     var body: some View {
         ZStack {
             // 1. Background: solid MCM cream
-            DeejAIColors.cream
+            DeejAIColors.surfaceColor
                 .ignoresSafeArea()
 
             // 2. Warm tint bleed behind album art area
@@ -89,8 +89,8 @@ struct DeejAINowPlayingView: View {
     private var backgroundGradient: some View {
         RadialGradient(
             gradient: Gradient(stops: [
-                .init(color: DeejAIColors.albumTint.opacity(0.45), location: 0.0),
-                .init(color: DeejAIColors.albumTint.opacity(0.15), location: 0.4),
+                .init(color: DeejAIColors.albumTintColor.opacity(0.45), location: 0.0),
+                .init(color: DeejAIColors.albumTintColor.opacity(0.15), location: 0.4),
                 .init(color: .clear, location: 1.0)
             ]),
             center: .init(x: 0.5, y: 0.28),
@@ -104,7 +104,7 @@ struct DeejAINowPlayingView: View {
             .font(.system(size: 11, weight: .medium, design: .rounded))
             .tracking(3)
             .textCase(.uppercase)
-            .foregroundStyle(DeejAIColors.tan)
+            .foregroundStyle(DeejAIColors.textTertiaryColor)
     }
 
     private var contextLabel: String {
@@ -130,7 +130,7 @@ struct DeejAINowPlayingView: View {
         ZStack {
             // Warm shadow layer
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(DeejAIColors.albumTint.opacity(0.3))
+                .fill(DeejAIColors.albumTintColor.opacity(0.3))
                 .frame(width: 296, height: 296)
                 .offset(x: 4, y: 6)
                 .blur(radius: 12)
@@ -143,16 +143,16 @@ struct DeejAINowPlayingView: View {
                 .overlay(
                     VStack(spacing: 8) {
                         Circle()
-                            .fill(DeejAIColors.cream.opacity(0.3))
+                            .fill(DeejAIColors.surfaceColor.opacity(0.3))
                             .frame(width: 80, height: 80)
                             .overlay(
                                 Circle()
-                                    .fill(DeejAIColors.brownDark.opacity(0.15))
+                                    .fill(DeejAIColors.textPrimaryColor.opacity(0.15))
                                     .frame(width: 24, height: 24)
                             )
                         Text(state.currentAlbumTitle)
                             .font(.system(size: 13, weight: .semibold, design: .serif))
-                            .foregroundStyle(DeejAIColors.cream.opacity(0.8))
+                            .foregroundStyle(DeejAIColors.surfaceColor.opacity(0.8))
                             .lineLimit(1)
                             .padding(.horizontal)
                     }
@@ -163,9 +163,9 @@ struct DeejAINowPlayingView: View {
     private var artPlaceholderGradient: LinearGradient {
         LinearGradient(
             colors: [
-                DeejAIColors.brownMedium,
-                DeejAIColors.terracottaDark,
-                DeejAIColors.brownDark
+                DeejAIColors.textSecondaryColor,
+                DeejAIColors.accentPrimaryDarkColor,
+                DeejAIColors.textPrimaryColor
             ],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
@@ -176,12 +176,12 @@ struct DeejAINowPlayingView: View {
         VStack(spacing: 6) {
             Text(state.currentTrackTitle)
                 .font(.system(size: 24, weight: .bold, design: .serif))
-                .foregroundStyle(DeejAIColors.brownDark)
+                .foregroundStyle(DeejAIColors.textPrimaryColor)
                 .lineLimit(1)
 
             Text(state.currentArtistName)
                 .font(.system(size: 16, weight: .medium, design: .rounded))
-                .foregroundStyle(DeejAIColors.tan)
+                .foregroundStyle(DeejAIColors.textTertiaryColor)
                 .lineLimit(1)
         }
         .padding(.horizontal, 32)
@@ -199,7 +199,7 @@ struct DeejAINowPlayingView: View {
         } label: {
             Image(systemName: state.isFavorite ? "heart.fill" : "heart")
                 .font(.system(size: 24, weight: .medium))
-                .foregroundStyle(state.isFavorite ? DeejAIColors.terracotta : DeejAIColors.tanLight)
+                .foregroundStyle(state.isFavorite ? DeejAIColors.accentPrimaryColor : DeejAIColors.textQuaternaryColor)
                 .scaleEffect(loveScale)
                 .frame(width: 52, height: 52)
         }
@@ -211,11 +211,11 @@ struct DeejAINowPlayingView: View {
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     Capsule()
-                        .fill(DeejAIColors.trackBackground)
+                        .fill(DeejAIColors.trackBackgroundColor)
                         .frame(height: 4)
 
                     Capsule()
-                        .fill(DeejAIColors.terracotta)
+                        .fill(DeejAIColors.accentPrimaryColor)
                         .frame(width: geo.size.width * state.progress, height: 4)
                 }
             }
@@ -224,11 +224,11 @@ struct DeejAINowPlayingView: View {
             HStack {
                 Text(state.elapsedText)
                     .font(.system(size: 11, weight: .medium, design: .monospaced))
-                    .foregroundStyle(DeejAIColors.tanLight)
+                    .foregroundStyle(DeejAIColors.textQuaternaryColor)
                 Spacer()
                 Text(state.durationText)
                     .font(.system(size: 11, weight: .medium, design: .monospaced))
-                    .foregroundStyle(DeejAIColors.tanLight)
+                    .foregroundStyle(DeejAIColors.textQuaternaryColor)
             }
         }
     }
@@ -238,7 +238,7 @@ struct DeejAINowPlayingView: View {
             Button { player.playPreviousOrReplay() } label: {
                 Image(systemName: "backward.fill")
                     .font(.system(size: 22, weight: .medium))
-                    .foregroundStyle(DeejAIColors.brownDark)
+                    .foregroundStyle(DeejAIColors.textPrimaryColor)
                     .frame(width: 44, height: 44)
             }
             .buttonStyle(.plain)
@@ -246,12 +246,12 @@ struct DeejAINowPlayingView: View {
             Button { player.togglePlayPause() } label: {
                 ZStack {
                     Circle()
-                        .fill(DeejAIColors.terracotta)
+                        .fill(DeejAIColors.accentPrimaryColor)
                         .frame(width: 68, height: 68)
 
                     Image(systemName: state.isPlaying ? "pause.fill" : "play.fill")
                         .font(.system(size: 28, weight: .bold))
-                        .foregroundStyle(DeejAIColors.cream)
+                        .foregroundStyle(DeejAIColors.surfaceColor)
                         .offset(x: state.isPlaying ? 0 : 2)
                 }
             }
@@ -260,7 +260,7 @@ struct DeejAINowPlayingView: View {
             Button { player.playNext() } label: {
                 Image(systemName: "forward.fill")
                     .font(.system(size: 22, weight: .medium))
-                    .foregroundStyle(DeejAIColors.brownDark)
+                    .foregroundStyle(DeejAIColors.textPrimaryColor)
                     .frame(width: 44, height: 44)
             }
             .buttonStyle(.plain)
@@ -276,34 +276,34 @@ struct DeejAINowPlayingView: View {
                 Text("UP NEXT")
                     .font(.system(size: 10, weight: .semibold, design: .rounded))
                     .tracking(2.5)
-                    .foregroundStyle(DeejAIColors.tan)
+                    .foregroundStyle(DeejAIColors.textTertiaryColor)
 
                 HStack(spacing: 14) {
                     RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .fill(DeejAIColors.teal)
+                        .fill(DeejAIColors.accentSecondaryColor)
                         .frame(width: 52, height: 52)
 
                     VStack(alignment: .leading, spacing: 3) {
                         Text(state.nextTrackTitle)
                             .font(.system(size: 15, weight: .semibold, design: .serif))
-                            .foregroundStyle(DeejAIColors.brownDark)
+                            .foregroundStyle(DeejAIColors.textPrimaryColor)
                             .lineLimit(1)
 
                         Text(state.nextArtistName)
                             .font(.system(size: 13, weight: .medium, design: .rounded))
-                            .foregroundStyle(DeejAIColors.tan)
+                            .foregroundStyle(DeejAIColors.textTertiaryColor)
                             .lineLimit(1)
                     }
                     Spacer()
                     Image(systemName: "chevron.right")
                         .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(DeejAIColors.tanLight)
+                        .foregroundStyle(DeejAIColors.textQuaternaryColor)
                 }
             }
             .padding(16)
             .background(
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(DeejAIColors.creamCard)
+                    .fill(DeejAIColors.surfaceElevatedColor)
             )
         }
         .buttonStyle(.plain)
@@ -314,7 +314,7 @@ struct DeejAINowPlayingView: View {
             Button { state.toggleRadioMode() } label: {
                 Image(systemName: "infinity")
                     .font(.system(size: 20, weight: .medium))
-                    .foregroundStyle(state.isRadioMode ? DeejAIColors.teal : DeejAIColors.tanLight)
+                    .foregroundStyle(state.isRadioMode ? DeejAIColors.accentSecondaryColor : DeejAIColors.textQuaternaryColor)
                     .frame(width: 44, height: 44)
             }
             .buttonStyle(.plain)
@@ -322,11 +322,11 @@ struct DeejAINowPlayingView: View {
             Text("feel · settled")
                 .font(.system(size: 13, weight: .medium, design: .rounded))
                 .tracking(1)
-                .foregroundStyle(DeejAIColors.teal)
+                .foregroundStyle(DeejAIColors.accentSecondaryColor)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
-                .background(Capsule().fill(DeejAIColors.teal.opacity(0.10)))
-                .overlay(Capsule().stroke(DeejAIColors.teal.opacity(0.25), lineWidth: 1))
+                .background(Capsule().fill(DeejAIColors.accentSecondaryColor.opacity(0.10)))
+                .overlay(Capsule().stroke(DeejAIColors.accentSecondaryColor.opacity(0.25), lineWidth: 1))
         }
     }
 }

@@ -15,10 +15,10 @@ struct DeejAIForYouView: View {
 
     /// Placeholder mixes until we wire up real data.
     @State private var mixes: [MixCard] = [
-        MixCard(name: "Daily Mix 1", subtitle: "Radiohead, Sigur Rós, Bon Iver", colors: [DeejAIColors.teal, DeejAIColors.tealMuted]),
-        MixCard(name: "Daily Mix 2", subtitle: "Khruangbin, Tame Impala, Men I Trust", colors: [DeejAIColors.terracotta, DeejAIColors.terracottaDark]),
-        MixCard(name: "Daily Mix 3", subtitle: "Nils Frahm, Ólafur Arnalds, Max Richter", colors: [DeejAIColors.brownMedium, DeejAIColors.teal]),
-        MixCard(name: "Mellow Flow", subtitle: "The National, Iron & Wine, Sufjan Stevens", colors: [DeejAIColors.terracotta, DeejAIColors.tealMuted])
+        MixCard(name: "Daily Mix 1", subtitle: "Radiohead, Sigur Rós, Bon Iver", colors: [DeejAIColors.accentSecondaryColor, DeejAIColors.accentSecondaryMutedColor]),
+        MixCard(name: "Daily Mix 2", subtitle: "Khruangbin, Tame Impala, Men I Trust", colors: [DeejAIColors.accentPrimaryColor, DeejAIColors.accentPrimaryDarkColor]),
+        MixCard(name: "Daily Mix 3", subtitle: "Nils Frahm, Ólafur Arnalds, Max Richter", colors: [DeejAIColors.textSecondaryColor, DeejAIColors.accentSecondaryColor]),
+        MixCard(name: "Mellow Flow", subtitle: "The National, Iron & Wine, Sufjan Stevens", colors: [DeejAIColors.accentPrimaryColor, DeejAIColors.accentSecondaryMutedColor])
     ]
 
     /// Placeholder top artists until DeejAI /home endpoint is wired.
@@ -53,7 +53,7 @@ struct DeejAIForYouView: View {
 
     var body: some View {
         ZStack {
-            DeejAIColors.cream
+            DeejAIColors.surfaceColor
                 .ignoresSafeArea()
 
             ScrollView(.vertical, showsIndicators: false) {
@@ -98,11 +98,11 @@ struct DeejAIForYouView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text(greetingText)
                 .font(.system(size: 32, weight: .bold, design: .serif))
-                .foregroundStyle(DeejAIColors.brownDark)
+                .foregroundStyle(DeejAIColors.textPrimaryColor)
 
             Text("Here's what DeejAI has lined up for you.")
                 .font(.system(size: 15, weight: .medium, design: .rounded))
-                .foregroundStyle(DeejAIColors.tan)
+                .foregroundStyle(DeejAIColors.textTertiaryColor)
         }
     }
 
@@ -122,7 +122,7 @@ struct DeejAIForYouView: View {
         Text(text)
             .font(.system(size: 11, weight: .semibold, design: .rounded))
             .tracking(2.5)
-            .foregroundStyle(DeejAIColors.tan)
+            .foregroundStyle(DeejAIColors.textTertiaryColor)
             .padding(.bottom, 14)
     }
 
@@ -154,21 +154,21 @@ struct DeejAIForYouView: View {
                         Spacer()
                         Image(systemName: "play.fill")
                             .font(.system(size: 28, weight: .bold))
-                            .foregroundStyle(DeejAIColors.cream.opacity(0.7))
+                            .foregroundStyle(DeejAIColors.surfaceColor.opacity(0.7))
                             .frame(width: 48, height: 48)
-                            .background(Circle().fill(DeejAIColors.cream.opacity(0.15)))
+                            .background(Circle().fill(DeejAIColors.surfaceColor.opacity(0.15)))
                             .padding(.bottom, 14)
                     }
                 )
 
             Text(mix.name)
                 .font(.system(size: 14, weight: .semibold, design: .serif))
-                .foregroundStyle(DeejAIColors.brownDark)
+                .foregroundStyle(DeejAIColors.textPrimaryColor)
                 .lineLimit(1)
 
             Text(mix.subtitle)
                 .font(.system(size: 12, weight: .medium, design: .rounded))
-                .foregroundStyle(DeejAIColors.tan)
+                .foregroundStyle(DeejAIColors.textTertiaryColor)
                 .lineLimit(2)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -197,17 +197,17 @@ struct DeejAIForYouView: View {
 
                 Text(String(artist.name.prefix(1)).uppercased())
                     .font(.system(size: 30, weight: .bold, design: .serif))
-                    .foregroundStyle(DeejAIColors.cream.opacity(0.85))
+                    .foregroundStyle(DeejAIColors.surfaceColor.opacity(0.85))
             }
 
             Text(artist.name)
                 .font(.system(size: 13, weight: .semibold, design: .serif))
-                .foregroundStyle(DeejAIColors.brownDark)
+                .foregroundStyle(DeejAIColors.textPrimaryColor)
                 .lineLimit(1)
 
-            Text("\(artist.plays) plays")
+            Text("\\(artist.plays) plays")
                 .font(.system(size: 11, weight: .medium, design: .rounded))
-                .foregroundStyle(DeejAIColors.tanLight)
+                .foregroundStyle(DeejAIColors.textQuaternaryColor)
         }
         .frame(width: 100)
     }
@@ -215,11 +215,11 @@ struct DeejAIForYouView: View {
     private func artistGradient(for name: String) -> LinearGradient {
         let hash = abs(name.hashValue)
         let palette: [(Color, Color)] = [
-            (DeejAIColors.teal, DeejAIColors.tealMuted),
-            (DeejAIColors.terracotta, DeejAIColors.terracottaDark),
-            (DeejAIColors.brownMedium, DeejAIColors.teal),
-            (DeejAIColors.tealMuted, DeejAIColors.terracotta),
-            (DeejAIColors.brownDark, DeejAIColors.teal)
+            (DeejAIColors.accentSecondaryColor, DeejAIColors.accentSecondaryMutedColor),
+            (DeejAIColors.accentPrimaryColor, DeejAIColors.accentPrimaryDarkColor),
+            (DeejAIColors.textSecondaryColor, DeejAIColors.accentSecondaryColor),
+            (DeejAIColors.accentSecondaryMutedColor, DeejAIColors.accentPrimaryColor),
+            (DeejAIColors.textPrimaryColor, DeejAIColors.accentSecondaryColor)
         ]
         let pair = palette[hash % palette.count]
         return LinearGradient(
@@ -237,14 +237,14 @@ struct DeejAIForYouView: View {
                 suggestedTrackRow(track, index: index)
                 if index < suggestedTracks.count - 1 {
                     Divider()
-                        .overlay(DeejAIColors.trackBackground.opacity(0.5))
+                        .overlay(DeejAIColors.trackBackgroundColor.opacity(0.5))
                         .padding(.leading, 56)
                 }
             }
         }
         .background(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(DeejAIColors.creamCard)
+                .fill(DeejAIColors.surfaceElevatedColor)
         )
     }
 
@@ -253,24 +253,24 @@ struct DeejAIForYouView: View {
             // Number badge
             Text("\(index + 1)")
                 .font(.system(size: 12, weight: .bold, design: .rounded))
-                .foregroundStyle(DeejAIColors.tanLight)
+                .foregroundStyle(DeejAIColors.textQuaternaryColor)
                 .frame(width: 20, alignment: .trailing)
 
             // Color swatch
             RoundedRectangle(cornerRadius: 6, style: .continuous)
-                .fill(index % 2 == 0 ? DeejAIColors.teal : DeejAIColors.terracotta)
+                .fill(index % 2 == 0 ? DeejAIColors.accentSecondaryColor : DeejAIColors.accentPrimaryColor)
                 .frame(width: 40, height: 40)
 
             // Track info
             VStack(alignment: .leading, spacing: 3) {
                 Text(track.title)
                     .font(.system(size: 15, weight: .semibold, design: .serif))
-                    .foregroundStyle(DeejAIColors.brownDark)
+                    .foregroundStyle(DeejAIColors.textPrimaryColor)
                     .lineLimit(1)
 
                 Text(track.artist)
                     .font(.system(size: 13, weight: .medium, design: .rounded))
-                    .foregroundStyle(DeejAIColors.tan)
+                    .foregroundStyle(DeejAIColors.textTertiaryColor)
                     .lineLimit(1)
             }
 
@@ -280,19 +280,19 @@ struct DeejAIForYouView: View {
             if let score = track.score {
                 Text(String(format: "%.0f%%", score * 100))
                     .font(.system(size: 11, weight: .bold, design: .rounded))
-                    .foregroundStyle(DeejAIColors.teal)
+                    .foregroundStyle(DeejAIColors.accentSecondaryColor)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(Capsule().fill(DeejAIColors.teal.opacity(0.10)))
+                    .background(Capsule().fill(DeejAIColors.accentSecondaryColor.opacity(0.10)))
             }
 
             // Play button
             Button {} label: {
                 Image(systemName: "play.fill")
                     .font(.system(size: 14, weight: .bold))
-                    .foregroundStyle(DeejAIColors.terracotta)
+                    .foregroundStyle(DeejAIColors.accentPrimaryColor)
                     .frame(width: 36, height: 36)
-                    .background(Circle().fill(DeejAIColors.terracotta.opacity(0.10)))
+                    .background(Circle().fill(DeejAIColors.accentPrimaryColor.opacity(0.10)))
             }
             .buttonStyle(.plain)
         }
@@ -308,14 +308,14 @@ struct DeejAIForYouView: View {
                 recentPlayRow(play)
                 if index < recentPlays.count - 1 {
                     Divider()
-                        .overlay(DeejAIColors.trackBackground.opacity(0.5))
+                        .overlay(DeejAIColors.trackBackgroundColor.opacity(0.5))
                         .padding(.leading, 56)
                 }
             }
         }
         .background(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(DeejAIColors.creamCard)
+                .fill(DeejAIColors.surfaceElevatedColor)
         )
     }
 
@@ -324,26 +324,26 @@ struct DeejAIForYouView: View {
             // Status indicator
             Image(systemName: play.completed ? "checkmark.circle.fill" : "forward.fill")
                 .font(.system(size: 16, weight: .medium))
-                .foregroundStyle(play.completed ? DeejAIColors.teal : DeejAIColors.tanLight)
+                .foregroundStyle(play.completed ? DeejAIColors.accentSecondaryColor : DeejAIColors.textQuaternaryColor)
                 .frame(width: 28, height: 28)
 
             // Track art swatch
             RoundedRectangle(cornerRadius: 6, style: .continuous)
                 .fill(play.completed
-                    ? DeejAIColors.teal.opacity(0.6)
-                    : DeejAIColors.trackBackground)
+                    ? DeejAIColors.accentSecondaryColor.opacity(0.6)
+                    : DeejAIColors.trackBackgroundColor)
                 .frame(width: 40, height: 40)
 
             // Track info
             VStack(alignment: .leading, spacing: 3) {
                 Text(play.title)
                     .font(.system(size: 15, weight: .semibold, design: .serif))
-                    .foregroundStyle(DeejAIColors.brownDark)
+                    .foregroundStyle(DeejAIColors.textPrimaryColor)
                     .lineLimit(1)
 
                 Text(play.artist)
                     .font(.system(size: 13, weight: .medium, design: .rounded))
-                    .foregroundStyle(DeejAIColors.tan)
+                    .foregroundStyle(DeejAIColors.textTertiaryColor)
                     .lineLimit(1)
             }
 
@@ -352,7 +352,7 @@ struct DeejAIForYouView: View {
             // Status label
             Text(play.completed ? "Listened" : "Skipped")
                 .font(.system(size: 11, weight: .medium, design: .rounded))
-                .foregroundStyle(play.completed ? DeejAIColors.teal : DeejAIColors.tanLight)
+                .foregroundStyle(play.completed ? DeejAIColors.accentSecondaryColor : DeejAIColors.textQuaternaryColor)
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
