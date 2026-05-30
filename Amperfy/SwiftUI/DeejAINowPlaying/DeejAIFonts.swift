@@ -91,4 +91,25 @@ enum DeejAIFonts {
     /// System SF Mono is preferred here — no custom monospace needed.
     static let monoTime = Font
         .system(size: 11, weight: .medium, design: .monospaced)
+
+    // MARK: - UIFont Variants (for UIKit views)
+
+    private static func uifont(_ name: String, size: CGFloat, weight: UIFont.Weight) -> UIFont {
+        UIFont(name: name, size: size) ?? .systemFont(ofSize: size, weight: weight)
+    }
+
+    /// Sans caption (Nunito 11 semibold) as UIFont for UIKit labels.
+    static var sansCaptionUIFont: UIFont {
+        uifont("Nunito", size: 11, weight: .semibold)
+    }
+
+    /// Sans body (Nunito 16 medium) as UIFont for UIKit labels.
+    static var sansBodyUIFont: UIFont {
+        uifont("Nunito", size: 16, weight: .medium)
+    }
+
+    /// Sans subheadline (Nunito 13 medium) as UIFont for UIKit labels.
+    static var sansSubheadlineUIFont: UIFont {
+        uifont("Nunito", size: 13, weight: .medium)
+    }
 }

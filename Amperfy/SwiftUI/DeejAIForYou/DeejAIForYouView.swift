@@ -14,40 +14,64 @@ struct DeejAIForYouView: View {
     // MARK: State
 
     /// Placeholder mixes until we wire up real data.
-    @State private var mixes: [MixCard] = [
-        MixCard(name: "Everything In Its Right Place Mix", subtitle: "Radiohead, Sigur Rós, Bon Iver", colors: [DeejAIColors.accentSecondaryColor, DeejAIColors.accentSecondaryMutedColor]),
-        MixCard(name: "Evan Finds the Third Room Mix", subtitle: "Khruangbin, Tame Impala, Men I Trust", colors: [DeejAIColors.accentPrimaryColor, DeejAIColors.accentPrimaryDarkColor]),
-        MixCard(name: "Says Mix", subtitle: "Nils Frahm, Ólafur Arnalds, Max Richter", colors: [DeejAIColors.textSecondaryColor, DeejAIColors.accentSecondaryColor]),
-        MixCard(name: "Pink Rabbits Mix", subtitle: "The National, Iron & Wine, Sufjan Stevens", colors: [DeejAIColors.accentPrimaryColor, DeejAIColors.accentSecondaryMutedColor])
-    ]
+    @State private var mixes: [MixCard] = {
+#if DEBUG
+        [
+            MixCard(name: "Everything In Its Right Place Mix", subtitle: "Radiohead, Sigur Rós, Bon Iver", colors: [DeejAIColors.accentSecondaryColor, DeejAIColors.accentSecondaryMutedColor]),
+            MixCard(name: "Evan Finds the Third Room Mix", subtitle: "Khruangbin, Tame Impala, Men I Trust", colors: [DeejAIColors.accentPrimaryColor, DeejAIColors.accentPrimaryDarkColor]),
+            MixCard(name: "Says Mix", subtitle: "Nils Frahm, Ólafur Arnalds, Max Richter", colors: [DeejAIColors.textSecondaryColor, DeejAIColors.accentSecondaryColor]),
+            MixCard(name: "Pink Rabbits Mix", subtitle: "The National, Iron & Wine, Sufjan Stevens", colors: [DeejAIColors.accentPrimaryColor, DeejAIColors.accentSecondaryMutedColor])
+        ]
+#else
+        []
+#endif
+    }()
 
     /// Placeholder top artists until DeejAI /home endpoint is wired.
-    @State private var topArtists: [TopArtistCard] = [
-        TopArtistCard(name: "Radiohead", plays: 142),
-        TopArtistCard(name: "Khruangbin", plays: 118),
-        TopArtistCard(name: "Nils Frahm", plays: 97),
-        TopArtistCard(name: "Tame Impala", plays: 85),
-        TopArtistCard(name: "Bon Iver", plays: 73),
-        TopArtistCard(name: "Sigur Rós", plays: 64)
-    ]
+    @State private var topArtists: [TopArtistCard] = {
+#if DEBUG
+        [
+            TopArtistCard(name: "Radiohead", plays: 142),
+            TopArtistCard(name: "Khruangbin", plays: 118),
+            TopArtistCard(name: "Nils Frahm", plays: 97),
+            TopArtistCard(name: "Tame Impala", plays: 85),
+            TopArtistCard(name: "Bon Iver", plays: 73),
+            TopArtistCard(name: "Sigur Rós", plays: 64)
+        ]
+#else
+        []
+#endif
+    }()
 
     /// Placeholder suggested tracks.
-    @State private var suggestedTracks: [SuggestedTrackCard] = [
-        SuggestedTrackCard(artist: "Radiohead", title: "Everything In Its Right Place", score: 0.94),
-        SuggestedTrackCard(artist: "Khruangbin", title: "Evan Finds the Third Room", score: 0.91),
-        SuggestedTrackCard(artist: "Nils Frahm", title: "Says", score: 0.88),
-        SuggestedTrackCard(artist: "Bon Iver", title: "Holocene", score: 0.86),
-        SuggestedTrackCard(artist: "Tame Impala", title: "Let It Happen", score: 0.83)
-    ]
+    @State private var suggestedTracks: [SuggestedTrackCard] = {
+#if DEBUG
+        [
+            SuggestedTrackCard(artist: "Radiohead", title: "Everything In Its Right Place", score: 0.94),
+            SuggestedTrackCard(artist: "Khruangbin", title: "Evan Finds the Third Room", score: 0.91),
+            SuggestedTrackCard(artist: "Nils Frahm", title: "Says", score: 0.88),
+            SuggestedTrackCard(artist: "Bon Iver", title: "Holocene", score: 0.86),
+            SuggestedTrackCard(artist: "Tame Impala", title: "Let It Happen", score: 0.83)
+        ]
+#else
+        []
+#endif
+    }()
 
     /// Placeholder recent plays.
-    @State private var recentPlays: [RecentPlayCard] = [
-        RecentPlayCard(artist: "Sigur Rós", title: "Svefn-g-englar", completed: true),
-        RecentPlayCard(artist: "The National", title: "Bloodbuzz Ohio", completed: true),
-        RecentPlayCard(artist: "Radiohead", title: "Reckoner", completed: false),
-        RecentPlayCard(artist: "Men I Trust", title: "Tailwhip", completed: true),
-        RecentPlayCard(artist: "Max Richter", title: "On the Nature of Daylight", completed: false)
-    ]
+    @State private var recentPlays: [RecentPlayCard] = {
+#if DEBUG
+        [
+            RecentPlayCard(artist: "Sigur Rós", title: "Svefn-g-englar", completed: true),
+            RecentPlayCard(artist: "The National", title: "Bloodbuzz Ohio", completed: true),
+            RecentPlayCard(artist: "Radiohead", title: "Reckoner", completed: false),
+            RecentPlayCard(artist: "Men I Trust", title: "Tailwhip", completed: true),
+            RecentPlayCard(artist: "Max Richter", title: "On the Nature of Daylight", completed: false)
+        ]
+#else
+        []
+#endif
+    }()
 
     // MARK: Body
 

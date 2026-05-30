@@ -154,7 +154,7 @@ class MiniPlayerView: UIView {
   fileprivate lazy var elapsedTimeLabel: UILabel = {
     let label = UILabel(frame: .zero)
     label.textColor = .secondaryLabel
-    label.font = .systemFont(ofSize: 12.0)
+    label.font = DeejAIFonts.sansCaptionUIFont
     return label
   }()
 
@@ -162,21 +162,21 @@ class MiniPlayerView: UIView {
     let label = UILabel(frame: .zero)
     label.textAlignment = .right
     label.textColor = .secondaryLabel
-    label.font = .systemFont(ofSize: 12.0)
+    label.font = DeejAIFonts.sansCaptionUIFont
     return label
   }()
 
   fileprivate lazy var liveLabel: UILabel = {
     let label = UILabel(frame: .zero)
     label.text = "LIVE"
-    label.font = .systemFont(ofSize: 12.0)
+    label.font = DeejAIFonts.sansCaptionUIFont
     label.textAlignment = .center
     return label
   }()
 
   fileprivate lazy var audioInfoLabel: UILabel = {
     let label = UILabel(frame: .zero)
-    label.font = .systemFont(ofSize: 12.0)
+    label.font = DeejAIFonts.sansCaptionUIFont
     return label
   }()
 
@@ -717,11 +717,11 @@ class MiniPlayerView: UIView {
 
   public func refreshForTraitChange(horizontalSizeClass: UIUserInterfaceSizeClass) {
     if horizontalSizeClass == .regular {
-      titleLabel.font = .systemFont(ofSize: 8.0)
-      subtitleLabel.font = .systemFont(ofSize: 15.0)
+      titleLabel.font = DeejAIFonts.sansCaptionUIFont
+      subtitleLabel.font = DeejAIFonts.sansBodyUIFont
     } else {
-      titleLabel.font = .systemFont(ofSize: 11.0)
-      subtitleLabel.font = .systemFont(ofSize: 13.0)
+      titleLabel.font = DeejAIFonts.sansCaptionUIFont
+      subtitleLabel.font = DeejAIFonts.sansSubheadlineUIFont
     }
   }
 

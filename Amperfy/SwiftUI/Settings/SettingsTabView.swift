@@ -54,6 +54,8 @@ struct SettingsTabView: View {
         .onTapGesture { selectedMenu = menuElement }
       }
       .listStyle(.sidebar)
+      .scrollContentBackground(.hidden)
+      .background(DeejAIColors.surfaceColor)
     } detail: {
       NavigationStack {
         AnyView(selectedMenu.view())
