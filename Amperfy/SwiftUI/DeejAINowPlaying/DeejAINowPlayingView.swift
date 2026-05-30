@@ -15,9 +15,7 @@ struct DeejAINowPlayingView: View {
     
     @ObservedObject var state: DeejAIPlayerState
     
-    @State private var isLoved = false
     @State private var loveScale: CGFloat = 1.0
-    @State private var radioContinues = true
     
     // Player instance passed from parent
     let player: PlayerFacade
@@ -51,7 +49,7 @@ struct DeejAINowPlayingView: View {
                         trackInfo
                             .padding(.bottom, 16)
 
-                        // 6. Love heart
+                        // 6. Love heart — wired to real isFavorite
                         loveButton
                             .padding(.bottom, 24)
 
@@ -80,6 +78,7 @@ struct DeejAINowPlayingView: View {
                     }
                     .frame(minHeight: geometry.size.height)
                 }
+                .scrollBounceBehavior(.basedOnSize)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -191,16 +190,16 @@ struct DeejAINowPlayingView: View {
     private var loveButton: some View {
         Button {
             withAnimation(.spring(response: 0.35, dampingFraction: 0.5)) {
-                isLoved.toggle()
+                state.toggleFavorite()
                 loveScale = 1.4
             }
             withAnimation(.spring(response: 0.45, dampingFraction: 0.6).delay(0.15)) {
                 loveScale = 1.0
             }
         } label: {
-            Image(systemName: isLoved ? "heart.fill" : "heart")
+            Image(systemName: state.isFavorite ? "heart.fill" : "heart")
                 .font(.system(size: 24, weight: .medium))
-                .foregroundStyle(isLoved ? DeejAIColors.terracotta : DeejAIColors.tanLight)
+                .foregroundStyle(state.isFavorite ? DeejAIColors.terracotta : DeejAIColors.tanLight)
                 .scaleEffect(loveScale)
                 .frame(width: 52, height: 52)
         }
@@ -307,10 +306,10 @@ struct DeejAINowPlayingView: View {
 
     private var bottomBar: some View {
         HStack(spacing: 20) {
-            Button { radioContinues.toggle() } label: {
+            Button { state.toggleRadioMode() } label: {
                 Image(systemName: "infinity")
                     .font(.system(size: 20, weight: .medium))
-                    .foregroundStyle(radioContinues ? DeejAIColors.teal : DeejAIColors.tanLight)
+                    .foregroundStyle(state.isRadioMode ? DeejAIColors.teal : DeejAIColors.tanLight)
                     .frame(width: 44, height: 44)
             }
             .buttonStyle(.plain)

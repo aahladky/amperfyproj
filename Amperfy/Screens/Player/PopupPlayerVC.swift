@@ -411,6 +411,20 @@ extension PopupPlayerVC: MusicPlayable {
 
     // Initialize DeejAI Bridge
     let playerState = DeejAIPlayerState(player: player)
+    
+    // Wire the real favorite toggle (persists to Core Data + syncs to server)
+    playerState.onToggleFavorite = { [weak self] in
+        guard let self, let playable = self.player.currentlyPlaying,
+              playable.isSong, let account = playable.account else { return }
+        do {
+            try await playable.remoteToggleFavorite(
+                syncer: self.appDelegate.getMeta(account.info).librarySyncer
+            )
+        } catch {
+            self.appDelegate.eventLogger.report(topic: "Toggle Favorite", error: error)
+        }
+    }
+    
     let deejaiView = DeejAINowPlayingView(state: playerState, player: player)
     let hostingController = UIHostingController(rootView: deejaiView)
     

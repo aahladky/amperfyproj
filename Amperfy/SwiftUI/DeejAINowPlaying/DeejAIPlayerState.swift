@@ -24,9 +24,15 @@ class DeejAIPlayerState: NSObject, ObservableObject, MusicPlayable {
     @Published var durationText: String = "0:00"
     @Published var nextTrackTitle: String = ""
     @Published var nextArtistName: String = ""
+    @Published var isFavorite: Bool = false
+    @Published var isRadioMode: Bool = false
     
     private let player: PlayerFacade
     private var timer: AnyCancellable?
+    
+    /// Optional closure for server-synced favorite toggle (set by the hosting view controller).
+    /// When nil, `toggleFavorite()` falls back to local Core Data toggle only.
+    var onToggleFavorite: (() async -> Void)?
 
     init(player: PlayerFacade) {
         self.player = player
@@ -35,11 +41,15 @@ class DeejAIPlayerState: NSObject, ObservableObject, MusicPlayable {
         // Register as a notifier to get track changes, play/pause, etc.
         player.addNotifier(notifier: self)
         
+        // Initialize radio mode from the player's current repeat mode
+        isRadioMode = player.repeatMode == .all
+        
         // Start a timer for smooth progress updates (since elapsedTime doesn't notify every second)
         timer = Timer.publish(every: 1.0, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
-                self?.updateProgress()
+                guard let self, self.isPlaying else { return }
+                self.updateProgress()
             }
         
         refresh()
@@ -51,6 +61,7 @@ class DeejAIPlayerState: NSObject, ObservableObject, MusicPlayable {
             currentArtistName = ""
             currentAlbumTitle = ""
             isPlaying = false
+            isFavorite = false
             return
         }
         
@@ -58,6 +69,8 @@ class DeejAIPlayerState: NSObject, ObservableObject, MusicPlayable {
         currentArtistName = playable.creatorName
         currentAlbumTitle = playable.subsubtitle ?? ""
         isPlaying = player.isPlaying
+        isFavorite = playable.isFavorite
+        isRadioMode = player.repeatMode == .all
         updateProgress()
         
         // Peek at the next item in the queue
@@ -68,6 +81,30 @@ class DeejAIPlayerState: NSObject, ObservableObject, MusicPlayable {
             nextTrackTitle = ""
             nextArtistName = ""
         }
+    }
+    
+    /// Toggles favorite on the currently playing track.
+    /// Uses the `onToggleFavorite` closure when available for server sync;
+    /// otherwise toggles locally on Core Data directly.
+    func toggleFavorite() {
+        Task { @MainActor in
+            if let onToggleFavorite = onToggleFavorite {
+                await onToggleFavorite()
+            } else {
+                // Fallback: toggle locally on Core Data only
+                guard let playable = player.currentlyPlaying, playable.isFavoritable else { return }
+                playable.isFavorite.toggle()
+            }
+            // Refresh published state from the model
+            isFavorite = player.currentlyPlaying?.isFavorite ?? false
+        }
+    }
+    
+    /// Toggles radio/infinity mode by setting repeat mode to .all (on) or .off (off).
+    func toggleRadioMode() {
+        let newMode: RepeatMode = isRadioMode ? .off : .all
+        player.setRepeatMode(newMode)
+        isRadioMode = player.repeatMode == .all
     }
     
     private func updateProgress() {
@@ -96,6 +133,8 @@ class DeejAIPlayerState: NSObject, ObservableObject, MusicPlayable {
     func didPlaylistChange() { refresh() }
     func didArtworkChange() { }
     func didShuffleChange() { }
-    func didRepeatChange() { }
+    func didRepeatChange() {
+        isRadioMode = player.repeatMode == .all
+    }
     func didPlaybackRateChange() { }
 }
