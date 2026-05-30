@@ -128,14 +128,7 @@ struct DeejAINowPlayingView: View {
 
     private var albumArt: some View {
         ZStack {
-            // Warm shadow layer
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(DeejAIColors.albumTintColor.opacity(0.3))
-                .frame(width: 296, height: 296)
-                .offset(x: 4, y: 6)
-                .blur(radius: 12)
-
-            // Real cover art from Amperfy's cached artwork, or placeholder gradient
+            // Approved spec shadow: black at 12% opacity, y-offset 4, blur 12
             DeejAICoverArtView(
                 entity: state.currentPlayable,
                 cornerRadius: 20,
@@ -146,6 +139,7 @@ struct DeejAINowPlayingView: View {
                 ]
             )
             .frame(width: 280, height: 280)
+            .shadow(color: Color.black.opacity(0.12), radius: 12, x: 0, y: 4)
         }
     }
 
@@ -178,11 +172,11 @@ struct DeejAINowPlayingView: View {
 
     private var loveButton: some View {
         Button {
-            withAnimation(.spring(response: 0.35, dampingFraction: 0.5)) {
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
                 state.toggleFavorite()
                 loveScale = 1.4
             }
-            withAnimation(.spring(response: 0.45, dampingFraction: 0.6).delay(0.15)) {
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.8).delay(0.15)) {
                 loveScale = 1.0
             }
         } label: {

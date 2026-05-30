@@ -65,8 +65,11 @@ enum DeejAIAppearance {
     // MARK: - Controls
 
     private static func configureControls() {
+        // Window-level global tint (set early via appearance proxy for system-level controls)
+        UIView.appearance().tintColor = DeejAIColors.accentPrimary
+
         // UISwitch
-        UISwitch.appearance().onTintColor = DeejAIColors.accentPrimary
+        UISwitch.appearance().onTintColor = DeejAIColors.accentSecondary
         UISwitch.appearance().thumbTintColor = DeejAIColors.surface
 
         // UISlider min/max track

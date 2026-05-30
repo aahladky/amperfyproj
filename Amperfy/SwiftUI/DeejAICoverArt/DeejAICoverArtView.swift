@@ -67,7 +67,7 @@ struct DeejAICoverArtView: View {
     /// Creates a cover art view for the given entity.
     /// - Parameters:
     ///   - entity: The library entity (song, album, etc.) whose artwork to display.
-    ///   - cornerRadius: Corner radius for the image (default: 16).
+    ///   - cornerRadius: Corner radius for the image (default: 20).
     ///   - placeholderColors: Gradient colors for the placeholder (default: MCM album tint).
     ///   - triggersDownload: If true, triggers artwork download when not cached (default: true).
     init(

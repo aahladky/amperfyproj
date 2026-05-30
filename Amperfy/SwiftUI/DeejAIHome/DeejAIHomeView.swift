@@ -105,11 +105,11 @@ struct DeejAIHomeView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear {
-            withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
                 heroScale = 1.0
                 heroOpacity = 1.0
             }
-            withAnimation(.spring(response: 0.8, dampingFraction: 0.75).delay(0.3)) {
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.8).delay(0.3)) {
                 altPicksOpacity = 1.0
             }
         }
@@ -165,17 +165,12 @@ struct DeejAIHomeView: View {
 
     private var heroAlbumArt: some View {
         ZStack {
-            // Warm shadow layer
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(DeejAIColors.albumTintColor.opacity(0.35))
-                .frame(width: 296, height: 296)
-                .offset(x: 5, y: 8)
-                .blur(radius: 14)
-
+            // Approved spec shadow: black at 12% opacity, y-offset 4, blur 12
             // Hero album art color block
             RoundedRectangle(cornerRadius: 20, style: .continuous)
                 .fill(heroArtGradient)
                 .frame(width: 280, height: 280)
+                .shadow(color: Color.black.opacity(0.12), radius: 12, x: 0, y: 4)
                 .overlay(
                     VStack(spacing: 12) {
                         Circle()
@@ -228,11 +223,11 @@ struct DeejAIHomeView: View {
 
     private var playRadioButton: some View {
         Button {
-            withAnimation(.spring(response: 0.25, dampingFraction: 0.5)) {
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
                 buttonScale = 0.92
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                withAnimation(.spring(response: 0.35, dampingFraction: 0.6)) {
+                withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
                     buttonScale = 1.0
                 }
                 // TODO: Wire to real radio/queue-extend — start context-aware playback
@@ -258,7 +253,7 @@ struct DeejAIHomeView: View {
                     .stroke(DeejAIColors.accentPrimaryDarkColor.opacity(0.3), lineWidth: 1)
             )
             .shadow(
-                color: DeejAIColors.accentPrimaryColor.opacity(0.35),
+                color: Color.black.opacity(0.12),
                 radius: 12, x: 0, y: 4
             )
             .scaleEffect(buttonScale)
