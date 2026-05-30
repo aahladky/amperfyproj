@@ -2,6 +2,8 @@
 
 Personal iOS music app — a fork of Amperfy (Swift, UIKit + SwiftUI hybrid; Ampache/Subsonic/Navidrome backend). This file is the source of truth for project intent. Read it fully each session.
 
+**Also read `design-spec.md`** — the frozen visual + behavioral contract (colors, fonts, spacing, motion, per-control semantics, CI guardrails). That file is the reference for all UI/UX implementation. CLAUDE.md defines *what* and *why*; design-spec.md defines *exactly how it looks and behaves*.
+
 ## Thesis
 
 The goal is **not discovery**. It's listening to more of the music I already own, with zero friction. The app acts as a personalized, context-aware pipeline (Deej-AI–style sonic-similarity embeddings + real completion rates + context) so my local library never feels like a forgotten archive.
