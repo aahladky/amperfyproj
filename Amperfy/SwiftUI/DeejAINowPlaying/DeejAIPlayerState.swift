@@ -26,6 +26,7 @@ class DeejAIPlayerState: NSObject, ObservableObject, MusicPlayable {
     @Published var nextArtistName: String = ""
     @Published var isFavorite: Bool = false
     @Published var isRadioMode: Bool = false
+    @Published var currentPlayable: AbstractPlayable?
     
     private let player: PlayerFacade
     private var timer: AnyCancellable?
@@ -65,6 +66,7 @@ class DeejAIPlayerState: NSObject, ObservableObject, MusicPlayable {
             return
         }
         
+        currentPlayable = playable
         currentTrackTitle = playable.title
         currentArtistName = playable.creatorName
         currentAlbumTitle = playable.subsubtitle ?? ""

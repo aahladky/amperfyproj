@@ -135,28 +135,17 @@ struct DeejAINowPlayingView: View {
                 .offset(x: 4, y: 6)
                 .blur(radius: 12)
 
-            // Placeholder album art — solid MCM color block
-            // In a real build, we will eventually fetch the real art from Navidrome
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(artPlaceholderGradient)
-                .frame(width: 280, height: 280)
-                .overlay(
-                    VStack(spacing: 8) {
-                        Circle()
-                            .fill(DeejAIColors.surfaceColor.opacity(0.3))
-                            .frame(width: 80, height: 80)
-                            .overlay(
-                                Circle()
-                                    .fill(DeejAIColors.textPrimaryColor.opacity(0.15))
-                                    .frame(width: 24, height: 24)
-                            )
-                        Text(state.currentAlbumTitle)
-                            .font(DeejAIFonts.serifSubheadline)
-                            .foregroundStyle(DeejAIColors.surfaceColor.opacity(0.8))
-                            .lineLimit(1)
-                            .padding(.horizontal)
-                    }
-                )
+            // Real cover art from Amperfy's cached artwork, or placeholder gradient
+            DeejAICoverArtView(
+                entity: state.currentPlayable,
+                cornerRadius: 16,
+                placeholderColors: [
+                    DeejAIColors.textSecondaryColor,
+                    DeejAIColors.accentPrimaryDarkColor,
+                    DeejAIColors.textPrimaryColor
+                ]
+            )
+            .frame(width: 280, height: 280)
         }
     }
 
