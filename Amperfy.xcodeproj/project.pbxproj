@@ -11,6 +11,7 @@
 		04D64E018EA514ED38E84D4E /* LoraVF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60BB41D19872A2407DE5FEA5 /* LoraVF.ttf */; };
 		09EB5F102F93B96E00B1C71C /* ShareSongAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB5F0D2F93B65400B1C71C /* ShareSongAction.swift */; };
 		27F043D0B278D38815F214A1 /* DeejAIColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809647C395BA4C47828ADC05 /* DeejAIColors.swift */; };
+		0C7643A3B7BEAC1B0CF401F3 /* DeejAIAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E3433886040AC9C2EEDBFE /* DeejAIAppearance.swift */; };
 		375545738DEDCA9FA7F7C7E7 /* DeejAINowPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB342E8AEB852C8FBFCB3BA /* DeejAINowPlayingView.swift */; };
 		43FBE27F250D4DFD00D5F9B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43FBE27E250D4DFD00D5F9B3 /* LaunchScreen.storyboard */; };
 		48CE41CB989BF7903C1EA60D /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82DF48A893F7ACE224EAF028 /* RatingView.swift */; };
@@ -2681,7 +2682,6 @@
 				D0EE4C2997CCFF0135302852 /* DeejAIHomeView.swift in Sources */,
 				A1F34551ABE8D70894BEECEB /* DeejAIFonts.swift in Sources */,
 				89DD420BA0CA9A235EC3A9B7 /* DeejAICoverArtView.swift in Sources */,
-		0C7643A3B7BEAC1B0CF401F3 /* DeejAIAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E3433886040AC9C2EEDBFE /* DeejAIAppearance.swift */; };
 				0C7643A3B7BEAC1B0CF401F3 /* DeejAIAppearance.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
