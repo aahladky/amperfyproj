@@ -424,7 +424,32 @@ extension PopupPlayerVC: MusicPlayable {
             self.appDelegate.eventLogger.report(topic: "Toggle Favorite", error: error)
         }
     }
-    
+
+    // Infinity/continuation — the app's primary verb. Reads/writes the shared
+    // "Instant Mix After End" policy and, on enable, appends sonically-similar tracks now.
+    playerState.continuationStateProvider = { [weak self] in
+        self?.appDelegate.storage.settings.user.isAutoMixAfterEnd ?? false
+    }
+    playerState.onToggleContinuation = { [weak self] enabled in
+        guard let self else { return }
+        // Engage/clear the passive after-end policy (same engine the queue-empty path uses).
+        self.appDelegate.storage.settings.user.isAutoMixAfterEnd = enabled
+        // On enable, also act now: append similar tracks so it keeps playing like this.
+        guard enabled,
+              let song = self.player.currentlyPlaying?.asSong,
+              let account = song.account else { return }
+        do {
+            let similarSongs = try await self.appDelegate.getMeta(account.info)
+                .librarySyncer.requestSimilarSongs(song: song, count: 99)
+            guard !similarSongs.isEmpty else { return }
+            self.player.appendContextQueue(playables: similarSongs)
+        } catch {
+            self.appDelegate.eventLogger.report(topic: "Instant Mix", error: error)
+        }
+    }
+    // Reflect the current policy in the infinity control now that providers are wired.
+    playerState.refresh()
+
     let deejaiView = DeejAINowPlayingView(state: playerState, player: player)
     let hostingController = UIHostingController(rootView: deejaiView)
     

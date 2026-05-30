@@ -35,6 +35,15 @@ class DeejAIPlayerState: NSObject, ObservableObject, MusicPlayable {
     /// When nil, `toggleFavorite()` falls back to local Core Data toggle only.
     var onToggleFavorite: (() async -> Void)?
 
+    /// Reads the current continuation (infinity/radio) state from the model — the shared
+    /// "Instant Mix After End" policy. Set by the hosting view controller.
+    var continuationStateProvider: (() -> Bool)?
+
+    /// Performs the continuation toggle: when enabling, append sonically-similar tracks to the
+    /// queue now AND engage the after-end policy; when disabling, clear the policy.
+    /// Set by the hosting view controller (needs backend/library access).
+    var onToggleContinuation: ((_ enabled: Bool) async -> Void)?
+
     init(player: PlayerFacade) {
         self.player = player
         super.init()
@@ -42,8 +51,8 @@ class DeejAIPlayerState: NSObject, ObservableObject, MusicPlayable {
         // Register as a notifier to get track changes, play/pause, etc.
         player.addNotifier(notifier: self)
         
-        // Initialize radio mode from the player's current repeat mode
-        isRadioMode = player.repeatMode == .all
+        // Initialize continuation (infinity) state from the shared after-end policy
+        isRadioMode = continuationStateProvider?() ?? false
         
         // Start a timer for smooth progress updates (since elapsedTime doesn't notify every second)
         timer = Timer.publish(every: 1.0, on: .main, in: .common)
@@ -72,7 +81,7 @@ class DeejAIPlayerState: NSObject, ObservableObject, MusicPlayable {
         currentAlbumTitle = playable.subsubtitle ?? ""
         isPlaying = player.isPlaying
         isFavorite = playable.isFavorite
-        isRadioMode = player.repeatMode == .all
+        isRadioMode = continuationStateProvider?() ?? false
         updateProgress()
         
         // Peek at the next item in the queue
@@ -102,11 +111,17 @@ class DeejAIPlayerState: NSObject, ObservableObject, MusicPlayable {
         }
     }
     
-    /// Toggles radio/infinity mode by setting repeat mode to .all (on) or .off (off).
-    func toggleRadioMode() {
-        let newMode: RepeatMode = isRadioMode ? .off : .all
-        player.setRepeatMode(newMode)
-        isRadioMode = player.repeatMode == .all
+    /// Toggles radio/infinity continuation — the app's primary verb, "keep playing like this."
+    /// Enabling appends sonically-similar tracks to the queue now and engages the shared
+    /// "Instant Mix After End" policy; disabling clears that policy. Drives sonic-similarity
+    /// continuation, NOT repeat mode.
+    func toggleContinuation() {
+        let newValue = !isRadioMode
+        isRadioMode = newValue // optimistic; reconciled from the model below
+        Task { @MainActor in
+            await onToggleContinuation?(newValue)
+            isRadioMode = continuationStateProvider?() ?? newValue
+        }
     }
     
     private func updateProgress() {
@@ -136,7 +151,8 @@ class DeejAIPlayerState: NSObject, ObservableObject, MusicPlayable {
     func didArtworkChange() { }
     func didShuffleChange() { }
     func didRepeatChange() {
-        isRadioMode = player.repeatMode == .all
+        // Infinity/continuation is decoupled from repeat mode — repeat changes no longer
+        // affect the infinity control. Continuation state is driven by the after-end policy.
     }
     func didPlaybackRateChange() { }
 }

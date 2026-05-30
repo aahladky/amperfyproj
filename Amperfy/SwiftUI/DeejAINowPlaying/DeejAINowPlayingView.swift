@@ -300,7 +300,7 @@ struct DeejAINowPlayingView: View {
 
     private var bottomBar: some View {
         HStack(spacing: 20) {
-            Button { state.toggleRadioMode() } label: {
+            Button { state.toggleContinuation() } label: {
                 Image(systemName: "infinity")
                     .font(DeejAIFonts.serifTitle)
                     .foregroundStyle(state.isRadioMode ? DeejAIColors.accentSecondaryColor : DeejAIColors.textQuaternaryColor)
