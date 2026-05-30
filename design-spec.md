@@ -1,109 +1,154 @@
 # design-spec.md
 
-The frozen visual + behavioral contract for DeejAI screens. **This file is authored by a sighted human (in fast mockups), not by agents.** Agents and CI implement and verify *against* it É?" they never invent values or decide what a control means. If a value isn't here, stop and ask; don't guess from "what looks warm."
+The frozen visual + behavioral contract for DeejAI screens. This file is authored by a sighted human (in fast mockups), not by agents. Agents and CI implement and verify against it ‚Äî they never invent values or decide what a control means. If a value isn't here, stop and ask; don't guess from "what looks warm."
 
-Division of labor: **judgment happens here, once. Translation and enforcement happen downstream, forever.** An agent that obeys this file produces warmth it cannot see.
+**Division of labor:** judgment happens here, once. Translation and enforcement happen downstream, forever. An agent that obeys this file produces warmth it cannot see.
 
 ---
 
-## 1. Color tokens É?" source of truth: `DeejAIColors.swift`
+## 1. Color tokens ‚Äî source of truth: `DeejAIColors.swift`
 
 Never write a color literal in a view. Every color resolves to a `DeejAIColors` token. Values below are the contract; the Swift file must match.
 
 | Token | Light | Dark | Use |
-|---|---|---|---|
-| `surface` | `#F5EFE2` cream | `#291F14` walnut | screen background |
-| `surfaceElevated` | `#EDE8D4` | `#382B1E` | cards, up-next container |
-| `albumTint` | `#E0BD9E` | `#66472E` | warm bleed behind art |
-| `trackBackground` | `#D9CCB8` | `#4D3D2E` | progress/slider track (unplayed) |
-| `accentPrimary` | `#D1733D` terracotta | `#DE7D47` | play button, progress fill, loved heart |
-| `accentPrimaryDark` | `#B35C2E` | `#BF612E` | pressed states |
-| `accentSecondary` | `#266B66` teal | `#2E807A` | infinity (active), accents É?" sparing |
-| `accentSecondaryMuted` | `#4D857A` | `#5C948A` | pills, subtle backgrounds |
-| `textPrimary` | `#38291E` | `#F5EFE2` | titles |
-| `textSecondary` | `#665240` | `#E0D6C2` | artist, body |
-| `textTertiary` | `#9E8A70` | `#B3A185` | secondary labels |
-| `textQuaternary` | `#B8A68C` | `#94806A` | captions, times, **unloved heart** |
+|-------|-------|------|-----|
+| surface | #F5EFE2 cream | #291F14 walnut | screen background |
+| surfaceElevated | #EDE8D4 | #382B1E | cards, up-next container |
+| albumTint | #E0BD9E | #66472E | warm bleed behind art |
+| trackBackground | #D9CCB8 | #4D3D2E | progress/slider track (unplayed) |
+| accentPrimary | #D1733D terracotta | #DE7D47 | play button, progress fill, loved heart |
+| accentPrimaryDark | #B35C2E | #BF612E | pressed states |
+| accentSecondary | #266B66 teal | #2E807A | infinity (active), accents ‚Äî sparing |
+| accentSecondaryMuted | #4D857A | #5C948A | pills, subtle backgrounds |
+| textPrimary | #38291E | #F5EFE2 | titles |
+| textSecondary | #665240 | #E0D6C2 | artist, body |
+| textTertiary | #9E8A70 | #B3A185 | secondary labels |
+| textQuaternary | #B8A68C | #94806A | captions, times, unloved heart |
 
-**Invariant C1:** zero `Color(red:`, `UIColor(red:`, or `#hex` literals in any file under `SwiftUI/DeejAI*` except `DeejAIColors.swift`. (Currently passes É?" keep it.)
+**Invariant C1:** zero `Color(red:`, `UIColor(red:`, or `#hex` literals in any file under `SwiftUI/DeejAI*` except `DeejAIColors.swift`. ‚úÖ PASSES.
 
 ---
 
-## 2. Type tokens É?" source of truth: `DeejAIFonts.swift`
+## 2. Type tokens ‚Äî source of truth: `DeejAIFonts.swift`
 
-Serif = **Lora** (titles, liner-notes feel). Sans = **Nunito** (everything else). All tokens use `Font.custom(_:relativeTo:)` so Dynamic Type scales.
+Serif = Lora (titles, liner-notes feel). Sans = Nunito (everything else). All tokens use `Font.custom(_:relativeTo:)` so Dynamic Type scales.
 
 | Token | Face / size / style | Use |
-|---|---|---|
-| `serifDisplay` | Lora 32 bold / largeTitle | home greeting |
-| `serifTitle` | Lora 24 bold / title | now-playing track title |
-| `serifHeadline` | Lora 15 semibold / headline | card titles, mix names |
-| `serifSubheadline` | Lora 13 semibold / subheadline | art-overlay text |
-| `sansBody` | Nunito 16 medium / body | artist name |
-| `sansSubheadline` | Nunito 13 medium / body | next/suggested artist |
-| `sansLabel` | Nunito 13 medium / callout | "feel A˙ settled", section labels |
-| `sansCaption` | Nunito 11 semibold / caption | "UP NEXT", context header, play counts |
-| `sansCaptionBold` | Nunito 11 bold / caption | numeric badges |
-| `monoTime` | system 11 mono | elapsed/duration **only** |
+|-------|---------------------|-----|
+| serifDisplay | Lora 32 bold / largeTitle | home greeting |
+| serifTitle | Lora 24 bold / title | now-playing track title |
+| serifHeadline | Lora 15 semibold / headline | card titles, mix names |
+| serifSubheadline | Lora 13 semibold / subheadline | art-overlay text |
+| sansBody | Nunito 16 medium / body | artist name |
+| sansSubheadline | Nunito 13 medium / body | next/suggested artist |
+| sansLabel | Nunito 13 medium / callout | "feel ¬∑ settled", section labels |
+| sansCaption | Nunito 11 semibold / caption | "UP NEXT", context header, play counts |
+| sansCaptionBold | Nunito 11 bold / caption | numeric badges |
+| monoTime | system 11 mono | elapsed/duration only |
 
-**Invariant T1 (OPEN É?" must fix):** no `.system(size:` anywhere under `SwiftUI/DeejAI*` except `DeejAIFonts.swift` and the single `monoTime` token. ~17 sites currently violate this É?" they render in system San Francisco (not Lora/Nunito) AND disable Dynamic Type. Replace each with the matching `DeejAIFonts.` token.
+**Invariant T1:** no `.system(size:` anywhere under `SwiftUI/DeejAI*` except `DeejAIFonts.swift` and the single `monoTime` token. ‚úÖ PASSES ‚Äî all 17 sites replaced.
 
 ---
 
 ## 3. Shape, spacing, shadow, motion
 
-**Radii É?" exactly three, no others:**
-- `radiusLg` = 20 É?" album art, primary cards *(note: art is currently 16; spec target is 20 É?" reconcile)*
-- `radiusMd` = 14 É?" up-next container
-- `radiusSm` = 8 É?" thumbnails
+**Radii** ‚Äî exactly three, no others:
+
+- `radiusLg = 20` ‚Äî album art, primary cards
+- `radiusMd = 14` ‚Äî up-next container
+- `radiusSm = 8` ‚Äî thumbnails
+
 Use `.continuous` corner style everywhere.
 
-**Spacing É?" 4pt base; use these steps only:** 4, 8, 12, 16, 20, 24, 28, 32, 40. (No ad-hoc values like 6, 14, 18, 48.) Reconcile existing `spacing: 6`, `spacing: 14`, `spacing: 48` to the nearest step.
+**Spacing** ‚Äî 4pt base; use these steps only: 4, 8, 12, 16, 20, 24, 28, 32, 40. No ad-hoc values like 6, 14, 18, 48.
 
-**Shadow É?" one warm shadow style only:** color = black at 12% opacity, *warm-shifted* (never neutral gray); y-offset 4; blur 12. No other shadow recipes.
+**Shadow** ‚Äî one warm shadow style only: color = black at 12% opacity, warm-shifted (never neutral gray); y-offset 4; blur 12. No other shadow recipes. ‚úÖ PASSES.
 
-**Motion É?" one spring:** `.spring(response: 0.4, dampingFraction: 0.8)` for state transitions, love-tap scale, art changes. No linear easing on user-facing transitions.
+**Motion** ‚Äî one spring: `.spring(response: 0.4, dampingFraction: 0.8)` for state transitions, love-tap scale, art changes. No linear easing on user-facing transitions. ‚úÖ PASSES.
 
 ---
 
-## 4. Per-control semantics É?" what each control MEANS (not just looks like)
+## 4. Per-control semantics ‚Äî what each control MEANS
 
 This is where blind agents drift: they wire a control to the nearest existing primitive that compiles. These bindings are the contract.
 
-- **Love heart** É?" toggles persisted favorite. Reads `playable.isFavorite` on load; writes back (Core Data + `onToggleFavorite` server hook). Filled+`accentPrimary` when loved, outline+`textQuaternary` when not. Éo" DONE É?" must not regress.
-- **Infinity** É?" **extends the queue with sequencer-selected sonically-similar tracks** ("keep playing like this"). It is **NOT** `repeatMode`. **OPEN BUG:** currently wired to `RepeatMode.all` (repeat), which replays the existing queue instead of generating continuation. Rewire to the radio/sequencer extend path. `accentSecondary` (teal) when active.
-- **Up next** É?" data source **must be the sequencer's predicted next track**, not `getNextQueueItems`. **OPEN BUG:** currently reads the plain Amperfy queue while labeled "flows on" (implies sonic similarity). Either wire the sequencer or change the label to match the real source. Label and source must always agree.
-- **Play/transport** É?" standard. Shuffle intentionally absent (a flow system doesn't randomize). Do not re-add.
-- **Feel pill** É?" the ONLY exposed model control. One human word ("settled"). Never expose epsilon / "drunk" / lookback / raw similarity params.
+**Love heart** ‚Äî toggles persisted favorite. Reads `playable.isFavorite` on load; writes back (Core Data + `onToggleFavorite` server hook). Filled+accentPrimary when loved, outline+textQuaternary when not. ‚úÖ DONE ‚Äî must not regress.
+
+**Infinity** ‚Äî extends the queue with sequencer-selected sonically-similar tracks ("keep playing like this"). It is NOT repeatMode. ‚ö†Ô∏è OPEN BUG: currently wired to `RepeatMode.all` (repeat), which replays the existing queue instead of generating continuation. Rewire to the radio/sequencer extend path. `accentSecondary` (teal) when active.
+
+**Up next** ‚Äî data source must be the sequencer's predicted next track, not `getNextQueueItems`. ‚ö†Ô∏è OPEN BUG: currently reads the plain Amperfy queue while labeled "UP NEXT" (implies sonic similarity). Either wire the sequencer or change the label to match the real source. Label and source must always agree.
+
+**Play/transport** ‚Äî standard. Shuffle intentionally absent (a flow system doesn't randomize). Do not re-add.
+
+**Feel pill** ‚Äî the ONLY exposed model control. One human word ("settled"). Never expose epsilon / "drunk" / lookback / raw similarity params.
 
 ---
 
-## 5. UIKit chrome É?" source of truth: a single appearance-config driven from `DeejAIColors`
+## 5. UIKit chrome ‚Äî source of truth: `DeejAIAppearance.swift`
 
-The app is UIKit+SwiftUI hybrid. Unstyled UIKit chrome leaking system blue/gray is the #1 "skinned" tell, and it's nearly invisible on a casual device glance É?" so it must be enforced mechanically, not by eye.
+The app is UIKit+SwiftUI hybrid. Unstyled UIKit chrome leaking system blue/gray is the #1 "skinned" tell.
 
-**Invariant U1 (OPEN É?" must fix):** appearance proxies do not exist yet (zero matches in the ViewController layer). Add a single setup, driven from the same tokens, covering at minimum:
-- `UINavigationBarAppearance` É?" set BOTH `standardAppearance` AND `scrollEdgeAppearance` (missing the latter = bar snaps to default on scroll-to-top). Background `surface`, title text `textPrimary`.
-- `UITabBarAppearance` É?" `standardAppearance` AND `scrollEdgeAppearance`. Selected item `accentPrimary`, background `surface`.
-- Window/global `tintColor` = `accentPrimary`.
-- `UISwitch.appearance().onTintColor`, `UISlider` min-track, table selection tint É?" all from tokens.
+**Invariant U1:** appearance proxies driven from the same tokens, covering at minimum:
+
+- `UINavigationBarAppearance` ‚Äî set BOTH `standardAppearance` AND `scrollEdgeAppearance`. Background `surface`, title text `textPrimary`.
+- `UITabBarAppearance` ‚Äî both appearances. Selected item `accentPrimary`, background `surface`.
+- Window/global `tintColor = accentPrimary`.
+- `UISwitch.appearance().onTintColor = accentSecondary`
+- `UISlider` min-track, table selection tint ‚Äî all from tokens.
+
+‚úÖ PASSES.
 
 ---
 
-## 6. CI gates (Xcode Cloud) É?" enforce without eyes
+## 6. CI gates (Xcode Cloud) ‚Äî enforce without eyes
 
-1. **grep-lint script** (cheap, runs first, fails fast): assert invariants C1, T1, U1 and "no shadow recipe outside the approved one." A regex pass catches the entire font/literal/proxy class of drift before a build is even worth doing. Most "it's fine" casualties die here.
-2. **Snapshot tests** (`swift-snapshot-testing`), one per screen, light + dark, against approved reference images. Generate references in the **same Xcode Cloud simulator/OS** they're checked against (font hinting/scale differ across machines, or you'll chase phantom diffs). A snapshot verifies *matches approved reference* É?" NOT *reference is good*. Human sighted approval happens once, at reference-update time.
+- **grep-lint script** (cheap, runs first, fails fast): assert invariants C1, T1, U1 and "no shadow recipe outside the approved one."
+- **Snapshot tests** (swift-snapshot-testing), one per screen, light + dark, against approved reference images. Generate references in the same Xcode Cloud simulator/OS they're checked against.
 
-**Workflow rule:** explore design in fast mockup É+' freeze values here É+' agents implement to this file É+' grep-lint + snapshot in CI É+' review build against the approved reference image (binary "matches / doesn't", not open-ended taste). Don't spend a 25-min deploy to *discover* a design; spend it to *confirm* one.
+**Workflow rule:** explore design in fast mockup ‚Üí freeze values here ‚Üí agents implement to this file ‚Üí grep-lint + snapshot in CI ‚Üí review build against the approved reference image (binary "matches / doesn't", not open-ended taste).
+
+---
+
+## 7. Library architecture (decided)
+
+Segmented control: **Artists / Albums / Songs** ‚Äî the only three top-level browse types.
+
+Persistent control bar: search field (scoped) + sort menu (name A-Z, date added, recently played, play count asc/desc, random).
+
+Filter chips: All / Favorites / Recently played ‚Äî apply across whichever segment is active.
+
+A-Z scrubber on the right edge when sorted by name.
+
+Podcasts: removed by HIDING, not excision. Leave upstream code paths dormant.
+
+---
+
+## 8. Home playlist shelf (decided)
+
+Playlists migrate from Library to Home as a secondary shelf beneath the hero/mixes.
+
+"Chosen for you" (next-listen hero, mixes) above; "chosen by you" (playlists) below.
+
+Playlist authoring: "+" on the shelf + edit affordances on detail. Don't lose create/edit flows.
+
+---
+
+## 9. Settings architecture (rules, not an inventory)
+
+Two-tier rule: top level shows frequency-touched settings + category doors + app info. Everything granular lives one tap down.
+
+Categories map to user INTENT: Playback, Library & Sync, Appearance, Account, Advanced/Developer.
+
+Model-knob containment: granular behavioral controls ‚Üí YES in Playback. Raw model parameters ‚Üí walled in Developer behind "advanced" framing.
 
 ---
 
 ## Open must-fix list (this revision)
 
-1. **T1** É?" replace ~17 `.system(size:)` sites with `DeejAIFonts` tokens (restores custom faces + Dynamic Type).
-2. **U1** É?" add UIKit appearance proxies (both standard + scrollEdge), token-driven.
-3. **Infinity** É?" rewire from `repeatMode` to sequencer queue-extend.
-4. **Up next** É?" wire sequencer OR soften label to match the queue source.
-5. Reconcile radii (art 16É+'20) and off-scale spacing (6/14/48) to the named steps.
-
+| # | Item | Status |
+|---|------|--------|
+| T1 | Replace .system(size:) with DeejAIFonts tokens | ‚úÖ DONE |
+| U1 | Add UIKit appearance proxies (both standard + scrollEdge) | ‚úÖ DONE |
+| Infinity | Rewire from repeatMode to sequencer queue-extend | ‚ö†Ô∏è OPEN |
+| Up next | Wire sequencer OR soften label to match queue source | ‚ö†Ô∏è OPEN |
+| Radii | Reconcile art 16‚Üí20 and off-scale spacing | ‚úÖ DONE |
