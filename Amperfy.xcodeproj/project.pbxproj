@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		"'50RA71NG2F5A01240085CBB3'" = {isa = PBXBuildFile; fileRef = 50RA71NG2F5A01230085CBB3; };
+		04D64E018EA514ED38E84D4E /* LoraVF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60BB41D19872A2407DE5FEA5 /* LoraVF.ttf */; };
 		09EB5F102F93B96E00B1C71C /* ShareSongAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB5F0D2F93B65400B1C71C /* ShareSongAction.swift */; };
 		27F043D0B278D38815F214A1 /* DeejAIColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809647C395BA4C47828ADC05 /* DeejAIColors.swift */; };
 		375545738DEDCA9FA7F7C7E7 /* DeejAINowPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB342E8AEB852C8FBFCB3BA /* DeejAINowPlayingView.swift */; };
@@ -541,6 +542,7 @@
 		C4B348899E574B96E876D5AD /* DeejAISyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A245C791B42C706E0CB13C /* DeejAISyncer.swift */; };
 		D93C42E393827BC5CA081DC0 /* DeejAIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9984433E9DA062BC1735A994 /* DeejAIModels.swift */; };
 		DCD34E648E3AB9D7E416CFC8 /* DeejAIPlayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6194D798255CEEFC13AB674 /* DeejAIPlayerState.swift */; };
+		DE4E47C997B96231AB0EF3AC /* NunitoVF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B8774603A2E0AAA98AE846A8 /* NunitoVF.ttf */; };
 		E1614CE08C953882B1DB3D7E /* DeejAIForYouView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDBE49869E7605A90652DE54 /* DeejAIForYouView.swift */; };
 /* End PBXBuildFile section */
 
@@ -1149,6 +1151,7 @@
 		50FF31192BBB27AC00C2C3B9 /* Amperfy v36.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v36.xcdatamodel"; sourceTree = "<group>"; };
 		50FF311A2BBC4D8000C2C3B9 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		5BB342E8AEB852C8FBFCB3BA /* DeejAINowPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAINowPlayingView.swift; path = Amperfy/SwiftUI/DeejAINowPlaying/DeejAINowPlayingView.swift; sourceTree = "<group>"; };
+		60BB41D19872A2407DE5FEA5 /* LoraVF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file.ttf; name = LoraVF.ttf; path = Amperfy/Resources/Fonts/LoraVF.ttf; sourceTree = "<group>"; };
 		631C166A2C6D3D9A0085F62E /* SettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRow.swift; sourceTree = "<group>"; };
 		631C166C2C6D61110085F62E /* NavigationTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationTarget.swift; sourceTree = "<group>"; };
 		631C166E2C6D63510085F62E /* SettingsSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsSection.swift; sourceTree = "<group>"; };
@@ -1168,6 +1171,7 @@
 		9984433E9DA062BC1735A994 /* DeejAIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIModels.swift; path = AmperfyKit/Api/DeejAI/DeejAIModels.swift; sourceTree = "<group>"; };
 		A6194D798255CEEFC13AB674 /* DeejAIPlayerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIPlayerState.swift; path = Amperfy/SwiftUI/DeejAINowPlaying/DeejAIPlayerState.swift; sourceTree = "<group>"; };
 		B5A5CE010000000000000002 /* ShareSongActionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSongActionTest.swift; sourceTree = "<group>"; };
+		B8774603A2E0AAA98AE846A8 /* NunitoVF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file.ttf; name = NunitoVF.ttf; path = Amperfy/Resources/Fonts/NunitoVF.ttf; sourceTree = "<group>"; };
 		C0A1B0022EEE000000000002 /* MacWindowHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacWindowHelper.swift; sourceTree = "<group>"; };
 		FDBE49869E7605A90652DE54 /* DeejAIForYouView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIForYouView.swift; path = Amperfy/SwiftUI/DeejAIForYou/DeejAIForYouView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1470,6 +1474,8 @@
 				82DF48A893F7ACE224EAF028 /* RatingView.swift */,
 				A6194D798255CEEFC13AB674 /* DeejAIPlayerState.swift */,
 				FDBE49869E7605A90652DE54 /* DeejAIForYouView.swift */,
+				60BB41D19872A2407DE5FEA5 /* LoraVF.ttf */,
+				B8774603A2E0AAA98AE846A8 /* NunitoVF.ttf */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2380,6 +2386,8 @@
 				508385ED21C5965B00C4BB32 /* Main.storyboard in Resources */,
 				500B97D02B7C9555005554BF /* EntityPreviewVC.xib in Resources */,
 				50A30E642B756CF100722894 /* CurrentlyPlayingTableCell.xib in Resources */,
+				04D64E018EA514ED38E84D4E /* LoraVF.ttf in Resources */,
+				DE4E47C997B96231AB0EF3AC /* NunitoVF.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
