@@ -82,6 +82,11 @@
 		<string>audio</string>
 		<string>fetch</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>LoraVF.ttf</string>
+		<string>NunitoVF.ttf</string>
+	</array>
 	<key>UIBrowsableContentSupportsSectionedBrowsing</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

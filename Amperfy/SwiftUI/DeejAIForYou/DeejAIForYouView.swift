@@ -97,11 +97,11 @@ struct DeejAIForYouView: View {
     private var greetingHeader: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(greetingText)
-                .font(.system(size: 32, weight: .bold, design: .serif))
+                .font(DeejAIFonts.serifDisplay)
                 .foregroundStyle(DeejAIColors.textPrimaryColor)
 
             Text("Here's what DeejAI has lined up for you.")
-                .font(.system(size: 15, weight: .medium, design: .rounded))
+                .font(DeejAIFonts.sansBody)
                 .foregroundStyle(DeejAIColors.textTertiaryColor)
         }
     }
@@ -120,7 +120,7 @@ struct DeejAIForYouView: View {
 
     private func sectionLabel(_ text: String) -> some View {
         Text(text)
-            .font(.system(size: 11, weight: .semibold, design: .rounded))
+            .font(DeejAIFonts.sansCaption)
             .tracking(2.5)
             .foregroundStyle(DeejAIColors.textTertiaryColor)
             .padding(.bottom, 14)
@@ -162,12 +162,12 @@ struct DeejAIForYouView: View {
                 )
 
             Text(mix.name)
-                .font(.system(size: 14, weight: .semibold, design: .serif))
+                .font(DeejAIFonts.serifHeadline)
                 .foregroundStyle(DeejAIColors.textPrimaryColor)
                 .lineLimit(1)
 
             Text(mix.subtitle)
-                .font(.system(size: 12, weight: .medium, design: .rounded))
+                .font(DeejAIFonts.sansSubheadline)
                 .foregroundStyle(DeejAIColors.textTertiaryColor)
                 .lineLimit(2)
                 .fixedSize(horizontal: false, vertical: true)
@@ -196,17 +196,17 @@ struct DeejAIForYouView: View {
                     .frame(width: 88, height: 88)
 
                 Text(String(artist.name.prefix(1)).uppercased())
-                    .font(.system(size: 30, weight: .bold, design: .serif))
+                    .font(DeejAIFonts.serifDisplay)
                     .foregroundStyle(DeejAIColors.surfaceColor.opacity(0.85))
             }
 
             Text(artist.name)
-                .font(.system(size: 13, weight: .semibold, design: .serif))
+                .font(DeejAIFonts.serifSubheadline)
                 .foregroundStyle(DeejAIColors.textPrimaryColor)
                 .lineLimit(1)
 
-            Text("\\(artist.plays) plays")
-                .font(.system(size: 11, weight: .medium, design: .rounded))
+            Text("\(artist.plays) plays")
+                .font(DeejAIFonts.sansCaption)
                 .foregroundStyle(DeejAIColors.textQuaternaryColor)
         }
         .frame(width: 100)
@@ -252,7 +252,7 @@ struct DeejAIForYouView: View {
         HStack(spacing: 14) {
             // Number badge
             Text("\(index + 1)")
-                .font(.system(size: 12, weight: .bold, design: .rounded))
+                .font(DeejAIFonts.sansCaptionBold)
                 .foregroundStyle(DeejAIColors.textQuaternaryColor)
                 .frame(width: 20, alignment: .trailing)
 
@@ -264,12 +264,12 @@ struct DeejAIForYouView: View {
             // Track info
             VStack(alignment: .leading, spacing: 3) {
                 Text(track.title)
-                    .font(.system(size: 15, weight: .semibold, design: .serif))
+                    .font(DeejAIFonts.serifHeadline)
                     .foregroundStyle(DeejAIColors.textPrimaryColor)
                     .lineLimit(1)
 
                 Text(track.artist)
-                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                    .font(DeejAIFonts.sansSubheadline)
                     .foregroundStyle(DeejAIColors.textTertiaryColor)
                     .lineLimit(1)
             }
@@ -279,7 +279,7 @@ struct DeejAIForYouView: View {
             // Score pill
             if let score = track.score {
                 Text(String(format: "%.0f%%", score * 100))
-                    .font(.system(size: 11, weight: .bold, design: .rounded))
+                    .font(DeejAIFonts.sansCaptionBold)
                     .foregroundStyle(DeejAIColors.accentSecondaryColor)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
@@ -337,12 +337,12 @@ struct DeejAIForYouView: View {
             // Track info
             VStack(alignment: .leading, spacing: 3) {
                 Text(play.title)
-                    .font(.system(size: 15, weight: .semibold, design: .serif))
+                    .font(DeejAIFonts.serifHeadline)
                     .foregroundStyle(DeejAIColors.textPrimaryColor)
                     .lineLimit(1)
 
                 Text(play.artist)
-                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                    .font(DeejAIFonts.sansSubheadline)
                     .foregroundStyle(DeejAIColors.textTertiaryColor)
                     .lineLimit(1)
             }
@@ -351,7 +351,7 @@ struct DeejAIForYouView: View {
 
             // Status label
             Text(play.completed ? "Listened" : "Skipped")
-                .font(.system(size: 11, weight: .medium, design: .rounded))
+                .font(DeejAIFonts.sansCaption)
                 .foregroundStyle(play.completed ? DeejAIColors.accentSecondaryColor : DeejAIColors.textQuaternaryColor)
         }
         .padding(.horizontal, 14)

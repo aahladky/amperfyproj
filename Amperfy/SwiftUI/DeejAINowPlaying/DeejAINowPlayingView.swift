@@ -101,7 +101,7 @@ struct DeejAINowPlayingView: View {
 
     private var contextHeader: some View {
         Text(contextLabel)
-            .font(.system(size: 11, weight: .medium, design: .rounded))
+            .font(DeejAIFonts.sansCaption)
             .tracking(3)
             .textCase(.uppercase)
             .foregroundStyle(DeejAIColors.textTertiaryColor)
@@ -151,7 +151,7 @@ struct DeejAINowPlayingView: View {
                                     .frame(width: 24, height: 24)
                             )
                         Text(state.currentAlbumTitle)
-                            .font(.system(size: 13, weight: .semibold, design: .serif))
+                            .font(DeejAIFonts.serifSubheadline)
                             .foregroundStyle(DeejAIColors.surfaceColor.opacity(0.8))
                             .lineLimit(1)
                             .padding(.horizontal)
@@ -175,12 +175,12 @@ struct DeejAINowPlayingView: View {
     private var trackInfo: some View {
         VStack(spacing: 6) {
             Text(state.currentTrackTitle)
-                .font(.system(size: 24, weight: .bold, design: .serif))
+                .font(DeejAIFonts.serifTitle)
                 .foregroundStyle(DeejAIColors.textPrimaryColor)
                 .lineLimit(1)
 
             Text(state.currentArtistName)
-                .font(.system(size: 16, weight: .medium, design: .rounded))
+                .font(DeejAIFonts.sansBody)
                 .foregroundStyle(DeejAIColors.textTertiaryColor)
                 .lineLimit(1)
         }
@@ -274,7 +274,7 @@ struct DeejAINowPlayingView: View {
         } label: {
             VStack(alignment: .leading, spacing: 12) {
                 Text("UP NEXT")
-                    .font(.system(size: 10, weight: .semibold, design: .rounded))
+                    .font(DeejAIFonts.sansCaption)
                     .tracking(2.5)
                     .foregroundStyle(DeejAIColors.textTertiaryColor)
 
@@ -285,12 +285,12 @@ struct DeejAINowPlayingView: View {
 
                     VStack(alignment: .leading, spacing: 3) {
                         Text(state.nextTrackTitle)
-                            .font(.system(size: 15, weight: .semibold, design: .serif))
+                            .font(DeejAIFonts.serifHeadline)
                             .foregroundStyle(DeejAIColors.textPrimaryColor)
                             .lineLimit(1)
 
                         Text(state.nextArtistName)
-                            .font(.system(size: 13, weight: .medium, design: .rounded))
+                            .font(DeejAIFonts.sansSubheadline)
                             .foregroundStyle(DeejAIColors.textTertiaryColor)
                             .lineLimit(1)
                     }
@@ -320,7 +320,7 @@ struct DeejAINowPlayingView: View {
             .buttonStyle(.plain)
 
             Text("feel · settled")
-                .font(.system(size: 13, weight: .medium, design: .rounded))
+                .font(DeejAIFonts.sansSubheadline)
                 .tracking(1)
                 .foregroundStyle(DeejAIColors.accentSecondaryColor)
                 .padding(.horizontal, 16)
