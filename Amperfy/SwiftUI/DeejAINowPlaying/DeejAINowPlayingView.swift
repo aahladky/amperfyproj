@@ -269,39 +269,44 @@ struct DeejAINowPlayingView: View {
     }
 
     private var upNextCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("UP NEXT · FLOWS ON")
-                .font(.system(size: 10, weight: .semibold, design: .rounded))
-                .tracking(2.5)
-                .foregroundStyle(DeejAIColors.tan)
+        Button {
+            player.playNext()
+        } label: {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("UP NEXT")
+                    .font(.system(size: 10, weight: .semibold, design: .rounded))
+                    .tracking(2.5)
+                    .foregroundStyle(DeejAIColors.tan)
 
-            HStack(spacing: 14) {
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .fill(DeejAIColors.teal)
-                    .frame(width: 52, height: 52)
+                HStack(spacing: 14) {
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .fill(DeejAIColors.teal)
+                        .frame(width: 52, height: 52)
 
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(state.nextTrackTitle)
-                        .font(.system(size: 15, weight: .semibold, design: .serif))
-                        .foregroundStyle(DeejAIColors.brownDark)
-                        .lineLimit(1)
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(state.nextTrackTitle)
+                            .font(.system(size: 15, weight: .semibold, design: .serif))
+                            .foregroundStyle(DeejAIColors.brownDark)
+                            .lineLimit(1)
 
-                    Text(state.nextArtistName)
-                        .font(.system(size: 13, weight: .medium, design: .rounded))
-                        .foregroundStyle(DeejAIColors.tan)
-                        .lineLimit(1)
+                        Text(state.nextArtistName)
+                            .font(.system(size: 13, weight: .medium, design: .rounded))
+                            .foregroundStyle(DeejAIColors.tan)
+                            .lineLimit(1)
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(DeejAIColors.tanLight)
                 }
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(DeejAIColors.tanLight)
             }
+            .padding(16)
+            .background(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(DeejAIColors.creamCard)
+            )
         }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(DeejAIColors.creamCard)
-        )
+        .buttonStyle(.plain)
     }
 
     private var bottomBar: some View {
