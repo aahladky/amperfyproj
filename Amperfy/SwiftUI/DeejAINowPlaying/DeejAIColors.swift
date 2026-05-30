@@ -170,8 +170,7 @@ enum DeejAIColors {
     static var creamCard: Color { surfaceElevatedColor }
 
     /// Album-art tint wash.
-    @available(*, deprecated, message: "Use DeejAIColors.albumTintColor instead")
-    static var albumTint: Color { albumTintColor }
+    // (Removed deprecated alias — use DeejAIColors.albumTintColor or .albumTint UIColor)
 
     /// Terracotta / burnt orange — hero accent.
     @available(*, deprecated, message: "Use DeejAIColors.accentPrimaryColor instead")
@@ -179,7 +178,7 @@ enum DeejAIColors {
 
     /// Darker terracotta — pressed states.
     @available(*, deprecated, message: "Use DeejAIColors.accentPrimaryDarkColor instead")
-    static var terracottaDark: Color { accentPrimaryDarkColor.brightness(0.95) } // approximate
+    static var terracottaDark: Color { accentPrimaryDarkColor.opacity(0.95) } // approximate darkening
 
     /// Deep teal — secondary accent.
     @available(*, deprecated, message: "Use DeejAIColors.accentSecondaryColor instead")
@@ -206,6 +205,5 @@ enum DeejAIColors {
     static var tanLight: Color { textQuaternaryColor }
 
     /// Track background — progress bars.
-    @available(*, deprecated, message: "Use DeejAIColors.trackBackgroundColor instead")
-    static var trackBackground: Color { trackBackgroundColor }
+    // (Removed deprecated alias — use DeejAIColors.trackBackgroundColor or .trackBackground UIColor)
 }

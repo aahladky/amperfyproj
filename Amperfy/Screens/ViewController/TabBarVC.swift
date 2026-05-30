@@ -71,7 +71,7 @@ class TabBarVC: UITabBarController {
     forYouTab = UITab(
       title: TabNavigatorItem.forYou.title,
       image: TabNavigatorItem.forYou.icon,
-      identifier: "Tabs.\\(TabNavigatorItem.forYou.title)"
+      identifier: "Tabs.\(TabNavigatorItem.forYou.title)"
     ) { _ in
       UINavigationController(
         rootViewController: TabNavigatorItem.forYou
