@@ -536,13 +536,10 @@
 		638920F02C8C8E9000932EE8 /* SettingsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638920EF2C8C8E9000932EE8 /* SettingsList.swift */; };
 		63DCDB7A2C674B5D00522F68 /* SettingsSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DCDB792C674B5D00522F68 /* SettingsSceneDelegate.swift */; };
 		641708592C13BF5100BA2619 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641708582C13BF5100BA2619 /* Haptics.swift */; };
-		781A4FEEB7B5A45170B15F1A /* DeejAICoverArtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8044F98805BAEEDFCC5AFE /* DeejAICoverArtView.swift */; };
 		89DD420BA0CA9A235EC3A9B7 /* DeejAICoverArtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8044F98805BAEEDFCC5AFE /* DeejAICoverArtView.swift */; };
 		8C4A4BE5B47200CA82A9184C /* DeejAIApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8641427181EE4179E8E941BE /* DeejAIApi.swift */; };
-		9F7E4115BC01926EC8F24A9C /* DeejAIFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474A4D3CA62F9E9597E1AF07 /* DeejAIFonts.swift */; };
 		A1F34551ABE8D70894BEECEB /* DeejAIFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474A4D3CA62F9E9597E1AF07 /* DeejAIFonts.swift */; };
 		B5A5CE010000000000000001 /* ShareSongActionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A5CE010000000000000002 /* ShareSongActionTest.swift */; };
-		BC7340F6B7D16BC01584DC17 /* DeejAICoverArtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8044F98805BAEEDFCC5AFE /* DeejAICoverArtView.swift */; };
 		C0A1B0032EEE000000000003 /* MacWindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A1B0022EEE000000000002 /* MacWindowHelper.swift */; };
 		C4B348899E574B96E876D5AD /* DeejAISyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A245C791B42C706E0CB13C /* DeejAISyncer.swift */; };
 		D0EE4C2997CCFF0135302852 /* DeejAIHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F945859819E461ED53BF58 /* DeejAIHomeView.swift */; };
@@ -550,7 +547,6 @@
 		DCD34E648E3AB9D7E416CFC8 /* DeejAIPlayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6194D798255CEEFC13AB674 /* DeejAIPlayerState.swift */; };
 		DE4E47C997B96231AB0EF3AC /* NunitoVF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B8774603A2E0AAA98AE846A8 /* NunitoVF.ttf */; };
 		E1614CE08C953882B1DB3D7E /* DeejAIForYouView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDBE49869E7605A90652DE54 /* DeejAIForYouView.swift */; };
-		E68B473BA4870B13FDF5E5AA /* DeejAIFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474A4D3CA62F9E9597E1AF07 /* DeejAIFonts.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2887,8 +2883,6 @@
 				D93C42E393827BC5CA081DC0 /* DeejAIModels.swift in Sources */,
 				C4B348899E574B96E876D5AD /* DeejAISyncer.swift in Sources */,
 				48CE41CB989BF7903C1EA60D /* RatingView.swift in Sources */,
-				9F7E4115BC01926EC8F24A9C /* DeejAIFonts.swift in Sources */,
-				781A4FEEB7B5A45170B15F1A /* DeejAICoverArtView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2954,8 +2948,6 @@
 				50BE5D8A2850F50F00156FC6 /* ErrorParserTest.swift in Sources */,
 				50BE5D942850F51E00156FC6 /* UnitTestHelper.swift in Sources */,
 				50AE79B82C1F68090085CBB3 /* SsLyricsBySongId2ParserTest.swift in Sources */,
-				E68B473BA4870B13FDF5E5AA /* DeejAIFonts.swift in Sources */,
-				BC7340F6B7D16BC01584DC17 /* DeejAICoverArtView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
