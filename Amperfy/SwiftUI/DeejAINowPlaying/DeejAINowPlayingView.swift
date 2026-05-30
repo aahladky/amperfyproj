@@ -129,7 +129,7 @@ struct DeejAINowPlayingView: View {
     private var albumArt: some View {
         ZStack {
             // Warm shadow layer
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
                 .fill(DeejAIColors.albumTintColor.opacity(0.3))
                 .frame(width: 296, height: 296)
                 .offset(x: 4, y: 6)
@@ -138,7 +138,7 @@ struct DeejAINowPlayingView: View {
             // Real cover art from Amperfy's cached artwork, or placeholder gradient
             DeejAICoverArtView(
                 entity: state.currentPlayable,
-                cornerRadius: 16,
+                cornerRadius: 20,
                 placeholderColors: [
                     DeejAIColors.textSecondaryColor,
                     DeejAIColors.accentPrimaryDarkColor,
@@ -162,7 +162,7 @@ struct DeejAINowPlayingView: View {
     }
 
     private var trackInfo: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 8) {
             Text(state.currentTrackTitle)
                 .font(DeejAIFonts.serifTitle)
                 .foregroundStyle(DeejAIColors.textPrimaryColor)
@@ -187,7 +187,7 @@ struct DeejAINowPlayingView: View {
             }
         } label: {
             Image(systemName: state.isFavorite ? "heart.fill" : "heart")
-                .font(.system(size: 24, weight: .medium))
+                .font(DeejAIFonts.serifTitle)
                 .foregroundStyle(state.isFavorite ? DeejAIColors.accentPrimaryColor : DeejAIColors.textQuaternaryColor)
                 .scaleEffect(loveScale)
                 .frame(width: 52, height: 52)
@@ -212,21 +212,21 @@ struct DeejAINowPlayingView: View {
 
             HStack {
                 Text(state.elapsedText)
-                    .font(.system(size: 11, weight: .medium, design: .monospaced))
+                    .font(DeejAIFonts.monoTime)
                     .foregroundStyle(DeejAIColors.textQuaternaryColor)
                 Spacer()
                 Text(state.durationText)
-                    .font(.system(size: 11, weight: .medium, design: .monospaced))
+                    .font(DeejAIFonts.monoTime)
                     .foregroundStyle(DeejAIColors.textQuaternaryColor)
             }
         }
     }
 
     private var playbackControls: some View {
-        HStack(alignment: .center, spacing: 48) {
+        HStack(alignment: .center, spacing: 40) {
             Button { player.playPreviousOrReplay() } label: {
                 Image(systemName: "backward.fill")
-                    .font(.system(size: 22, weight: .medium))
+                    .font(DeejAIFonts.serifTitle)
                     .foregroundStyle(DeejAIColors.textPrimaryColor)
                     .frame(width: 44, height: 44)
             }
@@ -239,7 +239,7 @@ struct DeejAINowPlayingView: View {
                         .frame(width: 68, height: 68)
 
                     Image(systemName: state.isPlaying ? "pause.fill" : "play.fill")
-                        .font(.system(size: 28, weight: .bold))
+                        .font(DeejAIFonts.serifDisplay)
                         .foregroundStyle(DeejAIColors.surfaceColor)
                         .offset(x: state.isPlaying ? 0 : 2)
                 }
@@ -248,7 +248,7 @@ struct DeejAINowPlayingView: View {
 
             Button { player.playNext() } label: {
                 Image(systemName: "forward.fill")
-                    .font(.system(size: 22, weight: .medium))
+                    .font(DeejAIFonts.serifTitle)
                     .foregroundStyle(DeejAIColors.textPrimaryColor)
                     .frame(width: 44, height: 44)
             }
@@ -267,12 +267,12 @@ struct DeejAINowPlayingView: View {
                     .tracking(2.5)
                     .foregroundStyle(DeejAIColors.textTertiaryColor)
 
-                HStack(spacing: 14) {
+                HStack(spacing: 16) {
                     RoundedRectangle(cornerRadius: 8, style: .continuous)
                         .fill(DeejAIColors.accentSecondaryColor)
                         .frame(width: 52, height: 52)
 
-                    VStack(alignment: .leading, spacing: 3) {
+                    VStack(alignment: .leading, spacing: 4) {
                         Text(state.nextTrackTitle)
                             .font(DeejAIFonts.serifHeadline)
                             .foregroundStyle(DeejAIColors.textPrimaryColor)
@@ -285,7 +285,7 @@ struct DeejAINowPlayingView: View {
                     }
                     Spacer()
                     Image(systemName: "chevron.right")
-                        .font(.system(size: 12, weight: .semibold))
+                        .font(DeejAIFonts.serifSubheadline)
                         .foregroundStyle(DeejAIColors.textQuaternaryColor)
                 }
             }
@@ -302,7 +302,7 @@ struct DeejAINowPlayingView: View {
         HStack(spacing: 20) {
             Button { state.toggleRadioMode() } label: {
                 Image(systemName: "infinity")
-                    .font(.system(size: 20, weight: .medium))
+                    .font(DeejAIFonts.serifTitle)
                     .foregroundStyle(state.isRadioMode ? DeejAIColors.accentSecondaryColor : DeejAIColors.textQuaternaryColor)
                     .frame(width: 44, height: 44)
             }

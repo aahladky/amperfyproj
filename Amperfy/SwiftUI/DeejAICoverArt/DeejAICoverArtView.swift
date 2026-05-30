@@ -72,7 +72,7 @@ struct DeejAICoverArtView: View {
     ///   - triggersDownload: If true, triggers artwork download when not cached (default: true).
     init(
         entity: AbstractLibraryEntity?,
-        cornerRadius: CGFloat = 16,
+        cornerRadius: CGFloat = 20,
         placeholderColors: [Color] = [
             DeejAIColors.textSecondaryColor,
             DeejAIColors.accentPrimaryDarkColor,
@@ -104,7 +104,7 @@ struct DeejAICoverArtView: View {
                 .overlay(
                     // Music note icon overlay
                     Image(systemName: "music.note")
-                        .font(.system(size: min(placeholderSize, 40), weight: .medium))
+                        .font(DeejAIFonts.serifDisplay)
                         .foregroundStyle(DeejAIColors.surfaceColor.opacity(0.3))
                 )
             }
@@ -191,8 +191,8 @@ extension DeejAICoverArtView {
     static func nowPlaying(entity: AbstractPlayable?) -> DeejAICoverArtView {
         DeejAICoverArtView(
             entity: entity,
-            cornerRadius: 16
-        )
+            cornerRadius: 20
+                        )
     }
 
     /// Creates a cover art view for a mini thumbnail (e.g. up-next, suggestion rows).
@@ -200,7 +200,7 @@ extension DeejAICoverArtView {
     static func thumbnail(entity: AbstractLibraryEntity?) -> DeejAICoverArtView {
         DeejAICoverArtView(
             entity: entity,
-            cornerRadius: 6,
+            cornerRadius: 8,
             placeholderColors: [
                 DeejAIColors.accentSecondaryColor,
                 DeejAIColors.accentSecondaryMutedColor
@@ -213,7 +213,7 @@ extension DeejAICoverArtView {
     static func card(entity: AbstractLibraryEntity?) -> DeejAICoverArtView {
         DeejAICoverArtView(
             entity: entity,
-            cornerRadius: 10
+            cornerRadius: 8
         )
     }
 
@@ -222,7 +222,7 @@ extension DeejAICoverArtView {
     static func mixCard(entity: AbstractLibraryEntity?) -> DeejAICoverArtView {
         DeejAICoverArtView(
             entity: entity,
-            cornerRadius: 12
+            cornerRadius: 14
         )
     }
 }

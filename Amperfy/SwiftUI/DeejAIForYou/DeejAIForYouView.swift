@@ -95,7 +95,7 @@ struct DeejAIForYouView: View {
     // MARK: - Greeting Header
 
     private var greetingHeader: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 8) {
             Text(greetingText)
                 .font(DeejAIFonts.serifDisplay)
                 .foregroundStyle(DeejAIColors.textPrimaryColor)
@@ -130,7 +130,7 @@ struct DeejAIForYouView: View {
 
     private var mixCardsSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 14) {
+            HStack(spacing: 16) {
                 ForEach(mixes) { mix in
                     mixCard(mix)
                 }
@@ -139,8 +139,8 @@ struct DeejAIForYouView: View {
     }
 
     private func mixCard(_ mix: MixCard) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
+        VStack(alignment: .leading, spacing: 12) {
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .fill(
                     LinearGradient(
                         colors: mix.colors,
@@ -153,7 +153,7 @@ struct DeejAIForYouView: View {
                     VStack {
                         Spacer()
                         Image(systemName: "play.fill")
-                            .font(.system(size: 28, weight: .bold))
+                            .font(DeejAIFonts.serifHeadline)
                             .foregroundStyle(DeejAIColors.surfaceColor.opacity(0.7))
                             .frame(width: 48, height: 48)
                             .background(Circle().fill(DeejAIColors.surfaceColor.opacity(0.15)))
@@ -188,7 +188,7 @@ struct DeejAIForYouView: View {
     }
 
     private func topArtistCard(_ artist: TopArtistCard) -> some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 12) {
             // Placeholder circle with initial
             ZStack {
                 Circle()
@@ -249,7 +249,7 @@ struct DeejAIForYouView: View {
     }
 
     private func suggestedTrackRow(_ track: SuggestedTrackCard, index: Int) -> some View {
-        HStack(spacing: 14) {
+        HStack(spacing: 16) {
             // Number badge
             Text("\(index + 1)")
                 .font(DeejAIFonts.sansCaptionBold)
@@ -257,12 +257,12 @@ struct DeejAIForYouView: View {
                 .frame(width: 20, alignment: .trailing)
 
             // Color swatch
-            RoundedRectangle(cornerRadius: 6, style: .continuous)
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .fill(index % 2 == 0 ? DeejAIColors.accentSecondaryColor : DeejAIColors.accentPrimaryColor)
                 .frame(width: 40, height: 40)
 
             // Track info
-            VStack(alignment: .leading, spacing: 3) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(track.title)
                     .font(DeejAIFonts.serifHeadline)
                     .foregroundStyle(DeejAIColors.textPrimaryColor)
@@ -289,7 +289,7 @@ struct DeejAIForYouView: View {
             // Play button
             Button {} label: {
                 Image(systemName: "play.fill")
-                    .font(.system(size: 14, weight: .bold))
+                    .font(DeejAIFonts.sansSubheadline)
                     .foregroundStyle(DeejAIColors.accentPrimaryColor)
                     .frame(width: 36, height: 36)
                     .background(Circle().fill(DeejAIColors.accentPrimaryColor.opacity(0.10)))
@@ -320,22 +320,22 @@ struct DeejAIForYouView: View {
     }
 
     private func recentPlayRow(_ play: RecentPlayCard) -> some View {
-        HStack(spacing: 14) {
+        HStack(spacing: 16) {
             // Status indicator
             Image(systemName: play.completed ? "checkmark.circle.fill" : "forward.fill")
-                .font(.system(size: 16, weight: .medium))
+                .font(DeejAIFonts.sansBody)
                 .foregroundStyle(play.completed ? DeejAIColors.accentSecondaryColor : DeejAIColors.textQuaternaryColor)
                 .frame(width: 28, height: 28)
 
             // Track art swatch
-            RoundedRectangle(cornerRadius: 6, style: .continuous)
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .fill(play.completed
                     ? DeejAIColors.accentSecondaryColor.opacity(0.6)
                     : DeejAIColors.trackBackgroundColor)
                 .frame(width: 40, height: 40)
 
             // Track info
-            VStack(alignment: .leading, spacing: 3) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(play.title)
                     .font(DeejAIFonts.serifHeadline)
                     .foregroundStyle(DeejAIColors.textPrimaryColor)

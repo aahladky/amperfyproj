@@ -177,13 +177,13 @@ struct DeejAIHomeView: View {
                 .fill(heroArtGradient)
                 .frame(width: 280, height: 280)
                 .overlay(
-                    VStack(spacing: 10) {
+                    VStack(spacing: 12) {
                         Circle()
                             .fill(DeejAIColors.surfaceColor.opacity(0.25))
                             .frame(width: 72, height: 72)
                             .overlay(
                                 Image(systemName: "music.note")
-                                    .font(.system(size: 28, weight: .medium))
+                                    .font(DeejAIFonts.serifDisplay)
                                     .foregroundStyle(DeejAIColors.surfaceColor.opacity(0.7))
                             )
 
@@ -212,7 +212,7 @@ struct DeejAIHomeView: View {
     }
 
     private var trackInfo: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 8) {
             Text(heroPick.title)
                 .font(DeejAIFonts.serifTitle)
                 .foregroundStyle(DeejAIColors.textPrimaryColor)
@@ -240,7 +240,7 @@ struct DeejAIHomeView: View {
         } label: {
             HStack(spacing: 12) {
                 Image(systemName: "play.fill")
-                    .font(.system(size: 18, weight: .bold))
+                    .font(DeejAIFonts.sansBody)
 
                 Text("Play Radio")
                     .font(DeejAIFonts.sansBody)
@@ -270,8 +270,8 @@ struct DeejAIHomeView: View {
         Button {
             // TODO: Wire to real skip-to-next action
         } label: {
-            VStack(alignment: .leading, spacing: 10) {
-                HStack(spacing: 6) {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(spacing: 8) {
                     Text("UP NEXT")
                         .font(DeejAIFonts.sansCaption)
                         .tracking(2.5)
@@ -283,18 +283,18 @@ struct DeejAIHomeView: View {
                         .foregroundStyle(DeejAIColors.accentSecondaryColor)
                 }
 
-                HStack(spacing: 14) {
+                HStack(spacing: 16) {
                     // Mini art swatch
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
                         .fill(DeejAIColors.accentSecondaryColor.opacity(0.3))
                         .frame(width: 48, height: 48)
                         .overlay(
                             Image(systemName: "music.note")
-                                .font(.system(size: 16, weight: .medium))
+                                .font(DeejAIFonts.sansBody)
                                 .foregroundStyle(DeejAIColors.accentSecondaryColor)
                         )
 
-                    VStack(alignment: .leading, spacing: 3) {
+                    VStack(alignment: .leading, spacing: 4) {
                         Text(nextPick.title)
                             .font(DeejAIFonts.serifHeadline)
                             .foregroundStyle(DeejAIColors.textPrimaryColor)
@@ -309,13 +309,13 @@ struct DeejAIHomeView: View {
                     Spacer()
 
                     Image(systemName: "chevron.right")
-                        .font(.system(size: 12, weight: .semibold))
+                        .font(DeejAIFonts.serifSubheadline)
                         .foregroundStyle(DeejAIColors.textQuaternaryColor)
                 }
             }
             .padding(16)
             .background(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .fill(DeejAIColors.surfaceElevatedColor)
             )
         }
@@ -333,7 +333,7 @@ struct DeejAIHomeView: View {
                 .padding(.horizontal, 24)
 
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 14) {
+                HStack(spacing: 16) {
                     ForEach(alternativePicks) { pick in
                         alternativeCard(pick)
                     }
@@ -348,7 +348,7 @@ struct DeejAIHomeView: View {
         Button {
             // TODO: Wire to play this specific track / start radio from here
         } label: {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 12) {
                 // Smaller art swatch
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
                     .fill(alternativeArtGradient(for: pick))
@@ -357,7 +357,7 @@ struct DeejAIHomeView: View {
                         VStack {
                             Spacer()
                             Image(systemName: "play.fill")
-                                .font(.system(size: 22, weight: .bold))
+                                .font(DeejAIFonts.serifTitle)
                                 .foregroundStyle(DeejAIColors.surfaceColor.opacity(0.7))
                                 .frame(width: 40, height: 40)
                                 .background(Circle().fill(DeejAIColors.surfaceColor.opacity(0.15)))
