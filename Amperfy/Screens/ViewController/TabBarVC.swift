@@ -28,6 +28,7 @@ class TabBarVC: UITabBarController {
   private var libraryGroup: UITabGroup?
   private var searchTab: UISearchTab?
   private var homeTab: UITab?
+  private var forYouTab: UITab?
   private let account: Account
 
   init(account: Account) {
@@ -66,6 +67,18 @@ class TabBarVC: UITabBarController {
       )
     }
     fixTabs.append(homeTab!)
+
+    forYouTab = UITab(
+      title: TabNavigatorItem.forYou.title,
+      image: TabNavigatorItem.forYou.icon,
+      identifier: "Tabs.\\(TabNavigatorItem.forYou.title)"
+    ) { _ in
+      UINavigationController(
+        rootViewController: TabNavigatorItem.forYou
+          .getController(account: self.account)
+      )
+    }
+    fixTabs.append(forYouTab!)
 
     var libraryTabs = [UITab]()
     let libraryTabsShown = appDelegate.storage.settings.accounts
@@ -282,6 +295,8 @@ extension TabBarVC: MainSceneHostingViewController {
       selectedTab = homeTab
     case .search:
       selectedTab = searchTab
+    case .forYou:
+      selectedTab = forYouTab
     }
     configureTraitChangesForMiniPlayer()
   }

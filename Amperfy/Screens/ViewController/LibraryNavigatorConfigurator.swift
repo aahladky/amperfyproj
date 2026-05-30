@@ -21,6 +21,7 @@
 
 import AmperfyKit
 import UIKit
+import SwiftUI
 
 // MARK: - LibraryNavigatorItem
 
@@ -65,11 +66,13 @@ final class LibraryNavigatorItem: Hashable, Sendable {
 enum TabNavigatorItem: Int, Hashable, CaseIterable {
   case search
   case home
+  case forYou
 
   var title: String {
     switch self {
     case .home: return "Home"
     case .search: return "Search"
+    case .forYou: return "For You"
     }
   }
 
@@ -78,14 +81,25 @@ enum TabNavigatorItem: Int, Hashable, CaseIterable {
     switch self {
     case .home: return .home
     case .search: return .search
+    case .forYou: return UIImage(systemName: "square.grid.2x2.fill") ?? .musicLibrary
     }
   }
 
   @MainActor
   func getController(account: Account) -> UIViewController {
     switch self {
-    case .home: return AppStoryboard.Main.segueToHome(account: account)
-    case .search: return AppStoryboard.Main.segueToSearch(account: account)
+    case .home:
+      let deejaiHomeView = DeejAIHomeView()
+      let hostingController = UIHostingController(rootView: deejaiHomeView)
+      hostingController.view.backgroundColor = .clear
+      return hostingController
+    case .search:
+      return AppStoryboard.Main.segueToSearch(account: account)
+    case .forYou:
+      let deejaiForYouView = DeejAIForYouView()
+      let hostingController = UIHostingController(rootView: deejaiForYouView)
+      hostingController.view.backgroundColor = .clear
+      return hostingController
     }
   }
 }
