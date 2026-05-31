@@ -147,7 +147,7 @@ struct DeejAIForYouView: View {
             .font(DeejAIFonts.sansCaption)
             .tracking(2.5)
             .foregroundStyle(DeejAIColors.textTertiaryColor)
-            .padding(.bottom, 14)
+            .padding(.bottom, 12)
     }
 
     // MARK: - Mix Cards
@@ -181,7 +181,7 @@ struct DeejAIForYouView: View {
                             .foregroundStyle(DeejAIColors.surfaceColor.opacity(0.7))
                             .frame(width: 48, height: 48)
                             .background(Circle().fill(DeejAIColors.surfaceColor.opacity(0.15)))
-                            .padding(.bottom, 14)
+                            .padding(.bottom, 12)
                     }
                 )
 
@@ -320,7 +320,7 @@ struct DeejAIForYouView: View {
             }
             .buttonStyle(.plain)
         }
-        .padding(.horizontal, 14)
+        .padding(.horizontal, 12)
         .padding(.vertical, 12)
     }
 
@@ -378,7 +378,7 @@ struct DeejAIForYouView: View {
                 .font(DeejAIFonts.sansCaption)
                 .foregroundStyle(play.completed ? DeejAIColors.accentSecondaryColor : DeejAIColors.textQuaternaryColor)
         }
-        .padding(.horizontal, 14)
+        .padding(.horizontal, 12)
         .padding(.vertical, 12)
     }
 }

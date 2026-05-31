@@ -119,7 +119,7 @@ class ArtistsVC: SingleSnapshotFetchedResultsTableViewController<ArtistMO> {
   private var fetchedResultsController: ArtistFetchedResultsController!
   private var optionsButton: UIBarButtonItem!
   public var displayFilter: ArtistCategoryFilter = .all
-  private var sortType: ArtistElementSortType = .name
+  var sortType: ArtistElementSortType = .name
   private var filterTitle = "Artists"
 
   init(account: Account) {

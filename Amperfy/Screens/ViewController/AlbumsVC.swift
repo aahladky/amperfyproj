@@ -122,7 +122,7 @@ class AlbumsVC: SingleSnapshotFetchedResultsTableViewController<AlbumMO> {
     common.sceneTitle
   }
 
-  private let common: AlbumsCommonVCInteractions
+  let common: AlbumsCommonVCInteractions
   private var detailHeader: LibraryElementDetailTableHeaderView?
 
   public var displayFilter: DisplayCategoryFilter {

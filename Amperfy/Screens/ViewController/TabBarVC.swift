@@ -20,12 +20,14 @@
 //
 
 import AmperfyKit
+import SwiftUI
 import UIKit
 
 // MARK: - TabBarVC
 
 class TabBarVC: UITabBarController {
-  private var libraryGroup: UITabGroup?
+  private var libraryTab: UITab?
+  private var libraryNavigationController: UINavigationController?
   private var searchTab: UISearchTab?
   private var homeTab: UITab?
   private var forYouTab: UITab?
@@ -80,61 +82,29 @@ class TabBarVC: UITabBarController {
     }
     fixTabs.append(forYouTab!)
 
-    var libraryTabs = [UITab]()
-    let libraryTabsShown = appDelegate.storage.settings.accounts
-      .getSetting(account.info).read
-      .libraryDisplaySettings.inUse
-      .compactMap { item in
-        let tab = UITab(
-          title: item.displayName,
-          image: item.image,
-          identifier: "Tabs.\(item.displayName)"
-        ) { tab in
-          item.controller(account: self.account, settings: self.appDelegate.storage.settings)
-        }
-        tab.allowsHiding = true
-        return tab
-      }
-    libraryTabs.append(contentsOf: libraryTabsShown)
+    // Single Library tab with segmented control (Artists/Albums/Songs)
+    let libNavCtrl = UINavigationController()
+    libNavCtrl.navigationBar.isHidden = true
+    libraryNavigationController = libNavCtrl
 
-    let libraryTabsHidden = appDelegate.storage.settings.accounts
-      .getSetting(account.info).read
-      .libraryDisplaySettings.notUsed
-      .compactMap { item in
-        let tab = UITab(
-          title: item.displayName,
-          image: item.image,
-          identifier: "Tabs.\(item.displayName)"
-        ) { tab in
-          item.controller(account: self.account, settings: self.appDelegate.storage.settings)
-        }
-        tab.allowsHiding = true
-        tab.isHiddenByDefault = true
-        return tab
-      }
-    libraryTabs.append(contentsOf: libraryTabsHidden)
-
-    libraryGroup = UITabGroup(
+    libraryTab = UITab(
       title: "Library",
       image: .musicLibrary,
-      identifier: "Tabs.Library",
-      children: libraryTabs
-    ) { tab in
-      AppStoryboard.Main.segueToLibrary(account: self.account)
+      identifier: "Tabs.Library"
+    ) { _ in
+      let deejaiLibraryView = DeejAILibraryView(
+        account: self.account,
+        libraryNavController: libNavCtrl
+      )
+      let hostingController = UIHostingController(rootView: deejaiLibraryView)
+      hostingController.view.backgroundColor = .clear
+      libNavCtrl.viewControllers = [hostingController]
+      return libNavCtrl
     }
-    libraryGroup!.managingNavigationController = UINavigationController()
-    libraryGroup!.allowsReordering = true
-    fixTabs.append(libraryGroup!)
+    fixTabs.append(libraryTab!)
 
     delegate = self
     tabs = fixTabs
-
-    NotificationCenter.default.addObserver(
-      self,
-      selector: #selector(handleLibraryItemsChanged(notification:)),
-      name: .LibraryItemsChanged,
-      object: nil
-    )
 
     tabBarMinimizeBehavior = .onScrollDown
 
@@ -229,30 +199,14 @@ class TabBarVC: UITabBarController {
     welcomePopupPresenter.displayInfoPopupsIfNeeded()
   }
 
-  @objc
-  func handleLibraryItemsChanged(notification: Notification) {
-    refresh()
-  }
-
   func refresh() {
-    guard let libraryGroup else { return }
-    let config = appDelegate.storage.settings.accounts.getSetting(account.info).read
-      .libraryDisplaySettings
-    libraryGroup.displayOrderIdentifiers = config.inUse.compactMap { "Tabs.\($0.displayName)" }
-    for tab in libraryGroup.displayOrder {
-      guard let item = LibraryDisplayType.createByDisplayName(name: tab.title) else { continue }
-      if let _ = config.inUse.first(where: { $0 == item }) {
-        tab.isHidden = false
-      } else {
-        tab.isHidden = true
-      }
-    }
+    // Library is now a single tab with segmented control — no per-tab visibility to manage.
   }
 
   public func push(vc: UIViewController) {
-    guard let libraryGroup else { return }
-    libraryGroup.managingNavigationController?.pushViewController(vc, animated: true)
-    selectedTab = libraryGroup
+    guard let libraryNavigationController else { return }
+    libraryNavigationController.pushViewController(vc, animated: true)
+    selectedTab = libraryTab
   }
 }
 
@@ -260,19 +214,7 @@ class TabBarVC: UITabBarController {
 
 extension TabBarVC: UITabBarControllerDelegate {
   func tabBarControllerDidEndEditing(_ tabBarController: UITabBarController) {
-    var visibleItems = [LibraryDisplayType]()
-    guard let libraryGroup else { return }
-    for tab in libraryGroup.displayOrder {
-      guard let item = LibraryDisplayType.createByDisplayName(name: tab.title) else { continue }
-      if !tab.isHidden {
-        visibleItems.append(item)
-      }
-    }
-    appDelegate.storage.settings.accounts
-      .updateSetting(account.info) { accountSettings in
-        accountSettings.libraryDisplaySettings = LibraryDisplaySettings(inUse: visibleItems)
-      }
-    NotificationCenter.default.post(name: .LibraryItemsChanged, object: nil, userInfo: nil)
+    // Library tab ordering is no longer applicable — single tab with segmented control.
   }
 }
 
@@ -284,8 +226,8 @@ extension TabBarVC: MainSceneHostingViewController {
   }
 
   public func pushLibraryCategory(vc: UIViewController) {
-    guard let libraryGroup else { return }
-    libraryGroup.managingNavigationController?.popToRootViewController(animated: false)
+    guard let libraryNavigationController else { return }
+    libraryNavigationController.popToRootViewController(animated: false)
     push(vc: vc)
   }
 

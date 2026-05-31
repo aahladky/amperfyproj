@@ -99,6 +99,11 @@ enum DeejAIColors {
         UIColor { $0.userInterfaceStyle == .dark ? Dark.trackBg : Light.trackBg }
     }
 
+    /// Warm-shifted shadow color — never neutral gray.
+    static var warmShadow: UIColor {
+        UIColor(red: 0.15, green: 0.10, blue: 0.05, alpha: 0.12)
+    }
+
     // - MARK: Accents
 
     /// Hero accent — terracotta / burnt orange for play button, progress fill, heart.
@@ -146,6 +151,9 @@ enum DeejAIColors {
 
     /// Track / progress bar background color (SwiftUI).
     static var trackBackgroundColor: Color { Color(uiColor: trackBackground) }
+
+    /// Warm shadow color (SwiftUI).
+    static var warmShadowColor: Color { Color(uiColor: warmShadow) }
 
     /// Hero accent color — terracotta (SwiftUI).
     static var accentPrimaryColor: Color { Color(uiColor: accentPrimary) }

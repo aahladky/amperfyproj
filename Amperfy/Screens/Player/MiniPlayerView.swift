@@ -887,8 +887,7 @@ class MiniPlayerView: UIView {
     container.layer.cornerRadius = 14
     container.layer.cornerCurve = .continuous
     // Warm shadow: warm-shifted dark tone, 12% opacity, y-offset 4, blur 12
-    let warmShadow = UIColor(red: 0.15, green: 0.10, blue: 0.05, alpha: 0.12)
-    container.layer.shadowColor = warmShadow.cgColor
+    container.layer.shadowColor = DeejAIColors.warmShadow.cgColor
     container.layer.shadowOpacity = 1.0
     container.layer.shadowOffset = CGSize(width: 0, height: 4)
     container.layer.shadowRadius = 12
