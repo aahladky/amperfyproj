@@ -11,7 +11,6 @@
 // See LICENSE for details.
 
 import AmperfyKit
-import Combine
 import SwiftUI
 import UIKit
 
@@ -112,24 +111,12 @@ enum LibrarySortOption: String, CaseIterable {
     }
 }
 
-// MARK: - Library Navigation Controller
-
-/// A UINavigationController subclass for the Library tab.
-/// DeejAILibraryView is the root; detail views are pushed onto this stack.
-class LibraryNavigationController: UINavigationController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        navigationBar.isHidden = true
-    }
-}
 
 // MARK: - DeejAI Library View
 
 struct DeejAILibraryView: View {
 
     let account: Account
-    /// The library's navigation controller — detail views push onto this stack.
-    weak var libraryNavController: UINavigationController?
 
     @State private var selectedSegment: LibrarySegment = .artists
     @State private var selectedSort: LibrarySortOption = .name
@@ -305,8 +292,7 @@ struct DeejAILibraryView: View {
             ArtistsListContainer(
                 account: account,
                 filter: selectedFilter,
-                sort: selectedSort,
-                navController: libraryNavController
+                sort: selectedSort
             )
             .ignoresSafeArea(edges: .bottom)
 
@@ -314,8 +300,7 @@ struct DeejAILibraryView: View {
             AlbumsListContainer(
                 account: account,
                 filter: selectedFilter,
-                sort: selectedSort,
-                navController: libraryNavController
+                sort: selectedSort
             )
             .ignoresSafeArea(edges: .bottom)
 
@@ -323,8 +308,7 @@ struct DeejAILibraryView: View {
             SongsListContainer(
                 account: account,
                 filter: selectedFilter,
-                sort: selectedSort,
-                navController: libraryNavController
+                sort: selectedSort
             )
             .ignoresSafeArea(edges: .bottom)
         }
@@ -339,16 +323,18 @@ struct ArtistsListContainer: UIViewControllerRepresentable {
     let account: Account
     let filter: LibraryFilter
     let sort: LibrarySortOption
-    weak var navController: UINavigationController?
 
-    func makeUIViewController(context: Context) -> ArtistsVC {
+    func makeUIViewController(context: Context) -> UINavigationController {
         let vc = ArtistsVC(account: account)
         vc.displayFilter = filter.toArtistCategoryFilter
         vc.change(sortType: sort.toArtistSortType)
-        return vc
+        let nav = UINavigationController(rootViewController: vc)
+        nav.navigationBar.isHidden = true
+        return nav
     }
 
-    func updateUIViewController(_ vc: ArtistsVC, context: Context) {
+    func updateUIViewController(_ nav: UINavigationController, context: Context) {
+        guard let vc = nav.viewControllers.first as? ArtistsVC else { return }
         if vc.displayFilter != filter.toArtistCategoryFilter {
             vc.displayFilter = filter.toArtistCategoryFilter
             vc.change(sortType: vc.sortType)
@@ -365,16 +351,18 @@ struct AlbumsListContainer: UIViewControllerRepresentable {
     let account: Account
     let filter: LibraryFilter
     let sort: LibrarySortOption
-    weak var navController: UINavigationController?
 
-    func makeUIViewController(context: Context) -> AlbumsVC {
+    func makeUIViewController(context: Context) -> UINavigationController {
         let vc = AlbumsVC(account: account)
         vc.displayFilter = filter.toDisplayCategoryFilter
         vc.common.change(sortType: sort.toAlbumSortType)
-        return vc
+        let nav = UINavigationController(rootViewController: vc)
+        nav.navigationBar.isHidden = true
+        return nav
     }
 
-    func updateUIViewController(_ vc: AlbumsVC, context: Context) {
+    func updateUIViewController(_ nav: UINavigationController, context: Context) {
+        guard let vc = nav.viewControllers.first as? AlbumsVC else { return }
         if vc.displayFilter != filter.toDisplayCategoryFilter {
             vc.displayFilter = filter.toDisplayCategoryFilter
             vc.common.change(sortType: vc.common.sortType)
@@ -391,16 +379,18 @@ struct SongsListContainer: UIViewControllerRepresentable {
     let account: Account
     let filter: LibraryFilter
     let sort: LibrarySortOption
-    weak var navController: UINavigationController?
 
-    func makeUIViewController(context: Context) -> SongsVC {
+    func makeUIViewController(context: Context) -> UINavigationController {
         let vc = SongsVC(account: account)
         vc.displayFilter = filter.toDisplayCategoryFilter
         vc.change(sortType: sort.toSongSortType)
-        return vc
+        let nav = UINavigationController(rootViewController: vc)
+        nav.navigationBar.isHidden = true
+        return nav
     }
 
-    func updateUIViewController(_ vc: SongsVC, context: Context) {
+    func updateUIViewController(_ nav: UINavigationController, context: Context) {
+        guard let vc = nav.viewControllers.first as? SongsVC else { return }
         if vc.displayFilter != filter.toDisplayCategoryFilter {
             vc.displayFilter = filter.toDisplayCategoryFilter
             vc.change(sortType: vc.sortType)

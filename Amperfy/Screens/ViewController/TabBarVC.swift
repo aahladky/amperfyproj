@@ -92,10 +92,7 @@ class TabBarVC: UITabBarController {
       image: .musicLibrary,
       identifier: "Tabs.Library"
     ) { _ in
-      let deejaiLibraryView = DeejAILibraryView(
-        account: self.account,
-        libraryNavController: libNavCtrl
-      )
+      let deejaiLibraryView = DeejAILibraryView(account: self.account)
       let hostingController = UIHostingController(rootView: deejaiLibraryView)
       hostingController.view.backgroundColor = .clear
       libNavCtrl.viewControllers = [hostingController]
