@@ -548,6 +548,7 @@
 		DCD34E648E3AB9D7E416CFC8 /* DeejAIPlayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6194D798255CEEFC13AB674 /* DeejAIPlayerState.swift */; };
 		DE4E47C997B96231AB0EF3AC /* NunitoVF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B8774603A2E0AAA98AE846A8 /* NunitoVF.ttf */; };
 		E1614CE08C953882B1DB3D7E /* DeejAIForYouView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDBE49869E7605A90652DE54 /* DeejAIForYouView.swift */; };
+		F1E2D3C4B5A67890FEDCBA01 /* DeejAILibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F67890ABCDEF01 /* DeejAILibraryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1157,6 +1158,7 @@
 		50FF31192BBB27AC00C2C3B9 /* Amperfy v36.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v36.xcdatamodel"; sourceTree = "<group>"; };
 		50FF311A2BBC4D8000C2C3B9 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		51E3433886040AC9C2EEDBFE /* DeejAIAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIAppearance.swift; path = Amperfy/Screens/DeejAIAppearance.swift; sourceTree = SOURCE_ROOT; };
+		A1B2C3D4E5F67890ABCDEF01 /* DeejAILibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAILibraryView.swift; path = Amperfy/SwiftUI/DeejAILibrary/DeejAILibraryView.swift; sourceTree = "<group>"; };
 		5BB342E8AEB852C8FBFCB3BA /* DeejAINowPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAINowPlayingView.swift; path = Amperfy/SwiftUI/DeejAINowPlaying/DeejAINowPlayingView.swift; sourceTree = "<group>"; };
 		60BB41D19872A2407DE5FEA5 /* LoraVF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file.ttf; name = LoraVF.ttf; path = Amperfy/Resources/Fonts/LoraVF.ttf; sourceTree = "<group>"; };
 		631C166A2C6D3D9A0085F62E /* SettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRow.swift; sourceTree = "<group>"; };
@@ -1488,6 +1490,7 @@
 				474A4D3CA62F9E9597E1AF07 /* DeejAIFonts.swift */,
 				6D8044F98805BAEEDFCC5AFE /* DeejAICoverArtView.swift */,
 				51E3433886040AC9C2EEDBFE /* DeejAIAppearance.swift */,
+				A1B2C3D4E5F67890ABCDEF01 /* DeejAILibraryView.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2679,6 +2682,7 @@
 				375545738DEDCA9FA7F7C7E7 /* DeejAINowPlayingView.swift in Sources */,
 				DCD34E648E3AB9D7E416CFC8 /* DeejAIPlayerState.swift in Sources */,
 				E1614CE08C953882B1DB3D7E /* DeejAIForYouView.swift in Sources */,
+				F1E2D3C4B5A67890FEDCBA01 /* DeejAILibraryView.swift in Sources */,
 				D0EE4C2997CCFF0135302852 /* DeejAIHomeView.swift in Sources */,
 				A1F34551ABE8D70894BEECEB /* DeejAIFonts.swift in Sources */,
 				89DD420BA0CA9A235EC3A9B7 /* DeejAICoverArtView.swift in Sources */,
