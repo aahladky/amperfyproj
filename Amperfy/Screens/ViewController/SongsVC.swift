@@ -35,7 +35,7 @@ class SongsVC: SingleFetchedResultsTableViewController<SongMO> {
   private var detailHeaderView: LibraryElementDetailTableHeaderView?
   private var optionsButton: UIBarButtonItem!
   public var displayFilter: DisplayCategoryFilter = .all
-  private var sortType: SongElementSortType = .name
+  var sortType: SongElementSortType = .name
   private var filterTitle = "Songs"
 
   private static var maxPlayContextCount = 40
