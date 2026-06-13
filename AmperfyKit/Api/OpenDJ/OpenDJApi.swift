@@ -67,13 +67,26 @@ public final class OpenDJApi: Sendable {
 
     // MARK: Properties
 
-    /// Default OpenDJ sidecar on the LAN. Single source of truth — both the play-reporting
+    /// Default OpenDJ sidecar base URL. Single source of truth — both the play-reporting
     /// syncer (MetaManager) and the recommendation screens build clients from this.
-    /// Reached via the Mac's IPv4 loopback. The simulator shares the Mac's loopback but does
-    /// NOT traverse the WireGuard tunnel, so a forward on the Mac maps 127.0.0.1:8050 → the
-    /// recommender. Must be 127.0.0.1, not "localhost": localhost resolves to IPv6 ::1 first,
-    /// which the IPv4-only `ssh -L` forward refuses. Plain HTTP OK — Info.plist allows it.
-    public static let defaultBaseURL = URL(string: "http://127.0.0.1:8050")!
+    ///
+    /// The reachable host differs by environment, so branch on simulator-vs-device:
+    /// - **Simulator:** the sim shares the Mac's loopback but does NOT traverse the
+    ///   WireGuard tunnel, so an `ssh -L` forward on the Mac maps 127.0.0.1:8050 → the
+    ///   recommender. Must be 127.0.0.1, not "localhost" (localhost resolves to IPv6 ::1
+    ///   first, which the IPv4-only forward refuses).
+    /// - **Real device (incl. TestFlight):** reach the recommender directly on the home
+    ///   Wi-Fi LAN at the desktop's address (recommender is published on 0.0.0.0:8050).
+    ///   Only works on the home network; revisit (WireGuard / reverse proxy) for off-LAN.
+    ///
+    /// Plain HTTP is allowed via Info.plist NSAllowsArbitraryLoads.
+    public static let defaultBaseURL: URL = {
+        #if targetEnvironment(simulator)
+        return URL(string: "http://127.0.0.1:8050")!
+        #else
+        return URL(string: "http://192.168.0.184:8050")!
+        #endif
+    }()
 
     /// Base URL of the OpenDJ server (e.g. `https://music.myhouse.fyi`).
     private let baseURL: URL
