@@ -100,6 +100,7 @@ enum TabNavigatorItem: Int, Hashable, CaseIterable {
         resolveEntity: { trackId in
           AmperKit.shared.storage.main.library.getSong(for: account, id: trackId)
         },
+        startRadio: openDJStartRadio(account: account),
         onOpenSettings: { [weak hostingController] in
           let nav = AppStoryboard.Main.segueToSettings()
           nav.modalPresentationStyle = .formSheet
@@ -119,11 +120,42 @@ enum TabNavigatorItem: Int, Hashable, CaseIterable {
         forYouProvider: { try await forYouApi.forYou() },
         resolveEntity: { trackId in
           AmperKit.shared.storage.main.library.getSong(for: account, id: trackId)
-        }
+        },
+        startRadio: openDJStartRadio(account: account)
       )
       let hostingController = UIHostingController(rootView: forYouView)
       hostingController.view.backgroundColor = .clear
       return hostingController
+    }
+  }
+}
+
+/// Builds the "tap a tile → start radio from this seed" handler shared by the Home
+/// and For You rails. Resolves the seed track id to a local Song, plays it
+/// immediately for instant feedback, then appends OpenDJ-personalized similar
+/// tracks behind it. `requestSimilarSongs` routes through Navidrome's
+/// getSimilarSongs2, which the OpenDJ plugin serves from the sidecar's reranker —
+/// so the radio is personalized without a separate on-device call.
+@MainActor
+private func openDJStartRadio(account: Account) -> (@MainActor (String) -> Void) {
+  { seedTrackId in
+    guard let seed = AmperKit.shared.storage.main.library.getSong(for: account, id: seedTrackId) else {
+      return
+    }
+    let player = AmperKit.shared.player
+    // Instant feedback: start the tapped track right away.
+    player.play(context: PlayContext(name: "OpenDJ Radio", playables: [seed]))
+    // Fill the radio queue behind it with personalized similar tracks.
+    Task { @MainActor in
+      do {
+        let similar = try await AmperKit.shared.getMeta(account.info)
+          .librarySyncer.requestSimilarSongs(song: seed, count: 99)
+        if !similar.isEmpty {
+          player.appendContextQueue(playables: similar)
+        }
+      } catch {
+        // Seed is already playing; radio extension just didn't load.
+      }
     }
   }
 }
