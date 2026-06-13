@@ -126,16 +126,16 @@ public class MetaManager {
     return scrobbleSyncer!
   }
 
-  private var OpenDJSyncer: OpenDJSyncer?
+  private var openDJSyncer: OpenDJSyncer?
   internal func createOpenDJSyncer(
     player: PlayerFacade
   ) -> OpenDJSyncer {
-    if let OpenDJSyncer { return OpenDJSyncer }
+    if let openDJSyncer { return openDJSyncer }
     // OpenDJ server config — hardcoded for now, move to settings later
     let baseURL = URL(string: "https://music.myhouse.fyi")!
     let api = OpenDJApi(baseURL: baseURL, apiKey: "")
-    OpenDJSyncer = OpenDJSyncer(player: player, api: api)
-    return OpenDJSyncer!
+    openDJSyncer = OpenDJSyncer(player: player, api: api)
+    return openDJSyncer!
   }
 
   public lazy var playableDownloadManager: DownloadManageable = {
