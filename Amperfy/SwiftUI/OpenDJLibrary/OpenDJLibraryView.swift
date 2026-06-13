@@ -328,6 +328,10 @@ struct ArtistsListContainer: UIViewControllerRepresentable {
         let vc = ArtistsVC(account: account)
         vc.displayFilter = filter.toArtistCategoryFilter
         vc.change(sortType: sort.toArtistSortType)
+        // The OpenDJ segmented control is the screen title — suppress the VC's own
+        // large title so it doesn't leak under the directly-hidden bar and overlap
+        // the Play/Shuffle header + first row.
+        vc.navigationItem.largeTitleDisplayMode = .never
         let nav = UINavigationController(rootViewController: vc)
         nav.navigationBar.isHidden = true
         return nav
@@ -356,6 +360,8 @@ struct AlbumsListContainer: UIViewControllerRepresentable {
         let vc = AlbumsVC(account: account)
         vc.displayFilter = filter.toDisplayCategoryFilter
         vc.common.change(sortType: sort.toAlbumSortType)
+        // Suppress the VC's own large title (see ArtistsListContainer).
+        vc.navigationItem.largeTitleDisplayMode = .never
         let nav = UINavigationController(rootViewController: vc)
         nav.navigationBar.isHidden = true
         return nav
@@ -384,6 +390,8 @@ struct SongsListContainer: UIViewControllerRepresentable {
         let vc = SongsVC(account: account)
         vc.displayFilter = filter.toDisplayCategoryFilter
         vc.change(sortType: sort.toSongSortType)
+        // Suppress the VC's own large title (see ArtistsListContainer).
+        vc.navigationItem.largeTitleDisplayMode = .never
         let nav = UINavigationController(rootViewController: vc)
         nav.navigationBar.isHidden = true
         return nav
