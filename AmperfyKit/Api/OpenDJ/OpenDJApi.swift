@@ -85,18 +85,15 @@ public final class OpenDJApi: Sendable {
     private let session: URLSession
 
     /// JSON encoder used for request bodies.
-    private let encoder: JSONEncoder = {
-        let enc = JSONEncoder()
-        enc.keyEncodingStrategy = .convertToSnakeCase
-        return enc
-    }()
+    /// No key strategy — each model's explicit CodingKeys already map snake_case.
+    /// (convertToSnakeCase + explicit snake CodingKeys conflict and corrupt keys.)
+    private let encoder = JSONEncoder()
 
     /// JSON decoder used for response bodies.
-    private let decoder: JSONDecoder = {
-        let dec = JSONDecoder()
-        dec.keyDecodingStrategy = .convertFromSnakeCase
-        return dec
-    }()
+    /// No key strategy — explicit CodingKeys handle snake_case. Setting
+    /// convertFromSnakeCase here makes decoding fail (it rewrites keys the
+    /// CodingKeys then can't match), which surfaced as a false "couldn't reach".
+    private let decoder = JSONDecoder()
 
     // MARK: Lifecycle
 

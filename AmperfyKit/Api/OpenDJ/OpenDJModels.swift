@@ -19,6 +19,8 @@
 //
 
 import Foundation
+// Note: snake_case mapping is handled by the explicit CodingKeys on each model.
+// OpenDJApi's coder must NOT also set convert*SnakeCase, or the two conflict and decoding fails.
 
 // MARK: - Track Info
 

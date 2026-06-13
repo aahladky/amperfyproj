@@ -29,6 +29,7 @@ struct OpenDJForYouView: View {
     @State private var recentPlays: [RecentPlayCard] = []
     @State private var isLoading = false
     @State private var loadFailed = false
+    @State private var loadErrorDetail: String?
 
     private var isEmptyAll: Bool {
         mixes.isEmpty && topArtists.isEmpty && suggestedTracks.isEmpty && recentPlays.isEmpty
@@ -48,7 +49,7 @@ struct OpenDJForYouView: View {
                 statusView(
                     icon: "wifi.exclamationmark",
                     title: "Couldn't reach OpenDJ",
-                    detail: "Your recommendations will appear here once the server responds."
+                    detail: loadErrorDetail ?? "Your recommendations will appear here once the server responds."
                 )
             } else {
                 content
@@ -118,6 +119,7 @@ struct OpenDJForYouView: View {
                 RecentPlayCard(artist: $0.artist, title: $0.title, playedAt: $0.playedAt)
             }
         } catch {
+            loadErrorDetail = String(describing: error)
             loadFailed = true
         }
         isLoading = false
