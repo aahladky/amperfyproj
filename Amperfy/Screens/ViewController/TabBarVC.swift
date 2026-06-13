@@ -63,10 +63,12 @@ class TabBarVC: UITabBarController {
       image: TabNavigatorItem.home.icon,
       identifier: "Tabs.\(TabNavigatorItem.home.title)"
     ) { _ in
-      UINavigationController(
+      let nav = UINavigationController(
         rootViewController: TabNavigatorItem.home
           .getController(account: self.account)
       )
+      nav.navigationBar.isHidden = true  // OpenDJ screens draw their own header; reclaim the top band
+      return nav
     }
     fixTabs.append(homeTab!)
 
@@ -75,10 +77,12 @@ class TabBarVC: UITabBarController {
       image: TabNavigatorItem.forYou.icon,
       identifier: "Tabs.\(TabNavigatorItem.forYou.title)"
     ) { _ in
-      UINavigationController(
+      let nav = UINavigationController(
         rootViewController: TabNavigatorItem.forYou
           .getController(account: self.account)
       )
+      nav.navigationBar.isHidden = true  // OpenDJ screens draw their own header; reclaim the top band
+      return nav
     }
     fixTabs.append(forYouTab!)
 
