@@ -324,7 +324,9 @@ class PlayableTableCell: BasicTableCell {
     guard let playable = playable else { return }
     titleLabel.text = playable.title
     titleLabel.textColor = .labelColor  // MCM primary text (xib default is system .label)
+    titleLabel.font = OpenDJFonts.serifHeadlineUIFont   // Lora serif title
     artistLabel.text = playable.creatorName
+    artistLabel.font = OpenDJFonts.sansSubheadlineUIFont // Nunito sans subtitle
 
     configureStyle(
       playable: playable,

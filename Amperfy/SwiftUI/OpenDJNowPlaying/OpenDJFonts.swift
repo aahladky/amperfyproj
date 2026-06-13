@@ -112,4 +112,18 @@ enum OpenDJFonts {
     static var sansSubheadlineUIFont: UIFont {
         uifont("Nunito", size: 13, weight: .medium)
     }
+
+    /// Serif headline (Lora ~16 semibold) as UIFont for UIKit row titles.
+    /// Lora is a variable font, so apply the weight via a descriptor trait
+    /// (the family name alone resolves to Regular); fall back to a system serif.
+    static var serifHeadlineUIFont: UIFont {
+        let size: CGFloat = 16
+        if let lora = UIFont(name: "Lora", size: size) {
+            let descriptor = lora.fontDescriptor.addingAttributes(
+                [.traits: [UIFontDescriptor.TraitKey.weight: UIFont.Weight.semibold]]
+            )
+            return UIFont(descriptor: descriptor, size: size)
+        }
+        return .systemFont(ofSize: size, weight: .semibold)
+    }
 }

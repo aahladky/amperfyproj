@@ -49,9 +49,11 @@ class GenericTableCell: BasicTableCell {
     selectionStyle = .none
     titleLabel.text = container.name
     titleLabel.textColor = .labelColor          // MCM primary (xib default is system .label)
+    titleLabel.font = OpenDJFonts.serifHeadlineUIFont
     subtitleLabel.isHidden = container.subtitle == nil
     subtitleLabel.text = container.subtitle
     subtitleLabel.textColor = .secondaryLabelColor
+    subtitleLabel.font = OpenDJFonts.sansSubheadlineUIFont
     entityImage.display(
       theme: appDelegate.storage.settings.accounts.getSetting(container.account?.info).read
         .themePreference,
