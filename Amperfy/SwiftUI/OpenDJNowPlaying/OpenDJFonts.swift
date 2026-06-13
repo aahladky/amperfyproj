@@ -25,14 +25,14 @@ enum OpenDJFonts {
     /// Uses `.largeTitle` text style for Dynamic Type scaling.
     /// Example: greeting header ("Good morning, Aaron").
     static let serifDisplay = Font
-        .custom("Lora", size: 32, relativeTo: .largeTitle)
+        .custom("Lora", size: 26, relativeTo: .largeTitle)
         .weight(.bold)
 
     /// Serif for primary track/album titles.
     /// Uses `.title` text style for Dynamic Type scaling.
     /// Example: "Everything In Its Right Place".
     static let serifTitle = Font
-        .custom("Lora", size: 24, relativeTo: .title)
+        .custom("Lora", size: 20, relativeTo: .title)
         .weight(.bold)
 
     /// Serif for secondary titles and cards.
