@@ -172,3 +172,30 @@ public struct RecentPlay: Codable, Sendable {
         case playedAt = "played_at"
     }
 }
+
+// MARK: - For You Rails
+
+/// The For You screen payload: a list of behavioral/contextual rails.
+public struct ForYouResponse: Codable, Sendable {
+    public let rails: [Rail]
+}
+
+/// A horizontal rail (e.g. "Your recent rotation", "Rediscover").
+public struct Rail: Codable, Sendable, Identifiable {
+    public let id: String
+    public let title: String
+    public let items: [RailItem]
+}
+
+/// A startable tile in a rail: an album "mix" with a seed track for cover art + radio.
+public struct RailItem: Codable, Sendable, Identifiable {
+    public let id: String
+    public let title: String
+    public let subtitle: String
+    public let seedTrackId: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id, title, subtitle
+        case seedTrackId = "seed_track_id"
+    }
+}

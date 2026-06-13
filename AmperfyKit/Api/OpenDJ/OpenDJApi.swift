@@ -198,6 +198,14 @@ public final class OpenDJApi: Sendable {
         try await get(path: "/api/home")
     }
 
+    /// Fetches the For You payload: behavioral / contextual rails.
+    ///
+    /// `GET /api/foryou`
+    /// - Returns: ``ForYouResponse`` with a list of startable rails.
+    public func forYou() async throws -> ForYouResponse {
+        try await get(path: "/api/foryou")
+    }
+
     // MARK: - Private Helpers
 
     /// Builds an authenticated URL request for the given path and method.

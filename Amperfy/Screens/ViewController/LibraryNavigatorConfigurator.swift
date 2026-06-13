@@ -102,11 +102,12 @@ enum TabNavigatorItem: Int, Hashable, CaseIterable {
     case .search:
       return AppStoryboard.Main.segueToSearch(account: account)
     case .forYou:
-      // Build a sidecar client and hand the view an async loader for /api/home,
-      // plus a resolver that maps a track id to a local Song for cover art.
+      // Build a sidecar client and hand the view an async loader for /api/foryou
+      // (behavioral rails), plus a resolver that maps a seed track id to a local
+      // Song for cover art. Tap-to-start-radio is wired in the next increment.
       let forYouApi = OpenDJApi(baseURL: OpenDJApi.defaultBaseURL, apiKey: "")
       let forYouView = OpenDJForYouView(
-        homeProvider: { try await forYouApi.home() },
+        forYouProvider: { try await forYouApi.forYou() },
         resolveEntity: { trackId in
           AmperKit.shared.storage.main.library.getSong(for: account, id: trackId)
         }

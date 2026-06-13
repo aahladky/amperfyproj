@@ -1,5 +1,12 @@
 // OpenDJForYouView.swift
-// OpenDJ — "For You" home screen (Mid-Century Modern)
+// OpenDJ — "For You" screen (Mid-Century Modern)
+//
+// The behavioral / contextual plane: horizontal rails of startable album "mix"
+// tiles, lifted from the reward log (recent rotation, rediscover, …). Each tile
+// is an album with a seed track that drives the cover art and — next increment —
+// tap-to-start-radio. This replaces the old top-artists / suggested-track-list /
+// recently-played layout, which mixed all-time stats and single-track rows onto a
+// top-level screen.
 //
 // Copyright © 2026 aahladky and contributors.
 // Licensed under the GNU General Public License v3.0 (GPLv3).
@@ -13,37 +20,41 @@ struct OpenDJForYouView: View {
 
     // MARK: Dependencies
 
-    /// Loads the home payload from the OpenDJ sidecar (`/api/home`).
+    /// Loads the For You payload from the OpenDJ sidecar (`/api/foryou`).
     /// `nil` → no live load (e.g. SwiftUI previews); the screen shows its empty state.
-    let homeProvider: (() async throws -> HomeResponse)?
+    let forYouProvider: (() async throws -> ForYouResponse)?
 
-    /// Resolves a Navidrome track id to a local library entity, for cover art. Optional.
+    /// Resolves a seed track id to a local library entity, for cover art. Optional.
     let resolveEntity: (@MainActor (String) -> AbstractLibraryEntity?)?
 
+    /// Starts radio from a seed track id (tap-to-play). Optional; wired next increment.
+    let startRadio: (@MainActor (String) -> Void)?
+
     init(
-        homeProvider: (() async throws -> HomeResponse)? = nil,
-        resolveEntity: (@MainActor (String) -> AbstractLibraryEntity?)? = nil
+        forYouProvider: (() async throws -> ForYouResponse)? = nil,
+        resolveEntity: (@MainActor (String) -> AbstractLibraryEntity?)? = nil,
+        startRadio: (@MainActor (String) -> Void)? = nil
     ) {
-        self.homeProvider = homeProvider
+        self.forYouProvider = forYouProvider
         self.resolveEntity = resolveEntity
+        self.startRadio = startRadio
     }
 
-    /// User preference: show real album art in cards, or the minimalist color blocks.
+    /// User preference: show real album art in tiles, or minimalist color blocks.
     @AppStorage("opendjShowAlbumArt") private var showAlbumArt = true
 
     // MARK: State
 
-    @State private var mixes: [MixCard] = []
-    @State private var topArtists: [TopArtistCard] = []
-    @State private var suggestedTracks: [SuggestedTrackCard] = []
-    @State private var recentPlays: [RecentPlayCard] = []
+    @State private var rails: [DisplayRail] = []
     @State private var isLoading = false
     @State private var loadFailed = false
     @State private var loadErrorDetail: String?
 
-    private var isEmptyAll: Bool {
-        mixes.isEmpty && topArtists.isEmpty && suggestedTracks.isEmpty && recentPlays.isEmpty
-    }
+    // MARK: Layout constants
+
+    private let tileSize: CGFloat = 150
+    private let railSpacing: CGFloat = 16
+    private let edgePadding: CGFloat = 20
 
     // MARK: Body
 
@@ -52,89 +63,74 @@ struct OpenDJForYouView: View {
             OpenDJColors.surfaceColor
                 .ignoresSafeArea()
 
-            if isLoading && isEmptyAll {
+            if isLoading && rails.isEmpty {
                 ProgressView()
                     .tint(OpenDJColors.accentPrimaryColor)
-            } else if loadFailed && isEmptyAll {
+            } else if loadFailed && rails.isEmpty {
                 statusView(
                     icon: "wifi.exclamationmark",
                     title: "Couldn't reach OpenDJ",
-                    detail: loadErrorDetail ?? "Your recommendations will appear here once the server responds."
+                    detail: loadErrorDetail ?? "Your stations will appear here once the server responds."
+                )
+            } else if rails.isEmpty {
+                statusView(
+                    icon: "music.note.list",
+                    title: "Nothing here yet",
+                    detail: "Play some music and your stations will start to build."
                 )
             } else {
                 content
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .task { await loadHome() }
+        .task { await loadForYou() }
     }
 
     private var content: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, spacing: 0) {
 
-                // 1. Greeting header
                 greetingHeader
+                    .padding(.horizontal, edgePadding)
                     .padding(.top, 8)
-                    .padding(.bottom, 16)
+                    .padding(.bottom, 24)
 
-                // 2. Mix cards (hidden until the sidecar serves mixes)
-                if !mixes.isEmpty {
-                    sectionLabel("YOUR MIXES")
-                    mixCardsSection
+                ForEach(rails) { rail in
+                    sectionLabel(rail.title.uppercased())
+                        .padding(.horizontal, edgePadding)
+                        .padding(.bottom, 12)
+
+                    railScroll(rail)
                         .padding(.bottom, 32)
-                }
-
-                // 3. Top Artists
-                if !topArtists.isEmpty {
-                    sectionLabel("TOP ARTISTS")
-                    topArtistsSection
-                        .padding(.bottom, 32)
-                }
-
-                // 4. Suggested Tracks
-                if !suggestedTracks.isEmpty {
-                    sectionLabel("SUGGESTED FOR YOU")
-                    suggestedTracksSection
-                        .padding(.bottom, 32)
-                }
-
-                // 5. Recently Played
-                if !recentPlays.isEmpty {
-                    sectionLabel("RECENTLY PLAYED")
-                    recentlyPlayedSection
-                        .padding(.bottom, 40)
                 }
 
                 Spacer(minLength: 20)
             }
-            .padding(.horizontal, 20)
         }
     }
 
     // MARK: - Data Loading
 
     @MainActor
-    private func loadHome() async {
-        guard let homeProvider else { return }
+    private func loadForYou() async {
+        guard let forYouProvider else { return }
         isLoading = true
         loadFailed = false
         do {
-            let home = try await homeProvider()
-            topArtists = home.topArtists.map { a in
-                let artistEntity = (a.trackId.flatMap { resolveEntity?($0) } as? Song)?.artist
-                return TopArtistCard(name: a.artist, plays: a.playCount, entity: artistEntity)
-            }
-            suggestedTracks = home.suggested.map {
-                SuggestedTrackCard(
-                    artist: $0.artist, title: $0.title, score: $0.score,
-                    entity: $0.trackId.flatMap { resolveEntity?($0) }
-                )
-            }
-            recentPlays = home.recent.map {
-                RecentPlayCard(
-                    artist: $0.artist, title: $0.title, playedAt: $0.playedAt,
-                    entity: $0.trackId.flatMap { resolveEntity?($0) }
+            let response = try await forYouProvider()
+            rails = response.rails.map { rail in
+                DisplayRail(
+                    id: rail.id,
+                    title: rail.title,
+                    tiles: rail.items.map { item in
+                        DisplayTile(
+                            id: item.id,
+                            title: item.title,
+                            subtitle: item.subtitle,
+                            seedTrackId: item.seedTrackId,
+                            entity: item.seedTrackId.flatMap { resolveEntity?($0) }
+                        )
+                    }
                 )
             }
         } catch {
@@ -142,6 +138,89 @@ struct OpenDJForYouView: View {
             loadFailed = true
         }
         isLoading = false
+    }
+
+    // MARK: - Rails
+
+    private func railScroll(_ rail: DisplayRail) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(alignment: .top, spacing: railSpacing) {
+                ForEach(rail.tiles) { tile in
+                    tileView(tile)
+                }
+            }
+            .padding(.horizontal, edgePadding)
+        }
+    }
+
+    private func tileView(_ tile: DisplayTile) -> some View {
+        Button {
+            if let seed = tile.seedTrackId {
+                startRadio?(seed)
+            }
+        } label: {
+            VStack(alignment: .leading, spacing: 10) {
+                ZStack {
+                    Group {
+                        if showAlbumArt {
+                            OpenDJCoverArtView(entity: tile.entity, cornerRadius: 14)
+                        } else {
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .fill(tileGradient(for: tile.title))
+                        }
+                    }
+                    .frame(width: tileSize, height: tileSize)
+
+                    // Play affordance — these tiles start radio.
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            Image(systemName: "play.fill")
+                                .font(OpenDJFonts.sansSubheadline)
+                                .foregroundStyle(OpenDJColors.surfaceColor)
+                                .frame(width: 36, height: 36)
+                                .background(Circle().fill(OpenDJColors.accentPrimaryColor.opacity(0.9)))
+                                .padding(10)
+                        }
+                    }
+                    .frame(width: tileSize, height: tileSize)
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .shadow(color: Color.black.opacity(0.12), radius: 8, x: 0, y: 2)
+
+                Text(tile.title)
+                    .font(OpenDJFonts.serifHeadline)
+                    .foregroundStyle(OpenDJColors.textPrimaryColor)
+                    .lineLimit(1)
+
+                if !tile.subtitle.isEmpty {
+                    Text(tile.subtitle)
+                        .font(OpenDJFonts.sansSubheadline)
+                        .foregroundStyle(OpenDJColors.textTertiaryColor)
+                        .lineLimit(1)
+                }
+            }
+            .frame(width: tileSize, alignment: .leading)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func tileGradient(for key: String) -> LinearGradient {
+        let hash = abs(key.hashValue)
+        let palette: [(Color, Color)] = [
+            (OpenDJColors.accentSecondaryColor, OpenDJColors.accentSecondaryMutedColor),
+            (OpenDJColors.accentPrimaryColor, OpenDJColors.accentPrimaryDarkColor),
+            (OpenDJColors.textSecondaryColor, OpenDJColors.accentSecondaryColor),
+            (OpenDJColors.accentSecondaryMutedColor, OpenDJColors.accentPrimaryColor),
+            (OpenDJColors.textPrimaryColor, OpenDJColors.accentSecondaryColor)
+        ]
+        let pair = palette[hash % palette.count]
+        return LinearGradient(
+            colors: [pair.0, pair.1],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
     }
 
     // MARK: - Status View (loading failure / empty)
@@ -172,7 +251,7 @@ struct OpenDJForYouView: View {
                 .font(OpenDJFonts.serifDisplay)
                 .foregroundStyle(OpenDJColors.textPrimaryColor)
 
-            Text("Here's what OpenDJ has lined up for you.")
+            Text("Stations built from how you've been listening.")
                 .font(OpenDJFonts.sansBody)
                 .foregroundStyle(OpenDJColors.textTertiaryColor)
         }
@@ -195,297 +274,23 @@ struct OpenDJForYouView: View {
             .font(OpenDJFonts.sansCaption)
             .tracking(2.5)
             .foregroundStyle(OpenDJColors.textTertiaryColor)
-            .padding(.bottom, 12)
-    }
-
-    // MARK: - Mix Cards
-
-    private var mixCardsSection: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 16) {
-                ForEach(mixes) { mix in
-                    mixCard(mix)
-                }
-            }
-        }
-    }
-
-    private func mixCard(_ mix: MixCard) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(
-                    LinearGradient(
-                        colors: mix.colors,
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .frame(width: 150, height: 150)
-                .overlay(
-                    VStack {
-                        Spacer()
-                        Image(systemName: "play.fill")
-                            .font(OpenDJFonts.serifHeadline)
-                            .foregroundStyle(OpenDJColors.surfaceColor.opacity(0.7))
-                            .frame(width: 48, height: 48)
-                            .background(Circle().fill(OpenDJColors.surfaceColor.opacity(0.15)))
-                            .padding(.bottom, 12)
-                    }
-                )
-
-            Text(mix.name)
-                .font(OpenDJFonts.serifHeadline)
-                .foregroundStyle(OpenDJColors.textPrimaryColor)
-                .lineLimit(1)
-
-            Text(mix.subtitle)
-                .font(OpenDJFonts.sansSubheadline)
-                .foregroundStyle(OpenDJColors.textTertiaryColor)
-                .lineLimit(2)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .frame(width: 150)
-    }
-
-    // MARK: - Top Artists
-
-    private var topArtistsSection: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 16) {
-                ForEach(topArtists) { artist in
-                    topArtistCard(artist)
-                }
-            }
-        }
-    }
-
-    private func topArtistCard(_ artist: TopArtistCard) -> some View {
-        VStack(spacing: 12) {
-            // Artist initial. (Navidrome serves a generic star as the "artist image" and
-            // marks it a real CustomImage, so artist artwork is indistinguishable from a
-            // real photo and not worth showing — the initial reads cleaner.)
-            Circle()
-                .fill(artistGradient(for: artist.name))
-                .frame(width: 88, height: 88)
-                .overlay(
-                    Text(String(artist.name.prefix(1)).uppercased())
-                        .font(OpenDJFonts.serifDisplay)
-                        .foregroundStyle(OpenDJColors.surfaceColor.opacity(0.85))
-                )
-
-            Text(artist.name)
-                .font(OpenDJFonts.serifSubheadline)
-                .foregroundStyle(OpenDJColors.textPrimaryColor)
-                .lineLimit(1)
-
-            Text("\(artist.plays) plays")
-                .font(OpenDJFonts.sansCaption)
-                .foregroundStyle(OpenDJColors.textQuaternaryColor)
-        }
-        .frame(width: 100)
-    }
-
-    private func artistGradient(for name: String) -> LinearGradient {
-        let hash = abs(name.hashValue)
-        let palette: [(Color, Color)] = [
-            (OpenDJColors.accentSecondaryColor, OpenDJColors.accentSecondaryMutedColor),
-            (OpenDJColors.accentPrimaryColor, OpenDJColors.accentPrimaryDarkColor),
-            (OpenDJColors.textSecondaryColor, OpenDJColors.accentSecondaryColor),
-            (OpenDJColors.accentSecondaryMutedColor, OpenDJColors.accentPrimaryColor),
-            (OpenDJColors.textPrimaryColor, OpenDJColors.accentSecondaryColor)
-        ]
-        let pair = palette[hash % palette.count]
-        return LinearGradient(
-            colors: [pair.0, pair.1],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-    }
-
-    // MARK: - Suggested Tracks
-
-    private var suggestedTracksSection: some View {
-        VStack(spacing: 0) {
-            ForEach(Array(suggestedTracks.enumerated()), id: \.offset) { index, track in
-                suggestedTrackRow(track, index: index)
-                if index < suggestedTracks.count - 1 {
-                    Divider()
-                        .overlay(OpenDJColors.trackBackgroundColor.opacity(0.5))
-                        .padding(.leading, 56)
-                }
-            }
-        }
-        .background(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(OpenDJColors.surfaceElevatedColor)
-        )
-    }
-
-    private func suggestedTrackRow(_ track: SuggestedTrackCard, index: Int) -> some View {
-        HStack(spacing: 16) {
-            // Number badge
-            Text("\(index + 1)")
-                .font(OpenDJFonts.sansCaptionBold)
-                .foregroundStyle(OpenDJColors.textQuaternaryColor)
-                .frame(width: 20, alignment: .trailing)
-
-            // Artwork (toggle on) or color swatch (toggle off)
-            Group {
-                if showAlbumArt {
-                    OpenDJCoverArtView.thumbnail(entity: track.entity)
-                } else {
-                    RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .fill(index % 2 == 0 ? OpenDJColors.accentSecondaryColor : OpenDJColors.accentPrimaryColor)
-                }
-            }
-            .frame(width: 40, height: 40)
-
-            // Track info
-            VStack(alignment: .leading, spacing: 4) {
-                Text(track.title)
-                    .font(OpenDJFonts.serifHeadline)
-                    .foregroundStyle(OpenDJColors.textPrimaryColor)
-                    .lineLimit(1)
-
-                Text(track.artist)
-                    .font(OpenDJFonts.sansSubheadline)
-                    .foregroundStyle(OpenDJColors.textTertiaryColor)
-                    .lineLimit(1)
-            }
-
-            Spacer()
-
-            // Score pill (playback wiring is the next increment)
-            if let score = track.score {
-                Text(String(format: "%.0f%%", score * 100))
-                    .font(OpenDJFonts.sansCaptionBold)
-                    .foregroundStyle(OpenDJColors.accentSecondaryColor)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Capsule().fill(OpenDJColors.accentSecondaryColor.opacity(0.10)))
-            }
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 12)
-    }
-
-    // MARK: - Recently Played
-
-    private var recentlyPlayedSection: some View {
-        VStack(spacing: 0) {
-            ForEach(Array(recentPlays.enumerated()), id: \.offset) { index, play in
-                recentPlayRow(play)
-                if index < recentPlays.count - 1 {
-                    Divider()
-                        .overlay(OpenDJColors.trackBackgroundColor.opacity(0.5))
-                        .padding(.leading, 56)
-                }
-            }
-        }
-        .background(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(OpenDJColors.surfaceElevatedColor)
-        )
-    }
-
-    private func recentPlayRow(_ play: RecentPlayCard) -> some View {
-        HStack(spacing: 16) {
-            // Neutral status indicator — the /api/home `recent` payload carries no
-            // finish/skip flag, so we don't claim one (design honesty rule).
-            Image(systemName: "clock.arrow.circlepath")
-                .font(OpenDJFonts.sansBody)
-                .foregroundStyle(OpenDJColors.textQuaternaryColor)
-                .frame(width: 28, height: 28)
-
-            // Artwork (toggle on) or color swatch (toggle off)
-            Group {
-                if showAlbumArt {
-                    OpenDJCoverArtView.thumbnail(entity: play.entity)
-                } else {
-                    RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .fill(OpenDJColors.trackBackgroundColor)
-                }
-            }
-            .frame(width: 40, height: 40)
-
-            // Track info
-            VStack(alignment: .leading, spacing: 4) {
-                Text(play.title)
-                    .font(OpenDJFonts.serifHeadline)
-                    .foregroundStyle(OpenDJColors.textPrimaryColor)
-                    .lineLimit(1)
-
-                Text(play.artist)
-                    .font(OpenDJFonts.sansSubheadline)
-                    .foregroundStyle(OpenDJColors.textTertiaryColor)
-                    .lineLimit(1)
-            }
-
-            Spacer()
-
-            // When it was played (relative), if the server provided a timestamp
-            if let when = Self.relativeTime(play.playedAt) {
-                Text(when)
-                    .font(OpenDJFonts.sansCaption)
-                    .foregroundStyle(OpenDJColors.textQuaternaryColor)
-            }
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 12)
-    }
-
-    // MARK: - Helpers
-
-    private static let isoFormatter: ISO8601DateFormatter = {
-        let f = ISO8601DateFormatter()
-        f.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        return f
-    }()
-
-    private static let isoFormatterNoFraction = ISO8601DateFormatter()
-
-    private static let relativeFormatter: RelativeDateTimeFormatter = {
-        let f = RelativeDateTimeFormatter()
-        f.unitsStyle = .abbreviated
-        return f
-    }()
-
-    private static func relativeTime(_ iso: String?) -> String? {
-        guard let iso else { return nil }
-        let date = isoFormatter.date(from: iso) ?? isoFormatterNoFraction.date(from: iso)
-        guard let date else { return nil }
-        return relativeFormatter.localizedString(for: date, relativeTo: .now)
     }
 }
 
-// MARK: - Card Data Models
+// MARK: - Display Models
 
-private struct MixCard: Identifiable {
-    let id = UUID()
-    let name: String
+/// A rail resolved for display: title + tiles with their library entities attached.
+private struct DisplayRail: Identifiable {
+    let id: String
+    let title: String
+    let tiles: [DisplayTile]
+}
+
+/// A tile resolved for display: an album mix with its seed-track entity (for cover art).
+private struct DisplayTile: Identifiable {
+    let id: String
+    let title: String
     let subtitle: String
-    let colors: [Color]
-}
-
-private struct TopArtistCard: Identifiable {
-    let id = UUID()
-    let name: String
-    let plays: Int
-    let entity: AbstractLibraryEntity?
-}
-
-private struct SuggestedTrackCard: Identifiable {
-    let id = UUID()
-    let artist: String
-    let title: String
-    let score: Double?
-    let entity: AbstractLibraryEntity?
-}
-
-private struct RecentPlayCard: Identifiable {
-    let id = UUID()
-    let artist: String
-    let title: String
-    let playedAt: String?
+    let seedTrackId: String?
     let entity: AbstractLibraryEntity?
 }
