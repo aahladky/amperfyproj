@@ -364,10 +364,21 @@ extension UIColor {
   }
 
   public static var backgroundColor: UIColor {
-    if #available(iOS 13.0, *) {
-      return UIColor.systemBackground
-    } else {
-      return UIColor.white
+    // OpenDJ MCM surface — adaptive. Mirrors OpenDJColors.surface (defined in the app
+    // target, which AmperfyKit can't import). Light: cream #F5EFE2; Dark: warm walnut
+    // #291F14. This is the single token the inherited UIKit screens read for their
+    // content background, so retinting it here unifies them with the OpenDJ screens.
+    UIColor { $0.userInterfaceStyle == .dark
+      ? UIColor(red: 0.16, green: 0.12, blue: 0.08, alpha: 1.0)
+      : UIColor(red: 0.96, green: 0.94, blue: 0.88, alpha: 1.0)
+    }
+  }
+
+  /// OpenDJ MCM elevated surface — cards, grouped cells. Light: #EDE8D4; Dark: #382B1E.
+  public static var elevatedBackgroundColor: UIColor {
+    UIColor { $0.userInterfaceStyle == .dark
+      ? UIColor(red: 0.22, green: 0.17, blue: 0.12, alpha: 1.0)
+      : UIColor(red: 0.93, green: 0.90, blue: 0.83, alpha: 1.0)
     }
   }
 }
