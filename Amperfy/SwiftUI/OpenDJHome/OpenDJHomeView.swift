@@ -95,7 +95,7 @@ struct OpenDJHomeView: View {
             VStack(alignment: .leading, spacing: 0) {
                 OpenDJGreetingHeader(
                     title: OpenDJGreeting.text(name: "Aaron"),
-                    subtitle: "Sound stations from across your library."
+                    subtitle: "Lanes from what you've been into lately."
                 )
                 .padding(.horizontal, 20)
                 .padding(.top, 8)

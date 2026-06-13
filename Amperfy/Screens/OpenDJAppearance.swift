@@ -84,6 +84,16 @@ enum OpenDJAppearance {
             return view
         }()
 
+        // Section index (A–Z scrubber) — was system blue.
+        UITableView.appearance().sectionIndexColor = OpenDJColors.accentPrimary
+        UITableView.appearance().sectionIndexBackgroundColor = .clear
+
+        // Content surfaces — cream, matching the themed nav/tab chrome (was system white).
+        // SwiftUI OpenDJ screens set their own background, so this only affects the
+        // inherited UIKit list/collection screens (Library, Search, detail views).
+        UITableView.appearance().backgroundColor = OpenDJColors.surface
+        UICollectionView.appearance().backgroundColor = OpenDJColors.surface
+
         // Search bar cursor
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self])
             .tintColor = OpenDJColors.accentPrimary
