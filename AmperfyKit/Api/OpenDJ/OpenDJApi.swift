@@ -69,7 +69,9 @@ public final class OpenDJApi: Sendable {
 
     /// Default OpenDJ sidecar on the LAN. Single source of truth — both the play-reporting
     /// syncer (MetaManager) and the recommendation screens build clients from this.
-    public static let defaultBaseURL = URL(string: "https://music.myhouse.fyi")!
+    /// LAN address of the recommender (Docker on the desktop host). For remote use, swap
+    /// to a WireGuard-tunnel host. Plain HTTP is OK — app Info.plist allows arbitrary loads.
+    public static let defaultBaseURL = URL(string: "http://192.168.0.184:8050")!
 
     /// Base URL of the OpenDJ server (e.g. `https://music.myhouse.fyi`).
     private let baseURL: URL
