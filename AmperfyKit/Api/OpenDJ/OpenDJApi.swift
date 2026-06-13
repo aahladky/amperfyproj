@@ -67,6 +67,10 @@ public final class OpenDJApi: Sendable {
 
     // MARK: Properties
 
+    /// Default OpenDJ sidecar on the LAN. Single source of truth — both the play-reporting
+    /// syncer (MetaManager) and the recommendation screens build clients from this.
+    public static let defaultBaseURL = URL(string: "https://music.myhouse.fyi")!
+
     /// Base URL of the OpenDJ server (e.g. `https://music.myhouse.fyi`).
     private let baseURL: URL
 

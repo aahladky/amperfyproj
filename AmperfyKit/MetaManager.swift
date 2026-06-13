@@ -131,9 +131,8 @@ public class MetaManager {
     player: PlayerFacade
   ) -> OpenDJSyncer {
     if let openDJSyncer { return openDJSyncer }
-    // OpenDJ server config — hardcoded for now, move to settings later
-    let baseURL = URL(string: "https://music.myhouse.fyi")!
-    let api = OpenDJApi(baseURL: baseURL, apiKey: "")
+    // OpenDJ server config — shared default (move to settings later)
+    let api = OpenDJApi(baseURL: OpenDJApi.defaultBaseURL, apiKey: "")
     openDJSyncer = OpenDJSyncer(player: player, api: api)
     return openDJSyncer!
   }

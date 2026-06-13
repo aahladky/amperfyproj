@@ -102,8 +102,10 @@ enum TabNavigatorItem: Int, Hashable, CaseIterable {
     case .search:
       return AppStoryboard.Main.segueToSearch(account: account)
     case .forYou:
-      let OpenDJForYouView = OpenDJForYouView()
-      let hostingController = UIHostingController(rootView: OpenDJForYouView)
+      // Build a sidecar client and hand the view an async loader for /api/home.
+      let forYouApi = OpenDJApi(baseURL: OpenDJApi.defaultBaseURL, apiKey: "")
+      let forYouView = OpenDJForYouView(homeProvider: { try await forYouApi.home() })
+      let hostingController = UIHostingController(rootView: forYouView)
       hostingController.view.backgroundColor = .clear
       return hostingController
     }

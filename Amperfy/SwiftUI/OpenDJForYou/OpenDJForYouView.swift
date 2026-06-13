@@ -11,67 +11,28 @@ import AmperfyKit
 
 struct OpenDJForYouView: View {
 
+    // MARK: Dependencies
+
+    /// Loads the home payload from the OpenDJ sidecar (`/api/home`).
+    /// `nil` → no live load (e.g. SwiftUI previews); the screen shows its empty state.
+    let homeProvider: (() async throws -> HomeResponse)?
+
+    init(homeProvider: (() async throws -> HomeResponse)? = nil) {
+        self.homeProvider = homeProvider
+    }
+
     // MARK: State
 
-    /// Placeholder mixes until we wire up real data.
-    @State private var mixes: [MixCard] = {
-#if DEBUG
-        [
-            MixCard(name: "Everything In Its Right Place Mix", subtitle: "Radiohead, Sigur Rós, Bon Iver", colors: [OpenDJColors.accentSecondaryColor, OpenDJColors.accentSecondaryMutedColor]),
-            MixCard(name: "Evan Finds the Third Room Mix", subtitle: "Khruangbin, Tame Impala, Men I Trust", colors: [OpenDJColors.accentPrimaryColor, OpenDJColors.accentPrimaryDarkColor]),
-            MixCard(name: "Says Mix", subtitle: "Nils Frahm, Ólafur Arnalds, Max Richter", colors: [OpenDJColors.textSecondaryColor, OpenDJColors.accentSecondaryColor]),
-            MixCard(name: "Pink Rabbits Mix", subtitle: "The National, Iron & Wine, Sufjan Stevens", colors: [OpenDJColors.accentPrimaryColor, OpenDJColors.accentSecondaryMutedColor])
-        ]
-#else
-        []
-#endif
-    }()
+    @State private var mixes: [MixCard] = []
+    @State private var topArtists: [TopArtistCard] = []
+    @State private var suggestedTracks: [SuggestedTrackCard] = []
+    @State private var recentPlays: [RecentPlayCard] = []
+    @State private var isLoading = false
+    @State private var loadFailed = false
 
-    /// Placeholder top artists until OpenDJ /home endpoint is wired.
-    @State private var topArtists: [TopArtistCard] = {
-#if DEBUG
-        [
-            TopArtistCard(name: "Radiohead", plays: 142),
-            TopArtistCard(name: "Khruangbin", plays: 118),
-            TopArtistCard(name: "Nils Frahm", plays: 97),
-            TopArtistCard(name: "Tame Impala", plays: 85),
-            TopArtistCard(name: "Bon Iver", plays: 73),
-            TopArtistCard(name: "Sigur Rós", plays: 64)
-        ]
-#else
-        []
-#endif
-    }()
-
-    /// Placeholder suggested tracks.
-    @State private var suggestedTracks: [SuggestedTrackCard] = {
-#if DEBUG
-        [
-            SuggestedTrackCard(artist: "Radiohead", title: "Everything In Its Right Place", score: 0.94),
-            SuggestedTrackCard(artist: "Khruangbin", title: "Evan Finds the Third Room", score: 0.91),
-            SuggestedTrackCard(artist: "Nils Frahm", title: "Says", score: 0.88),
-            SuggestedTrackCard(artist: "Bon Iver", title: "Holocene", score: 0.86),
-            SuggestedTrackCard(artist: "Tame Impala", title: "Let It Happen", score: 0.83)
-        ]
-#else
-        []
-#endif
-    }()
-
-    /// Placeholder recent plays.
-    @State private var recentPlays: [RecentPlayCard] = {
-#if DEBUG
-        [
-            RecentPlayCard(artist: "Sigur Rós", title: "Svefn-g-englar", completed: true),
-            RecentPlayCard(artist: "The National", title: "Bloodbuzz Ohio", completed: true),
-            RecentPlayCard(artist: "Radiohead", title: "Reckoner", completed: false),
-            RecentPlayCard(artist: "Men I Trust", title: "Tailwhip", completed: true),
-            RecentPlayCard(artist: "Max Richter", title: "On the Nature of Daylight", completed: false)
-        ]
-#else
-        []
-#endif
-    }()
+    private var isEmptyAll: Bool {
+        mixes.isEmpty && topArtists.isEmpty && suggestedTracks.isEmpty && recentPlays.isEmpty
+    }
 
     // MARK: Body
 
@@ -80,40 +41,106 @@ struct OpenDJForYouView: View {
             OpenDJColors.surfaceColor
                 .ignoresSafeArea()
 
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 0) {
-
-                    // 1. Greeting header
-                    greetingHeader
-                        .padding(.top, 24)
-                        .padding(.bottom, 28)
-
-                    // 2. Mix cards
-                    sectionLabel("YOUR MIXES")
-                    mixCardsSection
-                        .padding(.bottom, 32)
-
-                    // 3. Top Artists
-                    sectionLabel("TOP ARTISTS")
-                    topArtistsSection
-                        .padding(.bottom, 32)
-
-                    // 4. Suggested Tracks
-                    sectionLabel("SUGGESTED FOR YOU")
-                    suggestedTracksSection
-                        .padding(.bottom, 32)
-
-                    // 5. Recently Played
-                    sectionLabel("RECENTLY PLAYED")
-                    recentlyPlayedSection
-                        .padding(.bottom, 40)
-
-                    Spacer(minLength: 20)
-                }
-                .padding(.horizontal, 20)
+            if isLoading && isEmptyAll {
+                ProgressView()
+                    .tint(OpenDJColors.accentPrimaryColor)
+            } else if loadFailed && isEmptyAll {
+                statusView(
+                    icon: "wifi.exclamationmark",
+                    title: "Couldn't reach OpenDJ",
+                    detail: "Your recommendations will appear here once the server responds."
+                )
+            } else {
+                content
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .task { await loadHome() }
+    }
+
+    private var content: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack(alignment: .leading, spacing: 0) {
+
+                // 1. Greeting header
+                greetingHeader
+                    .padding(.top, 24)
+                    .padding(.bottom, 28)
+
+                // 2. Mix cards (hidden until the sidecar serves mixes)
+                if !mixes.isEmpty {
+                    sectionLabel("YOUR MIXES")
+                    mixCardsSection
+                        .padding(.bottom, 32)
+                }
+
+                // 3. Top Artists
+                if !topArtists.isEmpty {
+                    sectionLabel("TOP ARTISTS")
+                    topArtistsSection
+                        .padding(.bottom, 32)
+                }
+
+                // 4. Suggested Tracks
+                if !suggestedTracks.isEmpty {
+                    sectionLabel("SUGGESTED FOR YOU")
+                    suggestedTracksSection
+                        .padding(.bottom, 32)
+                }
+
+                // 5. Recently Played
+                if !recentPlays.isEmpty {
+                    sectionLabel("RECENTLY PLAYED")
+                    recentlyPlayedSection
+                        .padding(.bottom, 40)
+                }
+
+                Spacer(minLength: 20)
+            }
+            .padding(.horizontal, 20)
+        }
+    }
+
+    // MARK: - Data Loading
+
+    @MainActor
+    private func loadHome() async {
+        guard let homeProvider else { return }
+        isLoading = true
+        loadFailed = false
+        do {
+            let home = try await homeProvider()
+            topArtists = home.topArtists.map { TopArtistCard(name: $0.artist, plays: $0.playCount) }
+            suggestedTracks = home.suggested.map {
+                SuggestedTrackCard(artist: $0.artist, title: $0.title, score: $0.score)
+            }
+            recentPlays = home.recent.map {
+                RecentPlayCard(artist: $0.artist, title: $0.title, playedAt: $0.playedAt)
+            }
+        } catch {
+            loadFailed = true
+        }
+        isLoading = false
+    }
+
+    // MARK: - Status View (loading failure / empty)
+
+    private func statusView(icon: String, title: String, detail: String) -> some View {
+        VStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(OpenDJFonts.serifDisplay)
+                .foregroundStyle(OpenDJColors.textTertiaryColor)
+
+            Text(title)
+                .font(OpenDJFonts.serifHeadline)
+                .foregroundStyle(OpenDJColors.textPrimaryColor)
+
+            Text(detail)
+                .font(OpenDJFonts.sansSubheadline)
+                .foregroundStyle(OpenDJColors.textTertiaryColor)
+                .multilineTextAlignment(.center)
+        }
+        .padding(.horizontal, 48)
     }
 
     // MARK: - Greeting Header
@@ -300,7 +327,7 @@ struct OpenDJForYouView: View {
 
             Spacer()
 
-            // Score pill
+            // Score pill (playback wiring is the next increment)
             if let score = track.score {
                 Text(String(format: "%.0f%%", score * 100))
                     .font(OpenDJFonts.sansCaptionBold)
@@ -309,16 +336,6 @@ struct OpenDJForYouView: View {
                     .padding(.vertical, 4)
                     .background(Capsule().fill(OpenDJColors.accentSecondaryColor.opacity(0.10)))
             }
-
-            // Play button
-            Button {} label: {
-                Image(systemName: "play.fill")
-                    .font(OpenDJFonts.sansSubheadline)
-                    .foregroundStyle(OpenDJColors.accentPrimaryColor)
-                    .frame(width: 36, height: 36)
-                    .background(Circle().fill(OpenDJColors.accentPrimaryColor.opacity(0.10)))
-            }
-            .buttonStyle(.plain)
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 12)
@@ -345,17 +362,16 @@ struct OpenDJForYouView: View {
 
     private func recentPlayRow(_ play: RecentPlayCard) -> some View {
         HStack(spacing: 16) {
-            // Status indicator
-            Image(systemName: play.completed ? "checkmark.circle.fill" : "forward.fill")
+            // Neutral status indicator — the /api/home `recent` payload carries no
+            // finish/skip flag, so we don't claim one (design honesty rule).
+            Image(systemName: "clock.arrow.circlepath")
                 .font(OpenDJFonts.sansBody)
-                .foregroundStyle(play.completed ? OpenDJColors.accentSecondaryColor : OpenDJColors.textQuaternaryColor)
+                .foregroundStyle(OpenDJColors.textQuaternaryColor)
                 .frame(width: 28, height: 28)
 
             // Track art swatch
             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(play.completed
-                    ? OpenDJColors.accentSecondaryColor.opacity(0.6)
-                    : OpenDJColors.trackBackgroundColor)
+                .fill(OpenDJColors.trackBackgroundColor)
                 .frame(width: 40, height: 40)
 
             // Track info
@@ -373,17 +389,42 @@ struct OpenDJForYouView: View {
 
             Spacer()
 
-            // Status label
-            Text(play.completed ? "Listened" : "Skipped")
-                .font(OpenDJFonts.sansCaption)
-                .foregroundStyle(play.completed ? OpenDJColors.accentSecondaryColor : OpenDJColors.textQuaternaryColor)
+            // When it was played (relative), if the server provided a timestamp
+            if let when = Self.relativeTime(play.playedAt) {
+                Text(when)
+                    .font(OpenDJFonts.sansCaption)
+                    .foregroundStyle(OpenDJColors.textQuaternaryColor)
+            }
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 12)
     }
+
+    // MARK: - Helpers
+
+    private static let isoFormatter: ISO8601DateFormatter = {
+        let f = ISO8601DateFormatter()
+        f.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return f
+    }()
+
+    private static let isoFormatterNoFraction = ISO8601DateFormatter()
+
+    private static let relativeFormatter: RelativeDateTimeFormatter = {
+        let f = RelativeDateTimeFormatter()
+        f.unitsStyle = .abbreviated
+        return f
+    }()
+
+    private static func relativeTime(_ iso: String?) -> String? {
+        guard let iso else { return nil }
+        let date = isoFormatter.date(from: iso) ?? isoFormatterNoFraction.date(from: iso)
+        guard let date else { return nil }
+        return relativeFormatter.localizedString(for: date, relativeTo: .now)
+    }
 }
 
-// MARK: - Placeholder Data Models
+// MARK: - Card Data Models
 
 private struct MixCard: Identifiable {
     let id = UUID()
@@ -409,5 +450,5 @@ private struct RecentPlayCard: Identifiable {
     let id = UUID()
     let artist: String
     let title: String
-    let completed: Bool
+    let playedAt: String?
 }
