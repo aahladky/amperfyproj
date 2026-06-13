@@ -17,9 +17,19 @@ struct OpenDJForYouView: View {
     /// `nil` → no live load (e.g. SwiftUI previews); the screen shows its empty state.
     let homeProvider: (() async throws -> HomeResponse)?
 
-    init(homeProvider: (() async throws -> HomeResponse)? = nil) {
+    /// Resolves a Navidrome track id to a local library entity, for cover art. Optional.
+    let resolveEntity: (@MainActor (String) -> AbstractLibraryEntity?)?
+
+    init(
+        homeProvider: (() async throws -> HomeResponse)? = nil,
+        resolveEntity: (@MainActor (String) -> AbstractLibraryEntity?)? = nil
+    ) {
         self.homeProvider = homeProvider
+        self.resolveEntity = resolveEntity
     }
+
+    /// User preference: show real album art in cards, or the minimalist color blocks.
+    @AppStorage("opendjShowAlbumArt") private var showAlbumArt = true
 
     // MARK: State
 
@@ -113,10 +123,16 @@ struct OpenDJForYouView: View {
             let home = try await homeProvider()
             topArtists = home.topArtists.map { TopArtistCard(name: $0.artist, plays: $0.playCount) }
             suggestedTracks = home.suggested.map {
-                SuggestedTrackCard(artist: $0.artist, title: $0.title, score: $0.score)
+                SuggestedTrackCard(
+                    artist: $0.artist, title: $0.title, score: $0.score,
+                    entity: $0.trackId.flatMap { resolveEntity?($0) }
+                )
             }
             recentPlays = home.recent.map {
-                RecentPlayCard(artist: $0.artist, title: $0.title, playedAt: $0.playedAt)
+                RecentPlayCard(
+                    artist: $0.artist, title: $0.title, playedAt: $0.playedAt,
+                    entity: $0.trackId.flatMap { resolveEntity?($0) }
+                )
             }
         } catch {
             loadErrorDetail = String(describing: error)
@@ -309,10 +325,16 @@ struct OpenDJForYouView: View {
                 .foregroundStyle(OpenDJColors.textQuaternaryColor)
                 .frame(width: 20, alignment: .trailing)
 
-            // Color swatch
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(index % 2 == 0 ? OpenDJColors.accentSecondaryColor : OpenDJColors.accentPrimaryColor)
-                .frame(width: 40, height: 40)
+            // Artwork (toggle on) or color swatch (toggle off)
+            Group {
+                if showAlbumArt {
+                    OpenDJCoverArtView.thumbnail(entity: track.entity)
+                } else {
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .fill(index % 2 == 0 ? OpenDJColors.accentSecondaryColor : OpenDJColors.accentPrimaryColor)
+                }
+            }
+            .frame(width: 40, height: 40)
 
             // Track info
             VStack(alignment: .leading, spacing: 4) {
@@ -371,10 +393,16 @@ struct OpenDJForYouView: View {
                 .foregroundStyle(OpenDJColors.textQuaternaryColor)
                 .frame(width: 28, height: 28)
 
-            // Track art swatch
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(OpenDJColors.trackBackgroundColor)
-                .frame(width: 40, height: 40)
+            // Artwork (toggle on) or color swatch (toggle off)
+            Group {
+                if showAlbumArt {
+                    OpenDJCoverArtView.thumbnail(entity: play.entity)
+                } else {
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .fill(OpenDJColors.trackBackgroundColor)
+                }
+            }
+            .frame(width: 40, height: 40)
 
             // Track info
             VStack(alignment: .leading, spacing: 4) {
@@ -446,6 +474,7 @@ private struct SuggestedTrackCard: Identifiable {
     let artist: String
     let title: String
     let score: Double?
+    let entity: AbstractLibraryEntity?
 }
 
 private struct RecentPlayCard: Identifiable {
@@ -453,4 +482,5 @@ private struct RecentPlayCard: Identifiable {
     let artist: String
     let title: String
     let playedAt: String?
+    let entity: AbstractLibraryEntity?
 }

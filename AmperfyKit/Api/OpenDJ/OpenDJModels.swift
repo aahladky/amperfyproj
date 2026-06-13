@@ -137,15 +137,23 @@ public struct TopArtist: Codable, Sendable {
 
 /// A suggested track for the home screen.
 public struct SuggestedTrack: Codable, Sendable {
-    /// Track information.
+    /// Navidrome track id (for resolving local artwork). Optional.
+    public let trackId: String?
     public let artist: String
     public let title: String
     public let album: String?
     public let score: Double?
+
+    enum CodingKeys: String, CodingKey {
+        case artist, title, album, score
+        case trackId = "track_id"
+    }
 }
 
 /// A recently played track.
 public struct RecentPlay: Codable, Sendable {
+    /// Navidrome track id (for resolving local artwork). Optional.
+    public let trackId: String?
     /// Artist name.
     public let artist: String
     /// Track title.
@@ -157,6 +165,7 @@ public struct RecentPlay: Codable, Sendable {
 
     enum CodingKeys: String, CodingKey {
         case artist, title, album
+        case trackId = "track_id"
         case playedAt = "played_at"
     }
 }
