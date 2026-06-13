@@ -1,5 +1,5 @@
-// DeejAINowPlayingView.swift
-// DeejAI — Now Playing screen (Mid-Century Modern)
+// OpenDJNowPlayingView.swift
+// OpenDJ — Now Playing screen (Mid-Century Modern)
 //
 // Copyright © 2026 aahladky and contributors.
 // Licensed under the GNU General Public License v3.0 (GPLv3).
@@ -9,11 +9,11 @@ import AmperfyKit
 
 // MARK: - Now Playing View
 
-struct DeejAINowPlayingView: View {
+struct OpenDJNowPlayingView: View {
 
     // MARK: State
     
-    @ObservedObject var state: DeejAIPlayerState
+    @ObservedObject var state: OpenDJPlayerState
     
     @State private var loveScale: CGFloat = 1.0
     
@@ -25,7 +25,7 @@ struct DeejAINowPlayingView: View {
     var body: some View {
         ZStack {
             // 1. Background: solid MCM cream
-            DeejAIColors.surfaceColor
+            OpenDJColors.surfaceColor
                 .ignoresSafeArea()
 
             // 2. Warm tint bleed behind album art area
@@ -89,8 +89,8 @@ struct DeejAINowPlayingView: View {
     private var backgroundGradient: some View {
         RadialGradient(
             gradient: Gradient(stops: [
-                .init(color: DeejAIColors.albumTintColor.opacity(0.45), location: 0.0),
-                .init(color: DeejAIColors.albumTintColor.opacity(0.15), location: 0.4),
+                .init(color: OpenDJColors.albumTintColor.opacity(0.45), location: 0.0),
+                .init(color: OpenDJColors.albumTintColor.opacity(0.15), location: 0.4),
                 .init(color: .clear, location: 1.0)
             ]),
             center: .init(x: 0.5, y: 0.28),
@@ -101,10 +101,10 @@ struct DeejAINowPlayingView: View {
 
     private var contextHeader: some View {
         Text(contextLabel)
-            .font(DeejAIFonts.sansCaption)
+            .font(OpenDJFonts.sansCaption)
             .tracking(3)
             .textCase(.uppercase)
-            .foregroundStyle(DeejAIColors.textTertiaryColor)
+            .foregroundStyle(OpenDJColors.textTertiaryColor)
     }
 
     private var contextLabel: String {
@@ -129,13 +129,13 @@ struct DeejAINowPlayingView: View {
     private var albumArt: some View {
         ZStack {
             // Approved spec shadow: black at 12% opacity, y-offset 4, blur 12
-            DeejAICoverArtView(
+            OpenDJCoverArtView(
                 entity: state.currentPlayable,
                 cornerRadius: 20,
                 placeholderColors: [
-                    DeejAIColors.textSecondaryColor,
-                    DeejAIColors.accentPrimaryDarkColor,
-                    DeejAIColors.textPrimaryColor
+                    OpenDJColors.textSecondaryColor,
+                    OpenDJColors.accentPrimaryDarkColor,
+                    OpenDJColors.textPrimaryColor
                 ]
             )
             .frame(width: 280, height: 280)
@@ -146,9 +146,9 @@ struct DeejAINowPlayingView: View {
     private var artPlaceholderGradient: LinearGradient {
         LinearGradient(
             colors: [
-                DeejAIColors.textSecondaryColor,
-                DeejAIColors.accentPrimaryDarkColor,
-                DeejAIColors.textPrimaryColor
+                OpenDJColors.textSecondaryColor,
+                OpenDJColors.accentPrimaryDarkColor,
+                OpenDJColors.textPrimaryColor
             ],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
@@ -158,13 +158,13 @@ struct DeejAINowPlayingView: View {
     private var trackInfo: some View {
         VStack(spacing: 8) {
             Text(state.currentTrackTitle)
-                .font(DeejAIFonts.serifTitle)
-                .foregroundStyle(DeejAIColors.textPrimaryColor)
+                .font(OpenDJFonts.serifTitle)
+                .foregroundStyle(OpenDJColors.textPrimaryColor)
                 .lineLimit(1)
 
             Text(state.currentArtistName)
-                .font(DeejAIFonts.sansBody)
-                .foregroundStyle(DeejAIColors.textTertiaryColor)
+                .font(OpenDJFonts.sansBody)
+                .foregroundStyle(OpenDJColors.textTertiaryColor)
                 .lineLimit(1)
         }
         .padding(.horizontal, 32)
@@ -181,8 +181,8 @@ struct DeejAINowPlayingView: View {
             }
         } label: {
             Image(systemName: state.isFavorite ? "heart.fill" : "heart")
-                .font(DeejAIFonts.serifTitle)
-                .foregroundStyle(state.isFavorite ? DeejAIColors.accentPrimaryColor : DeejAIColors.textQuaternaryColor)
+                .font(OpenDJFonts.serifTitle)
+                .foregroundStyle(state.isFavorite ? OpenDJColors.accentPrimaryColor : OpenDJColors.textQuaternaryColor)
                 .scaleEffect(loveScale)
                 .frame(width: 52, height: 52)
         }
@@ -194,11 +194,11 @@ struct DeejAINowPlayingView: View {
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     Capsule()
-                        .fill(DeejAIColors.trackBackgroundColor)
+                        .fill(OpenDJColors.trackBackgroundColor)
                         .frame(height: 4)
 
                     Capsule()
-                        .fill(DeejAIColors.accentPrimaryColor)
+                        .fill(OpenDJColors.accentPrimaryColor)
                         .frame(width: geo.size.width * state.progress, height: 4)
                 }
             }
@@ -206,12 +206,12 @@ struct DeejAINowPlayingView: View {
 
             HStack {
                 Text(state.elapsedText)
-                    .font(DeejAIFonts.monoTime)
-                    .foregroundStyle(DeejAIColors.textQuaternaryColor)
+                    .font(OpenDJFonts.monoTime)
+                    .foregroundStyle(OpenDJColors.textQuaternaryColor)
                 Spacer()
                 Text(state.durationText)
-                    .font(DeejAIFonts.monoTime)
-                    .foregroundStyle(DeejAIColors.textQuaternaryColor)
+                    .font(OpenDJFonts.monoTime)
+                    .foregroundStyle(OpenDJColors.textQuaternaryColor)
             }
         }
     }
@@ -220,8 +220,8 @@ struct DeejAINowPlayingView: View {
         HStack(alignment: .center, spacing: 40) {
             Button { player.playPreviousOrReplay() } label: {
                 Image(systemName: "backward.fill")
-                    .font(DeejAIFonts.serifTitle)
-                    .foregroundStyle(DeejAIColors.textPrimaryColor)
+                    .font(OpenDJFonts.serifTitle)
+                    .foregroundStyle(OpenDJColors.textPrimaryColor)
                     .frame(width: 44, height: 44)
             }
             .buttonStyle(.plain)
@@ -229,12 +229,12 @@ struct DeejAINowPlayingView: View {
             Button { player.togglePlayPause() } label: {
                 ZStack {
                     Circle()
-                        .fill(DeejAIColors.accentPrimaryColor)
+                        .fill(OpenDJColors.accentPrimaryColor)
                         .frame(width: 68, height: 68)
 
                     Image(systemName: state.isPlaying ? "pause.fill" : "play.fill")
-                        .font(DeejAIFonts.serifDisplay)
-                        .foregroundStyle(DeejAIColors.surfaceColor)
+                        .font(OpenDJFonts.serifDisplay)
+                        .foregroundStyle(OpenDJColors.surfaceColor)
                         .offset(x: state.isPlaying ? 0 : 2)
                 }
             }
@@ -242,8 +242,8 @@ struct DeejAINowPlayingView: View {
 
             Button { player.playNext() } label: {
                 Image(systemName: "forward.fill")
-                    .font(DeejAIFonts.serifTitle)
-                    .foregroundStyle(DeejAIColors.textPrimaryColor)
+                    .font(OpenDJFonts.serifTitle)
+                    .foregroundStyle(OpenDJColors.textPrimaryColor)
                     .frame(width: 44, height: 44)
             }
             .buttonStyle(.plain)
@@ -257,36 +257,36 @@ struct DeejAINowPlayingView: View {
         } label: {
             VStack(alignment: .leading, spacing: 12) {
                 Text("UP NEXT")
-                    .font(DeejAIFonts.sansCaption)
+                    .font(OpenDJFonts.sansCaption)
                     .tracking(2.5)
-                    .foregroundStyle(DeejAIColors.textTertiaryColor)
+                    .foregroundStyle(OpenDJColors.textTertiaryColor)
 
                 HStack(spacing: 16) {
                     RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .fill(DeejAIColors.accentSecondaryColor)
+                        .fill(OpenDJColors.accentSecondaryColor)
                         .frame(width: 52, height: 52)
 
                     VStack(alignment: .leading, spacing: 4) {
                         Text(state.nextTrackTitle)
-                            .font(DeejAIFonts.serifHeadline)
-                            .foregroundStyle(DeejAIColors.textPrimaryColor)
+                            .font(OpenDJFonts.serifHeadline)
+                            .foregroundStyle(OpenDJColors.textPrimaryColor)
                             .lineLimit(1)
 
                         Text(state.nextArtistName)
-                            .font(DeejAIFonts.sansSubheadline)
-                            .foregroundStyle(DeejAIColors.textTertiaryColor)
+                            .font(OpenDJFonts.sansSubheadline)
+                            .foregroundStyle(OpenDJColors.textTertiaryColor)
                             .lineLimit(1)
                     }
                     Spacer()
                     Image(systemName: "chevron.right")
-                        .font(DeejAIFonts.serifSubheadline)
-                        .foregroundStyle(DeejAIColors.textQuaternaryColor)
+                        .font(OpenDJFonts.serifSubheadline)
+                        .foregroundStyle(OpenDJColors.textQuaternaryColor)
                 }
             }
             .padding(16)
             .background(
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(DeejAIColors.surfaceElevatedColor)
+                    .fill(OpenDJColors.surfaceElevatedColor)
             )
         }
         .buttonStyle(.plain)
@@ -296,20 +296,20 @@ struct DeejAINowPlayingView: View {
         HStack(spacing: 20) {
             Button { state.toggleContinuation() } label: {
                 Image(systemName: "infinity")
-                    .font(DeejAIFonts.serifTitle)
-                    .foregroundStyle(state.isRadioMode ? DeejAIColors.accentSecondaryColor : DeejAIColors.textQuaternaryColor)
+                    .font(OpenDJFonts.serifTitle)
+                    .foregroundStyle(state.isRadioMode ? OpenDJColors.accentSecondaryColor : OpenDJColors.textQuaternaryColor)
                     .frame(width: 44, height: 44)
             }
             .buttonStyle(.plain)
 
             Text("feel · settled")
-                .font(DeejAIFonts.sansSubheadline)
+                .font(OpenDJFonts.sansSubheadline)
                 .tracking(1)
-                .foregroundStyle(DeejAIColors.accentSecondaryColor)
+                .foregroundStyle(OpenDJColors.accentSecondaryColor)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
-                .background(Capsule().fill(DeejAIColors.accentSecondaryColor.opacity(0.10)))
-                .overlay(Capsule().stroke(DeejAIColors.accentSecondaryColor.opacity(0.25), lineWidth: 1))
+                .background(Capsule().fill(OpenDJColors.accentSecondaryColor.opacity(0.10)))
+                .overlay(Capsule().stroke(OpenDJColors.accentSecondaryColor.opacity(0.25), lineWidth: 1))
         }
     }
 }

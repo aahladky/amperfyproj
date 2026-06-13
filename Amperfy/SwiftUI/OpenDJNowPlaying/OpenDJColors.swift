@@ -1,5 +1,5 @@
-// DeejAIColors.swift
-// DeejAI — Mid-Century Modern color tokens
+// OpenDJColors.swift
+// OpenDJ — Mid-Century Modern color tokens
 //
 // Copyright © 2026 aahladky and contributors.
 // Licensed under the GNU General Public License v3.0 (GPLv3).
@@ -8,7 +8,7 @@
 import UIKit
 import SwiftUI
 
-/// Mid-Century Modern semantic color tokens for DeejAI.
+/// Mid-Century Modern semantic color tokens for OpenDJ.
 ///
 /// All colors are `UIColor`-based with explicit light/dark dynamic providers,
 /// exposed to SwiftUI via `Color(uiColor:)`. The same tokens drive UIKit
@@ -17,7 +17,7 @@ import SwiftUI
 /// Design: warm, flat, solid color blocks — anti-frosted-glass, anti-Liquid-Glass.
 /// Palette: cream backgrounds, terracotta hero accent, deep teal secondary, warm brown text.
 /// Dark mode: warm deep-brown backgrounds with warm cream text, keeping MCM warmth.
-enum DeejAIColors {
+enum OpenDJColors {
 
     // MARK: - Light Palette (preserved from original)
 
@@ -170,48 +170,48 @@ enum DeejAIColors {
     // MARK: - Backward Compatible Paint Names
 
     /// Primary cream background.
-    @available(*, deprecated, message: "Use DeejAIColors.surfaceColor instead")
+    @available(*, deprecated, message: "Use OpenDJColors.surfaceColor instead")
     static var cream: Color { surfaceColor }
 
     /// Slightly deeper cream for cards and elevated surfaces.
-    @available(*, deprecated, message: "Use DeejAIColors.surfaceElevatedColor instead")
+    @available(*, deprecated, message: "Use OpenDJColors.surfaceElevatedColor instead")
     static var creamCard: Color { surfaceElevatedColor }
 
     /// Album-art tint wash.
-    // (Removed deprecated alias — use DeejAIColors.albumTintColor or .albumTint UIColor)
+    // (Removed deprecated alias — use OpenDJColors.albumTintColor or .albumTint UIColor)
 
     /// Terracotta / burnt orange — hero accent.
-    @available(*, deprecated, message: "Use DeejAIColors.accentPrimaryColor instead")
+    @available(*, deprecated, message: "Use OpenDJColors.accentPrimaryColor instead")
     static var terracotta: Color { accentPrimaryColor }
 
     /// Darker terracotta — pressed states.
-    @available(*, deprecated, message: "Use DeejAIColors.accentPrimaryDarkColor instead")
+    @available(*, deprecated, message: "Use OpenDJColors.accentPrimaryDarkColor instead")
     static var terracottaDark: Color { accentPrimaryDarkColor.opacity(0.95) } // approximate darkening
 
     /// Deep teal — secondary accent.
-    @available(*, deprecated, message: "Use DeejAIColors.accentSecondaryColor instead")
+    @available(*, deprecated, message: "Use OpenDJColors.accentSecondaryColor instead")
     static var teal: Color { accentSecondaryColor }
 
     /// Muted teal.
-    @available(*, deprecated, message: "Use DeejAIColors.accentSecondaryMutedColor instead")
+    @available(*, deprecated, message: "Use OpenDJColors.accentSecondaryMutedColor instead")
     static var tealMuted: Color { accentSecondaryMutedColor }
 
     /// Dark brown — primary text.
-    @available(*, deprecated, message: "Use DeejAIColors.textPrimaryColor instead")
+    @available(*, deprecated, message: "Use OpenDJColors.textPrimaryColor instead")
     static var brownDark: Color { textPrimaryColor }
 
     /// Medium brown — secondary text.
-    @available(*, deprecated, message: "Use DeejAIColors.textSecondaryColor instead")
+    @available(*, deprecated, message: "Use OpenDJColors.textSecondaryColor instead")
     static var brownMedium: Color { textSecondaryColor }
 
     /// Muted tan — tertiary text.
-    @available(*, deprecated, message: "Use DeejAIColors.textTertiaryColor instead")
+    @available(*, deprecated, message: "Use OpenDJColors.textTertiaryColor instead")
     static var tan: Color { textTertiaryColor }
 
     /// Light tan — quaternary text.
-    @available(*, deprecated, message: "Use DeejAIColors.textQuaternaryColor instead")
+    @available(*, deprecated, message: "Use OpenDJColors.textQuaternaryColor instead")
     static var tanLight: Color { textQuaternaryColor }
 
     /// Track background — progress bars.
-    // (Removed deprecated alias — use DeejAIColors.trackBackgroundColor or .trackBackground UIColor)
+    // (Removed deprecated alias — use OpenDJColors.trackBackgroundColor or .trackBackground UIColor)
 }

@@ -1,8 +1,8 @@
 //
-//  DeejAIApi.swift
+//  OpenDJApi.swift
 //  AmperfyKit
 //
-//  Copyright (C) 2024 DeejAI Contributors
+//  Copyright (C) 2024 OpenDJ Contributors
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -20,10 +20,10 @@
 
 import Foundation
 
-// MARK: - DeejAIError
+// MARK: - OpenDJError
 
-/// Errors produced by ``DeejAIApi``.
-public enum DeejAIError: Error, LocalizedError, Sendable {
+/// Errors produced by ``OpenDJApi``.
+public enum OpenDJError: Error, LocalizedError, Sendable {
     /// The provided base URL is invalid.
     case invalidBaseURL
     /// The server returned an unexpected HTTP status code.
@@ -38,7 +38,7 @@ public enum DeejAIError: Error, LocalizedError, Sendable {
     public var errorDescription: String? {
         switch self {
         case .invalidBaseURL:
-            return "The DeejAI server URL is invalid."
+            return "The OpenDJ server URL is invalid."
         case .httpError(let code, let msg):
             return "HTTP \(code): \(msg ?? "Unknown error")"
         case .decodingError(let err):
@@ -51,23 +51,23 @@ public enum DeejAIError: Error, LocalizedError, Sendable {
     }
 }
 
-// MARK: - DeejAIApi
+// MARK: - OpenDJApi
 
-/// Lightweight async client for the DeejAI recommendation engine.
+/// Lightweight async client for the OpenDJ recommendation engine.
 ///
 /// Uses `URLSession` with Swift concurrency (`async`/`await`) and
 /// requires no third-party dependencies.
 ///
 /// ```swift
-/// let api = DeejAIApi(baseURL: URL(string: "https://music.myhouse.fyi")!,
+/// let api = OpenDJApi(baseURL: URL(string: "https://music.myhouse.fyi")!,
 ///                      apiKey: "secret")
 /// let health = try await api.healthCheck()
 /// ```
-public final class DeejAIApi: Sendable {
+public final class OpenDJApi: Sendable {
 
     // MARK: Properties
 
-    /// Base URL of the DeejAI server (e.g. `https://music.myhouse.fyi`).
+    /// Base URL of the OpenDJ server (e.g. `https://music.myhouse.fyi`).
     private let baseURL: URL
 
     /// Bearer token for authentication.
@@ -92,9 +92,9 @@ public final class DeejAIApi: Sendable {
 
     // MARK: Lifecycle
 
-    /// Creates a new DeejAI API client.
+    /// Creates a new OpenDJ API client.
     /// - Parameters:
-    ///   - baseURL: Root URL of the DeejAI server.
+    ///   - baseURL: Root URL of the OpenDJ server.
     ///   - apiKey: Bearer token for authentication.
     ///   - session: URLSession to use (defaults to `.shared`).
     public init(baseURL: URL,
@@ -111,7 +111,7 @@ public final class DeejAIApi: Sendable {
     ///
     /// `GET /api/health`
     /// - Returns: ``HealthResponse`` with status information.
-    /// - Throws: ``DeejAIError`` on failure.
+    /// - Throws: ``OpenDJError`` on failure.
     public func healthCheck() async throws -> HealthResponse {
         try await get(path: "/api/health")
     }
@@ -180,7 +180,7 @@ public final class DeejAIApi: Sendable {
     ///
     /// `POST /api/played`
     /// - Parameter request: A ``PlayedRequest`` describing the event.
-    /// - Throws: ``DeejAIError`` on failure.
+    /// - Throws: ``OpenDJError`` on failure.
     public func reportPlayed(_ request: PlayedRequest) async throws {
         let _: EmptyResponse = try await post(path: "/api/played", encodable: request)
     }
@@ -201,13 +201,13 @@ public final class DeejAIApi: Sendable {
                              queryItems: [String: String]? = nil) throws -> URLRequest {
         guard var components = URLComponents(url: baseURL.appendingPathComponent(path),
                                              resolvingAgainstBaseURL: false) else {
-            throw DeejAIError.invalidBaseURL
+            throw OpenDJError.invalidBaseURL
         }
         if let queryItems, !queryItems.isEmpty {
             components.queryItems = queryItems.map { URLQueryItem(name: $0.key, value: $0.value) }
         }
         guard let url = components.url else {
-            throw DeejAIError.invalidBaseURL
+            throw OpenDJError.invalidBaseURL
         }
         var request = URLRequest(url: url)
         request.httpMethod = method
@@ -248,16 +248,16 @@ public final class DeejAIApi: Sendable {
         do {
             (data, response) = try await session.data(for: request)
         } catch {
-            throw DeejAIError.networkError(error)
+            throw OpenDJError.networkError(error)
         }
 
         guard let http = response as? HTTPURLResponse else {
-            throw DeejAIError.unexpectedResponse
+            throw OpenDJError.unexpectedResponse
         }
 
         guard (200...299).contains(http.statusCode) else {
             let message = String(data: data, encoding: .utf8)
-            throw DeejAIError.httpError(statusCode: http.statusCode, message: message)
+            throw OpenDJError.httpError(statusCode: http.statusCode, message: message)
         }
 
         // Handle empty responses (e.g. POST /api/played returns 204).
@@ -268,7 +268,7 @@ public final class DeejAIApi: Sendable {
         do {
             return try decoder.decode(T.self, from: data)
         } catch {
-            throw DeejAIError.decodingError(error)
+            throw OpenDJError.decodingError(error)
         }
     }
 }

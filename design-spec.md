@@ -1,14 +1,14 @@
 # design-spec.md
 
-The frozen visual + behavioral contract for DeejAI screens. **This file is authored by a sighted human (in fast mockups), not by agents.** Agents and CI implement and verify *against* it — they never invent values or decide what a control means. If a value isn't here, stop and ask; don't guess from "what looks warm."
+The frozen visual + behavioral contract for OpenDJ screens. **This file is authored by a sighted human (in fast mockups), not by agents.** Agents and CI implement and verify *against* it — they never invent values or decide what a control means. If a value isn't here, stop and ask; don't guess from "what looks warm."
 
 Division of labor: **judgment happens here, once. Translation and enforcement happen downstream, forever.** An agent that obeys this file produces warmth it cannot see.
 
 ---
 
-## 1. Color tokens — source of truth: `DeejAIColors.swift`
+## 1. Color tokens — source of truth: `OpenDJColors.swift`
 
-Never write a color literal in a view. Every color resolves to a `DeejAIColors` token. Values below are the contract; the Swift file must match.
+Never write a color literal in a view. Every color resolves to a `OpenDJColors` token. Values below are the contract; the Swift file must match.
 
 | Token | Light | Dark | Use |
 |---|---|---|---|
@@ -25,11 +25,11 @@ Never write a color literal in a view. Every color resolves to a `DeejAIColors` 
 | `textTertiary` | `#9E8A70` | `#B3A185` | secondary labels |
 | `textQuaternary` | `#B8A68C` | `#94806A` | captions, times, **unloved heart** |
 
-**Invariant C1:** zero `Color(red:`, `UIColor(red:`, or `#hex` literals in any file under `SwiftUI/DeejAI*` except `DeejAIColors.swift`. (Currently passes — keep it.)
+**Invariant C1:** zero `Color(red:`, `UIColor(red:`, or `#hex` literals in any file under `SwiftUI/OpenDJ*` except `OpenDJColors.swift`. (Currently passes — keep it.)
 
 ---
 
-## 2. Type tokens — source of truth: `DeejAIFonts.swift`
+## 2. Type tokens — source of truth: `OpenDJFonts.swift`
 
 Serif = **Lora** (titles, liner-notes feel). Sans = **Nunito** (everything else). All tokens use `Font.custom(_:relativeTo:)` so Dynamic Type scales.
 
@@ -46,7 +46,7 @@ Serif = **Lora** (titles, liner-notes feel). Sans = **Nunito** (everything else)
 | `sansCaptionBold` | Nunito 11 bold / caption | numeric badges |
 | `monoTime` | system 11 mono | elapsed/duration **only** |
 
-**Invariant T1 (OPEN — must fix):** no `.system(size:` anywhere under `SwiftUI/DeejAI*` except `DeejAIFonts.swift` and the single `monoTime` token. ~17 sites currently violate this — they render in system San Francisco (not Lora/Nunito) AND disable Dynamic Type. Replace each with the matching `DeejAIFonts.` token.
+**Invariant T1 (OPEN — must fix):** no `.system(size:` anywhere under `SwiftUI/OpenDJ*` except `OpenDJFonts.swift` and the single `monoTime` token. ~17 sites currently violate this — they render in system San Francisco (not Lora/Nunito) AND disable Dynamic Type. Replace each with the matching `OpenDJFonts.` token.
 
 ---
 
@@ -78,7 +78,7 @@ This is where blind agents drift: they wire a control to the nearest existing pr
 
 ---
 
-## 5. UIKit chrome — source of truth: a single appearance-config driven from `DeejAIColors`
+## 5. UIKit chrome — source of truth: a single appearance-config driven from `OpenDJColors`
 
 The app is UIKit+SwiftUI hybrid. Unstyled UIKit chrome leaking system blue/gray is the #1 "skinned" tell, and it's nearly invisible on a casual device glance — so it must be enforced mechanically, not by eye.
 
@@ -101,7 +101,7 @@ The app is UIKit+SwiftUI hybrid. Unstyled UIKit chrome leaking system blue/gray 
 
 ## Open must-fix list (this revision)
 
-1. **T1** — replace ~17 `.system(size:)` sites with `DeejAIFonts` tokens (restores custom faces + Dynamic Type).
+1. **T1** — replace ~17 `.system(size:)` sites with `OpenDJFonts` tokens (restores custom faces + Dynamic Type).
 2. **U1** — add UIKit appearance proxies (both standard + scrollEdge), token-driven.
 3. **Infinity** — rewire from `repeatMode` to sequencer queue-extend.
 4. **Up next** — wire sequencer OR soften label to match the queue source.
@@ -128,7 +128,7 @@ The Library consolidates Amperfy's ~10-row server-browser taxonomy into **three 
 **Implementation notes:**
 - Build against the Subsonic API (Navidrome exposes play counts + starred state). But: sort-by-play-count is only as honest as the play data — fully meaningful only after the Plexamp backfill + feedback loop land. The screen can be built now; the data behind the sort matures later.
 - Songs (flat list of a large library) needs a **virtualized list** for performance.
-- Font: route `LibraryNavigatorConfigurator` labels through the DeejAIFonts UIFont bridge (closes the open T2 lint item).
+- Font: route `LibraryNavigatorConfigurator` labels through the OpenDJFonts UIFont bridge (closes the open T2 lint item).
 
 # 8. Home playlist shelf (decided)
 
@@ -152,4 +152,4 @@ Principle: **simple top level, granular underneath.** This is progressive disclo
 - Granular control over *experienced behavior* (continuation on/off, resurfacing aggressiveness in human terms, context sensitivity) → YES, in Playback settings, in human language.
 - Raw *model parameters* → walled in Advanced/Developer behind a clear "advanced — changes how recommendations are computed" framing, never in the top two tiers. The main UI still exposes at most the one "feel" control (§4); settings must not become the ML panel the app is designed to avoid.
 
-**Current skeleton (basis to evolve from, not a redesign):** top level = Version/Build (info), Offline Mode + Prevent Screen Lock (genuine top-level toggles), then doors: Account, Display & Interaction, Library, Player Stream & Scrobble, Equalizer, Swipe, Artwork, Support, License, X-Callback, Developer. Evolution direction: regroup the doors toward intent-based categories; verify the two promoted toggles are genuinely Aaron's highest-frequency items; ensure DeejAI playback-intelligence settings get a clear home (Playback) and any true model knobs go to Developer.
+**Current skeleton (basis to evolve from, not a redesign):** top level = Version/Build (info), Offline Mode + Prevent Screen Lock (genuine top-level toggles), then doors: Account, Display & Interaction, Library, Player Stream & Scrobble, Equalizer, Swipe, Artwork, Support, License, X-Callback, Developer. Evolution direction: regroup the doors toward intent-based categories; verify the two promoted toggles are genuinely Aaron's highest-frequency items; ensure OpenDJ playback-intelligence settings get a clear home (Playback) and any true model knobs go to Developer.

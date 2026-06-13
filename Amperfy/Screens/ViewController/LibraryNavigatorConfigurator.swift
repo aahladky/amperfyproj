@@ -89,15 +89,15 @@ enum TabNavigatorItem: Int, Hashable, CaseIterable {
   func getController(account: Account) -> UIViewController {
     switch self {
     case .home:
-      let deejaiHomeView = DeejAIHomeView()
-      let hostingController = UIHostingController(rootView: deejaiHomeView)
+      let OpenDJHomeView = OpenDJHomeView()
+      let hostingController = UIHostingController(rootView: OpenDJHomeView)
       hostingController.view.backgroundColor = .clear
       return hostingController
     case .search:
       return AppStoryboard.Main.segueToSearch(account: account)
     case .forYou:
-      let deejaiForYouView = DeejAIForYouView()
-      let hostingController = UIHostingController(rootView: deejaiForYouView)
+      let OpenDJForYouView = OpenDJForYouView()
+      let hostingController = UIHostingController(rootView: OpenDJForYouView)
       hostingController.view.backgroundColor = .clear
       return hostingController
     }
@@ -328,7 +328,7 @@ class LibraryNavigatorConfigurator: NSObject {
       if !item.isInteractable {
         var content = cell.defaultContentConfiguration()
         content.text = item.title
-        content.textProperties.font = .preferredFont(forTextStyle: .headline)
+        content.textProperties.font = OpenDJFonts.sansBodyUIFont
         cell.accessories = []
         cell.contentConfiguration = content
       } else if let libraryItem = item.library {

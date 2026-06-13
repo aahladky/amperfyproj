@@ -38,12 +38,12 @@ The aesthetic is a deliberate rejection of Liquid Glass: warm, flat, **solid col
 
 ## Known issues from first build (now-playing screen)
 
-`Amperfy/SwiftUI/DeejAINowPlaying/` — `DeejAINowPlayingView.swift`, `DeejAIPlayerState.swift`, `DeejAIColors.swift`.
+`Amperfy/SwiftUI/OpenDJNowPlaying/` — `OpenDJNowPlayingView.swift`, `OpenDJPlayerState.swift`, `OpenDJColors.swift`.
 
 1. **Heart is a no-op** — toggles local `isLoved`, never touches `playable.isFavorite`, never reads initial state. This is the most important control in the app (feeds the completion/love signal). Wire to the real model (`AbstractPlayable` favorite handling; `RatingView` exists in tree).
 2. **Infinity is a no-op + recessive** — local `radioContinues` bool. Wire to real radio/queue-extend state AND give it real hierarchy near the transport. It's the app's primary verb but currently the quietest control on screen.
 3. **Up-next reads the plain Amperfy queue**, not the sequencer — label says "flows on" but isn't yet true.
-4. **`DeejAIColors` is SwiftUI-only, flat RGB, no dark mode.** Refactor to UIColor-based dynamic semantic tokens feeding both SwiftUI and appearance proxies.
+4. **`OpenDJColors` is SwiftUI-only, flat RGB, no dark mode.** Refactor to UIColor-based dynamic semantic tokens feeding both SwiftUI and appearance proxies.
 5. **Serif is system serif (New York)** — a default. Register a deliberate humanist/transitional face via `UIAppFonts`.
 6. Progress timer polls every second even when paused — gate on `isPlaying`. Verify `subsubtitle` is actually the album. `ScrollView` on a non-scrolling screen allows rubber-band bounce.
 

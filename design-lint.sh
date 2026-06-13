@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# design-lint.sh — structural-invariant checks for DeejAI.
+# design-lint.sh — structural-invariant checks for OpenDJ.
 # Runs first in the Xcode Cloud workflow (ci_post_clone or a pre-build step).
 # Catches font/literal/material/honesty/placeholder/chrome drift WITHOUT a render.
 # Exit non-zero on any violation so the build goes red before it's worth compiling.
@@ -9,7 +9,7 @@
 # has moved, so a future rename can't quietly turn enforcement off.
 
 set -uo pipefail
-SWIFT_DEEJAI="SwiftUI/DeejAINowPlaying SwiftUI/DeejAIHome SwiftUI/DeejAIForYou SwiftUI/DeejAICoverArt"
+SWIFT_OpenDJ="SwiftUI/OpenDJNowPlaying SwiftUI/OpenDJHome SwiftUI/OpenDJForYou SwiftUI/OpenDJCoverArt"
 SWIFT_SETTINGS="SwiftUI/Settings SwiftUI/Basics"
 UIKIT="Screens"
 fail=0
@@ -18,37 +18,37 @@ note() { echo "❌ $1"; fail=1; }
 ok()   { echo "✅ $1"; }
 
 # --- Guard: every search root must exist, or the checks below false-clean ---
-for d in $SWIFT_DEEJAI $SWIFT_SETTINGS $UIKIT; do
+for d in $SWIFT_OpenDJ $SWIFT_SETTINGS $UIKIT; do
   if [ ! -d "$d" ]; then note "GUARD: search root '$d' not found — path moved? checks over it would false-clean"; fi
 done
 [ "$fail" -ne 0 ] && { echo "design-lint ABORTED (bad search roots)"; exit 1; }
 
-# C1 — no color literals in DeejAI views (tokens only)
-if grep -rn --include=*.swift -E 'Color\(red:|UIColor\(red:|#[0-9A-Fa-f]{6}' $SWIFT_DEEJAI \
-     | grep -v 'DeejAIColors.swift' | grep -v '//' ; then
-  note "C1: color literal in a view — route through DeejAIColors"
+# C1 — no color literals in OpenDJ views (tokens only)
+if grep -rn --include=*.swift -E 'Color\(red:|UIColor\(red:|#[0-9A-Fa-f]{6}' $SWIFT_OpenDJ \
+     | grep -v 'OpenDJColors.swift' | grep -v '//' ; then
+  note "C1: color literal in a view — route through OpenDJColors"
 else ok "C1: no color literals in views"; fi
 
-# T1 — no bare .system(size:) in DeejAI views (except DeejAIFonts monoTime)
-if grep -rn --include=*.swift '\.system(size:' $SWIFT_DEEJAI \
-     | grep -v 'DeejAIFonts.swift' | grep -v '//' ; then
-  note "T1: .system(size:) in a view — use DeejAIFonts tokens (kills Dynamic Type + custom face)"
-else ok "T1: font tokens used in DeejAI views"; fi
+# T1 — no bare .system(size:) in OpenDJ views (except OpenDJFonts monoTime)
+if grep -rn --include=*.swift '\.system(size:' $SWIFT_OpenDJ \
+     | grep -v 'OpenDJFonts.swift' | grep -v '//' ; then
+  note "T1: .system(size:) in a view — use OpenDJFonts tokens (kills Dynamic Type + custom face)"
+else ok "T1: font tokens used in OpenDJ views"; fi
 
-# T2 (SCOPED) — only the redesigned-identity UIKit surfaces must use DeejAIFonts; utility/
+# T2 (SCOPED) — only the redesigned-identity UIKit surfaces must use OpenDJFonts; utility/
 # dense text (lyrics, login, etc.) may stay system. Add `// design-lint:allow-system-font`
 # on a line to intentionally opt it out. Edit T2_SCOPE to expand the enforced surface set.
 T2_SCOPE="Screens/ViewController/LibraryNavigatorConfigurator.swift Screens/Player/MiniPlayerView.swift"
 for f in $T2_SCOPE; do [ -e "$f" ] || note "T2: scoped file '$f' missing — path moved?"; done
 if grep -rn --include=*.swift -E '\.preferredFont\(forTextStyle:|\.systemFont\(ofSize:' $T2_SCOPE 2>/dev/null \
-     | grep -v 'DeejAIFonts' | grep -v 'design-lint:allow-system-font' | grep -v '//' ; then
-  note "T2: system UIFont on a redesigned surface — route through DeejAIFonts UIFont bridge"
-else ok "T2: redesigned UIKit surfaces use DeejAIFonts (utility text exempt)"; fi
+     | grep -v 'OpenDJFonts' | grep -v 'design-lint:allow-system-font' | grep -v '//' ; then
+  note "T2: system UIFont on a redesigned surface — route through OpenDJFonts UIFont bridge"
+else ok "T2: redesigned UIKit surfaces use OpenDJFonts (utility text exempt)"; fi
 
 # MATERIAL — no Liquid Glass / blur materials on redesigned surfaces (.blur allowed).
 # Covers BOTH mini-player presentation paths (TabBarVC + SplitVC) — image showed the pill
 # rendering translucent over collection views, so a per-context regression must be catchable.
-MATERIAL_SURFACES="Screens/Player/MiniPlayerView.swift Screens/ViewController/TabBarVC.swift Screens/ViewController/SplitVC.swift $SWIFT_DEEJAI"
+MATERIAL_SURFACES="Screens/Player/MiniPlayerView.swift Screens/ViewController/TabBarVC.swift Screens/ViewController/SplitVC.swift $SWIFT_OpenDJ"
 if grep -rn --include=*.swift -E 'UIGlassEffect|UIVisualEffectView|setBackgroundBlur|\.(ultraThin|thin|regular|thick)Material' \
      $MATERIAL_SURFACES | grep -v '//' ; then
   note "MATERIAL: glass/blur material on a redesigned surface — use solid surfaceElevated + warm shadow"
@@ -79,7 +79,7 @@ if grep -rqn --include=*.swift 'Toggle' $SWIFT_SETTINGS ; then
 else ok "U2: no untinted settings toggles"; fi
 
 # FLOWSON — label must not promise sequencing until Phase 3
-if grep -rn --include=*.swift 'flows on' $SWIFT_DEEJAI | grep -v '//' ; then
+if grep -rn --include=*.swift 'flows on' $SWIFT_OpenDJ | grep -v '//' ; then
   note "FLOWSON: 'flows on' present — sequencer is Phase 3; use plain UP NEXT until real"
 else ok "FLOWSON: no premature sequencing label"; fi
 
@@ -87,7 +87,7 @@ else ok "FLOWSON: no premature sequencing label"; fi
 # #if DEBUG ... #endif block. A line-level "grep -v DEBUG" can't see block scope and
 # false-fails correctly-gated demo data, so track scope with awk instead.
 placeholder_hits=$(
-  for f in $(grep -rl --include=*.swift -E 'plays:[[:space:]]*[0-9]+|Daily Mix' $SWIFT_DEEJAI 2>/dev/null); do
+  for f in $(grep -rl --include=*.swift -E 'plays:[[:space:]]*[0-9]+|Daily Mix' $SWIFT_OpenDJ 2>/dev/null); do
     awk -v file="$f" '
       /#if[[:space:]]+DEBUG/ { depth++; next }
       /#endif/              { if (depth>0) depth--; next }

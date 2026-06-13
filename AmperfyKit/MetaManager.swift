@@ -126,16 +126,16 @@ public class MetaManager {
     return scrobbleSyncer!
   }
 
-  private var deejAISyncer: DeejAISyncer?
-  internal func createDeejAISyncer(
+  private var OpenDJSyncer: OpenDJSyncer?
+  internal func createOpenDJSyncer(
     player: PlayerFacade
-  ) -> DeejAISyncer {
-    if let deejAISyncer { return deejAISyncer }
-    // DeejAI server config — hardcoded for now, move to settings later
+  ) -> OpenDJSyncer {
+    if let OpenDJSyncer { return OpenDJSyncer }
+    // OpenDJ server config — hardcoded for now, move to settings later
     let baseURL = URL(string: "https://music.myhouse.fyi")!
-    let api = DeejAIApi(baseURL: baseURL, apiKey: "")
-    deejAISyncer = DeejAISyncer(player: player, api: api)
-    return deejAISyncer!
+    let api = OpenDJApi(baseURL: baseURL, apiKey: "")
+    OpenDJSyncer = OpenDJSyncer(player: player, api: api)
+    return OpenDJSyncer!
   }
 
   public lazy var playableDownloadManager: DownloadManageable = {
@@ -296,8 +296,8 @@ public class MetaManager {
     backgroundLibrarySyncer.start()
     let scrobbler = createScrobbleSyncer(player: player)
     player.addNotifier(notifier: scrobbler)
-    let deejai = createDeejAISyncer(player: player)
-    player.addNotifier(notifier: deejai)
+    let OpenDJ = createOpenDJSyncer(player: player)
+    player.addNotifier(notifier: OpenDJ)
   }
 
   public func startManagerForNormalOperation(player: PlayerFacade) {
@@ -309,8 +309,8 @@ public class MetaManager {
     let scrobbler = createScrobbleSyncer(player: player)
     player.addNotifier(notifier: scrobbler)
     scrobbler.start()
-    let deejai = createDeejAISyncer(player: player)
-    player.addNotifier(notifier: deejai)
+    let OpenDJ = createOpenDJSyncer(player: player)
+    player.addNotifier(notifier: OpenDJ)
   }
 
   public func stopManager() {

@@ -56,7 +56,7 @@ class PopupPlayerVC: UIViewController, UIScrollViewDelegate {
   var controlView: PlayerControlView?
   var largeCurrentlyPlayingView: LargeCurrentlyPlayingPlayerView?
   var accountNotificationHandler: AccountNotificationHandler?
-  var deejaiHostingController: UIHostingController<DeejAINowPlayingView>?
+  var OpenDJHostingController: UIHostingController<OpenDJNowPlayingView>?
 
   var currentlyPlayingTableCell: CurrentlyPlayingTableCell?
   var contextPrevQueueSectionHeader: ContextQueuePrevSectionHeader?
@@ -83,8 +83,8 @@ class PopupPlayerVC: UIViewController, UIScrollViewDelegate {
     player.addNotifier(notifier: self)
     playerHandler = PlayerUIHandler(player: player, style: .popupPlayer)
 
-    // DeejAI MCM Replacement Logic
-    setupDeejAIPlayer()
+    // OpenDJ MCM Replacement Logic
+    setupOpenDJPlayer()
 
     backgroundImage.setBackgroundBlur(style: .prominent)
 
@@ -399,7 +399,7 @@ extension PopupPlayerVC: MusicPlayable {
   func didRepeatChange() {}
   func didPlaybackRateChange() {}
 
-  private func setupDeejAIPlayer() {
+  private func setupOpenDJPlayer() {
     // Hide standard Amperfy UI elements
     tableView.isHidden = true
     backgroundImage.isHidden = true
@@ -409,8 +409,8 @@ extension PopupPlayerVC: MusicPlayable {
     // Set our solid cream background
     view.backgroundColor = UIColor(red: 0.96, green: 0.94, blue: 0.88, alpha: 1.0)
 
-    // Initialize DeejAI Bridge
-    let playerState = DeejAIPlayerState(player: player)
+    // Initialize OpenDJ Bridge
+    let playerState = OpenDJPlayerState(player: player)
     
     // Wire the real favorite toggle (persists to Core Data + syncs to server)
     playerState.onToggleFavorite = { [weak self] in
@@ -450,13 +450,13 @@ extension PopupPlayerVC: MusicPlayable {
     // Reflect the current policy in the infinity control now that providers are wired.
     playerState.refresh()
 
-    let deejaiView = DeejAINowPlayingView(state: playerState, player: player)
-    let hostingController = UIHostingController(rootView: deejaiView)
+    let OpenDJView = OpenDJNowPlayingView(state: playerState, player: player)
+    let hostingController = UIHostingController(rootView: OpenDJView)
     
     // Ensure hosting controller background is transparent so our view color shows through
     hostingController.view.backgroundColor = .clear
     
-    self.deejaiHostingController = hostingController
+    self.OpenDJHostingController = hostingController
     
     // Add as child VC
     addChild(hostingController)

@@ -269,7 +269,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     libraryUpdater.performAccountCleanUpIfNeccessaryInBackground()
 
     configureDefaultNavigationBarStyle()
-    DeejAIAppearance.configure()
+    OpenDJAppearance.configure()
     configureBatteryMonitoring()
     configureBackgroundFetch()
     configureNotificationHandling()

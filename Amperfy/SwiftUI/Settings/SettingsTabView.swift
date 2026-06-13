@@ -55,7 +55,7 @@ struct SettingsTabView: View {
       }
       .listStyle(.sidebar)
       .scrollContentBackground(.hidden)
-      .background(DeejAIColors.surfaceColor)
+      .background(OpenDJColors.surfaceColor)
     } detail: {
       NavigationStack {
         AnyView(selectedMenu.view())

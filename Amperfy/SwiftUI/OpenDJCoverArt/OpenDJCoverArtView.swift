@@ -1,5 +1,5 @@
-// DeejAICoverArtView.swift
-// DeejAI — Reusable cover art component (Mid-Century Modern)
+// OpenDJCoverArtView.swift
+// OpenDJ — Reusable cover art component (Mid-Century Modern)
 //
 // Copyright © 2026 aahladky and contributors.
 // Licensed under the GNU General Public License v3.0 (GPLv3).
@@ -12,10 +12,10 @@ import UIKit
 // MARK: - Cover Art Cache
 
 /// In-memory cache for decoded cover art images.
-/// Shared across all DeejAICoverArtView instances.
+/// Shared across all OpenDJCoverArtView instances.
 @MainActor
-final class DeejAICoverArtCache {
-    static let shared = DeejAICoverArtCache()
+final class OpenDJCoverArtCache {
+    static let shared = OpenDJCoverArtCache()
     private let cache: NSCache<NSString, UIImage>
 
     private init() {
@@ -34,14 +34,14 @@ final class DeejAICoverArtCache {
     }
 }
 
-// MARK: - DeejAICoverArtView
+// MARK: - OpenDJCoverArtView
 
 /// A SwiftUI view that displays cover art for an `AbstractLibraryEntity`.
 ///
 /// Uses Amperfy's cached-on-disk artwork (downloaded via `ArtworkDownloadManager`).
 /// Shows an MCM gradient placeholder while loading / when no artwork is available.
 /// Triggers artwork download if the entity has an artwork reference that isn't cached yet.
-struct DeejAICoverArtView: View {
+struct OpenDJCoverArtView: View {
 
     /// The library entity to show artwork for (e.g. a Song, Album, Artist).
     let entity: AbstractLibraryEntity?
@@ -50,7 +50,7 @@ struct DeejAICoverArtView: View {
     let cornerRadius: CGFloat
 
     /// Placeholder gradient colors (MCM palette).
-    /// Defaults to the album-tint gradient used elsewhere in DeejAI.
+    /// Defaults to the album-tint gradient used elsewhere in OpenDJ.
     let placeholderColors: [Color]
 
     /// Whether to trigger artwork download via Amperfy's download manager
@@ -74,9 +74,9 @@ struct DeejAICoverArtView: View {
         entity: AbstractLibraryEntity?,
         cornerRadius: CGFloat = 20,
         placeholderColors: [Color] = [
-            DeejAIColors.textSecondaryColor,
-            DeejAIColors.accentPrimaryDarkColor,
-            DeejAIColors.textPrimaryColor
+            OpenDJColors.textSecondaryColor,
+            OpenDJColors.accentPrimaryDarkColor,
+            OpenDJColors.textPrimaryColor
         ],
         triggersDownload: Bool = true
     ) {
@@ -104,8 +104,8 @@ struct DeejAICoverArtView: View {
                 .overlay(
                     // Music note icon overlay
                     Image(systemName: "music.note")
-                        .font(DeejAIFonts.serifDisplay)
-                        .foregroundStyle(DeejAIColors.surfaceColor.opacity(0.3))
+                        .font(OpenDJFonts.serifDisplay)
+                        .foregroundStyle(OpenDJColors.surfaceColor.opacity(0.3))
                 )
             }
         }
@@ -140,7 +140,7 @@ struct DeejAICoverArtView: View {
             setting: .preferServerArtwork
         )
 
-        if let imagePath, let cachedImage = DeejAICoverArtCache.shared.image(forKey: imagePath) {
+        if let imagePath, let cachedImage = OpenDJCoverArtCache.shared.image(forKey: imagePath) {
             // Fast path: already in our in-memory cache
             loadedImage = cachedImage
             isLoading = false
@@ -153,7 +153,7 @@ struct DeejAICoverArtView: View {
                 // Decode for display on background thread
                 let decoded = await diskImage.byPreparingForDisplay()
                 if let decoded {
-                    DeejAICoverArtCache.shared.setImage(decoded, forKey: imagePath)
+                    OpenDJCoverArtCache.shared.setImage(decoded, forKey: imagePath)
                     loadedImage = decoded
                     isLoading = false
                     return
@@ -184,12 +184,12 @@ struct DeejAICoverArtView: View {
 
 // MARK: - Convenience Initializers
 
-extension DeejAICoverArtView {
+extension OpenDJCoverArtView {
 
     /// Creates a cover art view sized for the Now Playing screen (large hero art).
     /// - Parameter entity: The currently playing track.
-    static func nowPlaying(entity: AbstractPlayable?) -> DeejAICoverArtView {
-        DeejAICoverArtView(
+    static func nowPlaying(entity: AbstractPlayable?) -> OpenDJCoverArtView {
+        OpenDJCoverArtView(
             entity: entity,
             cornerRadius: 20
                         )
@@ -197,21 +197,21 @@ extension DeejAICoverArtView {
 
     /// Creates a cover art view for a mini thumbnail (e.g. up-next, suggestion rows).
     /// - Parameter entity: The playable to show artwork for.
-    static func thumbnail(entity: AbstractLibraryEntity?) -> DeejAICoverArtView {
-        DeejAICoverArtView(
+    static func thumbnail(entity: AbstractLibraryEntity?) -> OpenDJCoverArtView {
+        OpenDJCoverArtView(
             entity: entity,
             cornerRadius: 8,
             placeholderColors: [
-                DeejAIColors.accentSecondaryColor,
-                DeejAIColors.accentSecondaryMutedColor
+                OpenDJColors.accentSecondaryColor,
+                OpenDJColors.accentSecondaryMutedColor
             ]
         )
     }
 
     /// Creates a cover art view for a medium card (e.g. alternative picks on Home).
     /// - Parameter entity: The entity to show artwork for.
-    static func card(entity: AbstractLibraryEntity?) -> DeejAICoverArtView {
-        DeejAICoverArtView(
+    static func card(entity: AbstractLibraryEntity?) -> OpenDJCoverArtView {
+        OpenDJCoverArtView(
             entity: entity,
             cornerRadius: 8
         )
@@ -219,8 +219,8 @@ extension DeejAICoverArtView {
 
     /// Creates a cover art view for a mix card on the For You screen.
     /// - Parameter entity: The entity to show artwork for.
-    static func mixCard(entity: AbstractLibraryEntity?) -> DeejAICoverArtView {
-        DeejAICoverArtView(
+    static func mixCard(entity: AbstractLibraryEntity?) -> OpenDJCoverArtView {
+        OpenDJCoverArtView(
             entity: entity,
             cornerRadius: 14
         )

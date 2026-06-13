@@ -1,8 +1,8 @@
 //
-//  DeejAIModels.swift
+//  OpenDJModels.swift
 //  AmperfyKit
 //
-//  Copyright (C) 2024 DeejAI Contributors
+//  Copyright (C) 2024 OpenDJ Contributors
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ import Foundation
 
 // MARK: - Track Info
 
-/// A track recommendation from DeejAI.
+/// A track recommendation from OpenDJ.
 public struct TrackInfo: Codable, Sendable {
     /// Artist name.
     public let artist: String

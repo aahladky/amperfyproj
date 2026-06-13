@@ -1,12 +1,12 @@
 //
-//  DeejAIAppearance.swift
+//  OpenDJAppearance.swift
 //  Amperfy
 //
-//  DeejAI — Token-driven UIKit appearance proxies.
+//  OpenDJ — Token-driven UIKit appearance proxies.
 //
 //  All UIKit chrome (nav bars, tab bars, switches, sliders, window tint)
-//  is styled from DeejAIColors semantic tokens. This file is the single
-//  source of truth for appearance — call DeejAIAppearance.configure() once
+//  is styled from OpenDJColors semantic tokens. This file is the single
+//  source of truth for appearance — call OpenDJAppearance.configure() once
 //  at app launch.
 //
 //  Copyright © 2026 aahladky and contributors.
@@ -16,10 +16,10 @@
 
 import UIKit
 
-/// Configures UIKit appearance proxies with DeejAI semantic color tokens.
+/// Configures UIKit appearance proxies with OpenDJ semantic color tokens.
 /// Ensures all UIKit chrome uses the MCM palette instead of system blue.
 /// Must be called from AppDelegate.application(_:didFinishLaunchingWithOptions:).
-enum DeejAIAppearance {
+enum OpenDJAppearance {
 
     static func configure() {
         configureNavigationBar()
@@ -32,14 +32,14 @@ enum DeejAIAppearance {
     private static func configureNavigationBar() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = DeejAIColors.surface
-        appearance.titleTextAttributes = [.foregroundColor: DeejAIColors.textPrimary]
-        appearance.largeTitleTextAttributes = [.foregroundColor: DeejAIColors.textPrimary]
+        appearance.backgroundColor = OpenDJColors.surface
+        appearance.titleTextAttributes = [.foregroundColor: OpenDJColors.textPrimary]
+        appearance.largeTitleTextAttributes = [.foregroundColor: OpenDJColors.textPrimary]
 
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
-        UINavigationBar.appearance().tintColor = DeejAIColors.accentPrimary
+        UINavigationBar.appearance().tintColor = OpenDJColors.accentPrimary
     }
 
     // MARK: - UITabBar
@@ -47,15 +47,15 @@ enum DeejAIAppearance {
     private static func configureTabBar() {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = DeejAIColors.surface
+        appearance.backgroundColor = OpenDJColors.surface
 
-        appearance.stackedLayoutAppearance.normal.iconColor = DeejAIColors.textTertiary
+        appearance.stackedLayoutAppearance.normal.iconColor = OpenDJColors.textTertiary
         appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
-            .foregroundColor: DeejAIColors.textTertiary
+            .foregroundColor: OpenDJColors.textTertiary
         ]
-        appearance.stackedLayoutAppearance.selected.iconColor = DeejAIColors.accentPrimary
+        appearance.stackedLayoutAppearance.selected.iconColor = OpenDJColors.accentPrimary
         appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
-            .foregroundColor: DeejAIColors.accentPrimary
+            .foregroundColor: OpenDJColors.accentPrimary
         ]
 
         UITabBar.appearance().standardAppearance = appearance
@@ -66,33 +66,33 @@ enum DeejAIAppearance {
 
     private static func configureControls() {
         // Window-level global tint (set early via appearance proxy for system-level controls)
-        UIView.appearance().tintColor = DeejAIColors.accentPrimary
+        UIView.appearance().tintColor = OpenDJColors.accentPrimary
 
         // UISwitch
-        UISwitch.appearance().onTintColor = DeejAIColors.accentSecondary
-        UISwitch.appearance().thumbTintColor = DeejAIColors.surface
+        UISwitch.appearance().onTintColor = OpenDJColors.accentSecondary
+        UISwitch.appearance().thumbTintColor = OpenDJColors.surface
 
         // UISlider min/max track
-        UISlider.appearance().minimumTrackTintColor = DeejAIColors.accentPrimary
-        UISlider.appearance().maximumTrackTintColor = DeejAIColors.trackBackground
+        UISlider.appearance().minimumTrackTintColor = OpenDJColors.accentPrimary
+        UISlider.appearance().maximumTrackTintColor = OpenDJColors.trackBackground
 
         // UITableView selection tint
-        UITableView.appearance().tintColor = DeejAIColors.accentPrimary
+        UITableView.appearance().tintColor = OpenDJColors.accentPrimary
         UITableViewCell.appearance().selectedBackgroundView = {
             let view = UIView()
-            view.backgroundColor = DeejAIColors.accentSecondary.withAlphaComponent(0.12)
+            view.backgroundColor = OpenDJColors.accentSecondary.withAlphaComponent(0.12)
             return view
         }()
 
         // Search bar cursor
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self])
-            .tintColor = DeejAIColors.accentPrimary
+            .tintColor = OpenDJColors.accentPrimary
 
         // Window-level global tint (applied when a window is available)
         if let windowScene = UIApplication.shared.connectedScenes
             .compactMap({ $0 as? UIWindowScene }).first,
            let window = windowScene.windows.first {
-            window.tintColor = DeejAIColors.accentPrimary
+            window.tintColor = OpenDJColors.accentPrimary
         }
     }
 }

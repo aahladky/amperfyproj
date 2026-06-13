@@ -1,5 +1,5 @@
-// DeejAIFonts.swift
-// DeejAI — Mid-Century Modern font tokens
+// OpenDJFonts.swift
+// OpenDJ — Mid-Century Modern font tokens
 //
 // Copyright © 2026 aahladky and contributors.
 // Licensed under the GNU General Public License v3.0 (GPLv3).
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// Mid-Century Modern semantic font tokens for DeejAI.
+/// Mid-Century Modern semantic font tokens for OpenDJ.
 ///
 /// Custom fonts registered via UIAppFonts:
 /// - **Lora** (variable font, OFL) — warm transitional serif for titles and
@@ -17,7 +17,7 @@ import SwiftUI
 ///
 /// Every font uses `Font.custom(_:size:relativeTo:)` so Dynamic Type
 /// accessibility scaling is preserved — never bare `.system(size:)`.
-enum DeejAIFonts {
+enum OpenDJFonts {
 
     // MARK: - Serif (Lora)
 

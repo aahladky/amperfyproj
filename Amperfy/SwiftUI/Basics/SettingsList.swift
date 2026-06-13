@@ -34,6 +34,6 @@ struct SettingsList<Content: View>: View {
       content()
     }
     .scrollContentBackground(.hidden)
-    .background(DeejAIColors.surfaceColor)
+    .background(OpenDJColors.surfaceColor)
   }
 }

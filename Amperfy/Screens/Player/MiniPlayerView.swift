@@ -154,7 +154,7 @@ class MiniPlayerView: UIView {
   fileprivate lazy var elapsedTimeLabel: UILabel = {
     let label = UILabel(frame: .zero)
     label.textColor = .secondaryLabel
-    label.font = DeejAIFonts.sansCaptionUIFont
+    label.font = OpenDJFonts.sansCaptionUIFont
     return label
   }()
 
@@ -162,21 +162,21 @@ class MiniPlayerView: UIView {
     let label = UILabel(frame: .zero)
     label.textAlignment = .right
     label.textColor = .secondaryLabel
-    label.font = DeejAIFonts.sansCaptionUIFont
+    label.font = OpenDJFonts.sansCaptionUIFont
     return label
   }()
 
   fileprivate lazy var liveLabel: UILabel = {
     let label = UILabel(frame: .zero)
     label.text = "LIVE"
-    label.font = DeejAIFonts.sansCaptionUIFont
+    label.font = OpenDJFonts.sansCaptionUIFont
     label.textAlignment = .center
     return label
   }()
 
   fileprivate lazy var audioInfoLabel: UILabel = {
     let label = UILabel(frame: .zero)
-    label.font = DeejAIFonts.sansCaptionUIFont
+    label.font = OpenDJFonts.sansCaptionUIFont
     return label
   }()
 
@@ -717,11 +717,11 @@ class MiniPlayerView: UIView {
 
   public func refreshForTraitChange(horizontalSizeClass: UIUserInterfaceSizeClass) {
     if horizontalSizeClass == .regular {
-      titleLabel.font = DeejAIFonts.sansCaptionUIFont
-      subtitleLabel.font = DeejAIFonts.sansBodyUIFont
+      titleLabel.font = OpenDJFonts.sansCaptionUIFont
+      subtitleLabel.font = OpenDJFonts.sansBodyUIFont
     } else {
-      titleLabel.font = DeejAIFonts.sansCaptionUIFont
-      subtitleLabel.font = DeejAIFonts.sansSubheadlineUIFont
+      titleLabel.font = OpenDJFonts.sansCaptionUIFont
+      subtitleLabel.font = OpenDJFonts.sansSubheadlineUIFont
     }
   }
 
@@ -883,11 +883,11 @@ class MiniPlayerView: UIView {
 
   public lazy var glassContainer: UIView = {
     let container = UIView()
-    container.backgroundColor = DeejAIColors.surfaceElevated
+    container.backgroundColor = OpenDJColors.surfaceElevated
     container.layer.cornerRadius = 14
     container.layer.cornerCurve = .continuous
     // Warm shadow: warm-shifted dark tone, 12% opacity, y-offset 4, blur 12
-    container.layer.shadowColor = DeejAIColors.warmShadow.cgColor
+    container.layer.shadowColor = OpenDJColors.warmShadow.cgColor
     container.layer.shadowOpacity = 1.0
     container.layer.shadowOffset = CGSize(width: 0, height: 4)
     container.layer.shadowRadius = 12

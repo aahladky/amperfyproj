@@ -1,5 +1,5 @@
-// DeejAIForYouView.swift
-// DeejAI — "For You" home screen (Mid-Century Modern)
+// OpenDJForYouView.swift
+// OpenDJ — "For You" home screen (Mid-Century Modern)
 //
 // Copyright © 2026 aahladky and contributors.
 // Licensed under the GNU General Public License v3.0 (GPLv3).
@@ -9,7 +9,7 @@ import AmperfyKit
 
 // MARK: - For You View
 
-struct DeejAIForYouView: View {
+struct OpenDJForYouView: View {
 
     // MARK: State
 
@@ -17,17 +17,17 @@ struct DeejAIForYouView: View {
     @State private var mixes: [MixCard] = {
 #if DEBUG
         [
-            MixCard(name: "Everything In Its Right Place Mix", subtitle: "Radiohead, Sigur Rós, Bon Iver", colors: [DeejAIColors.accentSecondaryColor, DeejAIColors.accentSecondaryMutedColor]),
-            MixCard(name: "Evan Finds the Third Room Mix", subtitle: "Khruangbin, Tame Impala, Men I Trust", colors: [DeejAIColors.accentPrimaryColor, DeejAIColors.accentPrimaryDarkColor]),
-            MixCard(name: "Says Mix", subtitle: "Nils Frahm, Ólafur Arnalds, Max Richter", colors: [DeejAIColors.textSecondaryColor, DeejAIColors.accentSecondaryColor]),
-            MixCard(name: "Pink Rabbits Mix", subtitle: "The National, Iron & Wine, Sufjan Stevens", colors: [DeejAIColors.accentPrimaryColor, DeejAIColors.accentSecondaryMutedColor])
+            MixCard(name: "Everything In Its Right Place Mix", subtitle: "Radiohead, Sigur Rós, Bon Iver", colors: [OpenDJColors.accentSecondaryColor, OpenDJColors.accentSecondaryMutedColor]),
+            MixCard(name: "Evan Finds the Third Room Mix", subtitle: "Khruangbin, Tame Impala, Men I Trust", colors: [OpenDJColors.accentPrimaryColor, OpenDJColors.accentPrimaryDarkColor]),
+            MixCard(name: "Says Mix", subtitle: "Nils Frahm, Ólafur Arnalds, Max Richter", colors: [OpenDJColors.textSecondaryColor, OpenDJColors.accentSecondaryColor]),
+            MixCard(name: "Pink Rabbits Mix", subtitle: "The National, Iron & Wine, Sufjan Stevens", colors: [OpenDJColors.accentPrimaryColor, OpenDJColors.accentSecondaryMutedColor])
         ]
 #else
         []
 #endif
     }()
 
-    /// Placeholder top artists until DeejAI /home endpoint is wired.
+    /// Placeholder top artists until OpenDJ /home endpoint is wired.
     @State private var topArtists: [TopArtistCard] = {
 #if DEBUG
         [
@@ -77,7 +77,7 @@ struct DeejAIForYouView: View {
 
     var body: some View {
         ZStack {
-            DeejAIColors.surfaceColor
+            OpenDJColors.surfaceColor
                 .ignoresSafeArea()
 
             ScrollView(.vertical, showsIndicators: false) {
@@ -121,12 +121,12 @@ struct DeejAIForYouView: View {
     private var greetingHeader: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(greetingText)
-                .font(DeejAIFonts.serifDisplay)
-                .foregroundStyle(DeejAIColors.textPrimaryColor)
+                .font(OpenDJFonts.serifDisplay)
+                .foregroundStyle(OpenDJColors.textPrimaryColor)
 
-            Text("Here's what DeejAI has lined up for you.")
-                .font(DeejAIFonts.sansBody)
-                .foregroundStyle(DeejAIColors.textTertiaryColor)
+            Text("Here's what OpenDJ has lined up for you.")
+                .font(OpenDJFonts.sansBody)
+                .foregroundStyle(OpenDJColors.textTertiaryColor)
         }
     }
 
@@ -144,9 +144,9 @@ struct DeejAIForYouView: View {
 
     private func sectionLabel(_ text: String) -> some View {
         Text(text)
-            .font(DeejAIFonts.sansCaption)
+            .font(OpenDJFonts.sansCaption)
             .tracking(2.5)
-            .foregroundStyle(DeejAIColors.textTertiaryColor)
+            .foregroundStyle(OpenDJColors.textTertiaryColor)
             .padding(.bottom, 12)
     }
 
@@ -177,22 +177,22 @@ struct DeejAIForYouView: View {
                     VStack {
                         Spacer()
                         Image(systemName: "play.fill")
-                            .font(DeejAIFonts.serifHeadline)
-                            .foregroundStyle(DeejAIColors.surfaceColor.opacity(0.7))
+                            .font(OpenDJFonts.serifHeadline)
+                            .foregroundStyle(OpenDJColors.surfaceColor.opacity(0.7))
                             .frame(width: 48, height: 48)
-                            .background(Circle().fill(DeejAIColors.surfaceColor.opacity(0.15)))
+                            .background(Circle().fill(OpenDJColors.surfaceColor.opacity(0.15)))
                             .padding(.bottom, 12)
                     }
                 )
 
             Text(mix.name)
-                .font(DeejAIFonts.serifHeadline)
-                .foregroundStyle(DeejAIColors.textPrimaryColor)
+                .font(OpenDJFonts.serifHeadline)
+                .foregroundStyle(OpenDJColors.textPrimaryColor)
                 .lineLimit(1)
 
             Text(mix.subtitle)
-                .font(DeejAIFonts.sansSubheadline)
-                .foregroundStyle(DeejAIColors.textTertiaryColor)
+                .font(OpenDJFonts.sansSubheadline)
+                .foregroundStyle(OpenDJColors.textTertiaryColor)
                 .lineLimit(2)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -220,18 +220,18 @@ struct DeejAIForYouView: View {
                     .frame(width: 88, height: 88)
 
                 Text(String(artist.name.prefix(1)).uppercased())
-                    .font(DeejAIFonts.serifDisplay)
-                    .foregroundStyle(DeejAIColors.surfaceColor.opacity(0.85))
+                    .font(OpenDJFonts.serifDisplay)
+                    .foregroundStyle(OpenDJColors.surfaceColor.opacity(0.85))
             }
 
             Text(artist.name)
-                .font(DeejAIFonts.serifSubheadline)
-                .foregroundStyle(DeejAIColors.textPrimaryColor)
+                .font(OpenDJFonts.serifSubheadline)
+                .foregroundStyle(OpenDJColors.textPrimaryColor)
                 .lineLimit(1)
 
             Text("\(artist.plays) plays")
-                .font(DeejAIFonts.sansCaption)
-                .foregroundStyle(DeejAIColors.textQuaternaryColor)
+                .font(OpenDJFonts.sansCaption)
+                .foregroundStyle(OpenDJColors.textQuaternaryColor)
         }
         .frame(width: 100)
     }
@@ -239,11 +239,11 @@ struct DeejAIForYouView: View {
     private func artistGradient(for name: String) -> LinearGradient {
         let hash = abs(name.hashValue)
         let palette: [(Color, Color)] = [
-            (DeejAIColors.accentSecondaryColor, DeejAIColors.accentSecondaryMutedColor),
-            (DeejAIColors.accentPrimaryColor, DeejAIColors.accentPrimaryDarkColor),
-            (DeejAIColors.textSecondaryColor, DeejAIColors.accentSecondaryColor),
-            (DeejAIColors.accentSecondaryMutedColor, DeejAIColors.accentPrimaryColor),
-            (DeejAIColors.textPrimaryColor, DeejAIColors.accentSecondaryColor)
+            (OpenDJColors.accentSecondaryColor, OpenDJColors.accentSecondaryMutedColor),
+            (OpenDJColors.accentPrimaryColor, OpenDJColors.accentPrimaryDarkColor),
+            (OpenDJColors.textSecondaryColor, OpenDJColors.accentSecondaryColor),
+            (OpenDJColors.accentSecondaryMutedColor, OpenDJColors.accentPrimaryColor),
+            (OpenDJColors.textPrimaryColor, OpenDJColors.accentSecondaryColor)
         ]
         let pair = palette[hash % palette.count]
         return LinearGradient(
@@ -261,14 +261,14 @@ struct DeejAIForYouView: View {
                 suggestedTrackRow(track, index: index)
                 if index < suggestedTracks.count - 1 {
                     Divider()
-                        .overlay(DeejAIColors.trackBackgroundColor.opacity(0.5))
+                        .overlay(OpenDJColors.trackBackgroundColor.opacity(0.5))
                         .padding(.leading, 56)
                 }
             }
         }
         .background(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(DeejAIColors.surfaceElevatedColor)
+                .fill(OpenDJColors.surfaceElevatedColor)
         )
     }
 
@@ -276,25 +276,25 @@ struct DeejAIForYouView: View {
         HStack(spacing: 16) {
             // Number badge
             Text("\(index + 1)")
-                .font(DeejAIFonts.sansCaptionBold)
-                .foregroundStyle(DeejAIColors.textQuaternaryColor)
+                .font(OpenDJFonts.sansCaptionBold)
+                .foregroundStyle(OpenDJColors.textQuaternaryColor)
                 .frame(width: 20, alignment: .trailing)
 
             // Color swatch
             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(index % 2 == 0 ? DeejAIColors.accentSecondaryColor : DeejAIColors.accentPrimaryColor)
+                .fill(index % 2 == 0 ? OpenDJColors.accentSecondaryColor : OpenDJColors.accentPrimaryColor)
                 .frame(width: 40, height: 40)
 
             // Track info
             VStack(alignment: .leading, spacing: 4) {
                 Text(track.title)
-                    .font(DeejAIFonts.serifHeadline)
-                    .foregroundStyle(DeejAIColors.textPrimaryColor)
+                    .font(OpenDJFonts.serifHeadline)
+                    .foregroundStyle(OpenDJColors.textPrimaryColor)
                     .lineLimit(1)
 
                 Text(track.artist)
-                    .font(DeejAIFonts.sansSubheadline)
-                    .foregroundStyle(DeejAIColors.textTertiaryColor)
+                    .font(OpenDJFonts.sansSubheadline)
+                    .foregroundStyle(OpenDJColors.textTertiaryColor)
                     .lineLimit(1)
             }
 
@@ -303,20 +303,20 @@ struct DeejAIForYouView: View {
             // Score pill
             if let score = track.score {
                 Text(String(format: "%.0f%%", score * 100))
-                    .font(DeejAIFonts.sansCaptionBold)
-                    .foregroundStyle(DeejAIColors.accentSecondaryColor)
+                    .font(OpenDJFonts.sansCaptionBold)
+                    .foregroundStyle(OpenDJColors.accentSecondaryColor)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(Capsule().fill(DeejAIColors.accentSecondaryColor.opacity(0.10)))
+                    .background(Capsule().fill(OpenDJColors.accentSecondaryColor.opacity(0.10)))
             }
 
             // Play button
             Button {} label: {
                 Image(systemName: "play.fill")
-                    .font(DeejAIFonts.sansSubheadline)
-                    .foregroundStyle(DeejAIColors.accentPrimaryColor)
+                    .font(OpenDJFonts.sansSubheadline)
+                    .foregroundStyle(OpenDJColors.accentPrimaryColor)
                     .frame(width: 36, height: 36)
-                    .background(Circle().fill(DeejAIColors.accentPrimaryColor.opacity(0.10)))
+                    .background(Circle().fill(OpenDJColors.accentPrimaryColor.opacity(0.10)))
             }
             .buttonStyle(.plain)
         }
@@ -332,14 +332,14 @@ struct DeejAIForYouView: View {
                 recentPlayRow(play)
                 if index < recentPlays.count - 1 {
                     Divider()
-                        .overlay(DeejAIColors.trackBackgroundColor.opacity(0.5))
+                        .overlay(OpenDJColors.trackBackgroundColor.opacity(0.5))
                         .padding(.leading, 56)
                 }
             }
         }
         .background(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(DeejAIColors.surfaceElevatedColor)
+                .fill(OpenDJColors.surfaceElevatedColor)
         )
     }
 
@@ -347,27 +347,27 @@ struct DeejAIForYouView: View {
         HStack(spacing: 16) {
             // Status indicator
             Image(systemName: play.completed ? "checkmark.circle.fill" : "forward.fill")
-                .font(DeejAIFonts.sansBody)
-                .foregroundStyle(play.completed ? DeejAIColors.accentSecondaryColor : DeejAIColors.textQuaternaryColor)
+                .font(OpenDJFonts.sansBody)
+                .foregroundStyle(play.completed ? OpenDJColors.accentSecondaryColor : OpenDJColors.textQuaternaryColor)
                 .frame(width: 28, height: 28)
 
             // Track art swatch
             RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .fill(play.completed
-                    ? DeejAIColors.accentSecondaryColor.opacity(0.6)
-                    : DeejAIColors.trackBackgroundColor)
+                    ? OpenDJColors.accentSecondaryColor.opacity(0.6)
+                    : OpenDJColors.trackBackgroundColor)
                 .frame(width: 40, height: 40)
 
             // Track info
             VStack(alignment: .leading, spacing: 4) {
                 Text(play.title)
-                    .font(DeejAIFonts.serifHeadline)
-                    .foregroundStyle(DeejAIColors.textPrimaryColor)
+                    .font(OpenDJFonts.serifHeadline)
+                    .foregroundStyle(OpenDJColors.textPrimaryColor)
                     .lineLimit(1)
 
                 Text(play.artist)
-                    .font(DeejAIFonts.sansSubheadline)
-                    .foregroundStyle(DeejAIColors.textTertiaryColor)
+                    .font(OpenDJFonts.sansSubheadline)
+                    .foregroundStyle(OpenDJColors.textTertiaryColor)
                     .lineLimit(1)
             }
 
@@ -375,8 +375,8 @@ struct DeejAIForYouView: View {
 
             // Status label
             Text(play.completed ? "Listened" : "Skipped")
-                .font(DeejAIFonts.sansCaption)
-                .foregroundStyle(play.completed ? DeejAIColors.accentSecondaryColor : DeejAIColors.textQuaternaryColor)
+                .font(OpenDJFonts.sansCaption)
+                .foregroundStyle(play.completed ? OpenDJColors.accentSecondaryColor : OpenDJColors.textQuaternaryColor)
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 12)

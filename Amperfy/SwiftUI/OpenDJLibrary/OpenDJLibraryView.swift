@@ -1,5 +1,5 @@
-// DeejAILibraryView.swift
-// DeejAI — Library screen (Mid-Century Modern)
+// OpenDJLibraryView.swift
+// OpenDJ — Library screen (Mid-Century Modern)
 //
 // Replaces Amperfy's ~10-row server-browser taxonomy with a single
 // segmented control (Artists / Albums / Songs) + sort/filter controls.
@@ -16,7 +16,7 @@ import UIKit
 
 // MARK: - Library Segment
 
-/// The three browse types in the DeejAI library.
+/// The three browse types in the OpenDJ library.
 enum LibrarySegment: String, CaseIterable, Identifiable {
     case artists = "Artists"
     case albums = "Albums"
@@ -112,9 +112,9 @@ enum LibrarySortOption: String, CaseIterable {
 }
 
 
-// MARK: - DeejAI Library View
+// MARK: - OpenDJ Library View
 
-struct DeejAILibraryView: View {
+struct OpenDJLibraryView: View {
 
     let account: Account
 
@@ -126,7 +126,7 @@ struct DeejAILibraryView: View {
     var body: some View {
         ZStack {
             // Background: solid MCM cream
-            DeejAIColors.surfaceColor
+            OpenDJColors.surfaceColor
                 .ignoresSafeArea()
 
             VStack(spacing: 0) {
@@ -163,11 +163,11 @@ struct DeejAILibraryView: View {
                     }
                 } label: {
                     Text(segment.rawValue)
-                        .font(DeejAIFonts.serifHeadline)
+                        .font(OpenDJFonts.serifHeadline)
                         .foregroundStyle(
                             selectedSegment == segment
-                                ? DeejAIColors.accentPrimaryColor
-                                : DeejAIColors.textTertiaryColor
+                                ? OpenDJColors.accentPrimaryColor
+                                : OpenDJColors.textTertiaryColor
                         )
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
@@ -176,7 +176,7 @@ struct DeejAILibraryView: View {
                                 Spacer()
                                 if selectedSegment == segment {
                                     Rectangle()
-                                        .fill(DeejAIColors.accentPrimaryColor)
+                                        .fill(OpenDJColors.accentPrimaryColor)
                                         .frame(height: 2)
                                         .matchedGeometryEffect(id: "segmentIndicator", in: namespace)
                                 }
@@ -188,7 +188,7 @@ struct DeejAILibraryView: View {
         }
         .background(
             Rectangle()
-                .fill(DeejAIColors.trackBackgroundColor.opacity(0.3))
+                .fill(OpenDJColors.trackBackgroundColor.opacity(0.3))
                 .frame(height: 1)
                 .offset(y: 16),
             alignment: .bottom
@@ -201,8 +201,8 @@ struct DeejAILibraryView: View {
         HStack(spacing: 12) {
             // Current filter label
             Text(filterLabel)
-                .font(DeejAIFonts.sansSubheadline)
-                .foregroundStyle(DeejAIColors.textTertiaryColor)
+                .font(OpenDJFonts.sansSubheadline)
+                .foregroundStyle(OpenDJColors.textTertiaryColor)
 
             Spacer()
 
@@ -218,17 +218,17 @@ struct DeejAILibraryView: View {
             } label: {
                 HStack(spacing: 4) {
                     Image(systemName: selectedSort.systemImage)
-                        .font(DeejAIFonts.sansCaption)
+                        .font(OpenDJFonts.sansCaption)
 
                     Text(selectedSort.rawValue)
-                        .font(DeejAIFonts.sansCaption)
+                        .font(OpenDJFonts.sansCaption)
                 }
-                .foregroundStyle(DeejAIColors.accentSecondaryColor)
+                .foregroundStyle(OpenDJColors.accentSecondaryColor)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
                 .background(
                     Capsule()
-                        .fill(DeejAIColors.accentSecondaryColor.opacity(0.10))
+                        .fill(OpenDJColors.accentSecondaryColor.opacity(0.10))
                 )
             }
         }
@@ -256,15 +256,15 @@ struct DeejAILibraryView: View {
                     } label: {
                         HStack(spacing: 6) {
                             Image(systemName: filter.systemImage)
-                                .font(DeejAIFonts.sansCaption)
+                                .font(OpenDJFonts.sansCaption)
 
                             Text(filter.rawValue)
-                                .font(DeejAIFonts.sansCaption)
+                                .font(OpenDJFonts.sansCaption)
                         }
                         .foregroundStyle(
                             selectedFilter == filter
-                                ? DeejAIColors.surfaceColor
-                                : DeejAIColors.textSecondaryColor
+                                ? OpenDJColors.surfaceColor
+                                : OpenDJColors.textSecondaryColor
                         )
                         .padding(.horizontal, 14)
                         .padding(.vertical, 7)
@@ -272,8 +272,8 @@ struct DeejAILibraryView: View {
                             Capsule()
                                 .fill(
                                     selectedFilter == filter
-                                        ? DeejAIColors.accentPrimaryColor
-                                        : DeejAIColors.surfaceElevatedColor
+                                        ? OpenDJColors.accentPrimaryColor
+                                        : OpenDJColors.surfaceElevatedColor
                                 )
                         )
                     }

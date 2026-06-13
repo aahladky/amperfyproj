@@ -10,9 +10,9 @@
 		"'50RA71NG2F5A01240085CBB3'" = {isa = PBXBuildFile; fileRef = 50RA71NG2F5A01230085CBB3; };
 		04D64E018EA514ED38E84D4E /* LoraVF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60BB41D19872A2407DE5FEA5 /* LoraVF.ttf */; };
 		09EB5F102F93B96E00B1C71C /* ShareSongAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB5F0D2F93B65400B1C71C /* ShareSongAction.swift */; };
-		27F043D0B278D38815F214A1 /* DeejAIColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809647C395BA4C47828ADC05 /* DeejAIColors.swift */; };
-		0C7643A3B7BEAC1B0CF401F3 /* DeejAIAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E3433886040AC9C2EEDBFE /* DeejAIAppearance.swift */; };
-		375545738DEDCA9FA7F7C7E7 /* DeejAINowPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB342E8AEB852C8FBFCB3BA /* DeejAINowPlayingView.swift */; };
+		27F043D0B278D38815F214A1 /* OpenDJColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809647C395BA4C47828ADC05 /* OpenDJColors.swift */; };
+		0C7643A3B7BEAC1B0CF401F3 /* OpenDJAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E3433886040AC9C2EEDBFE /* OpenDJAppearance.swift */; };
+		375545738DEDCA9FA7F7C7E7 /* OpenDJNowPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB342E8AEB852C8FBFCB3BA /* OpenDJNowPlayingView.swift */; };
 		43FBE27F250D4DFD00D5F9B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43FBE27E250D4DFD00D5F9B3 /* LaunchScreen.storyboard */; };
 		48CE41CB989BF7903C1EA60D /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82DF48A893F7ACE224EAF028 /* RatingView.swift */; };
 		5003D8FB267B3390006946BF /* LibrarySyncPopupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5003D8FA267B3390006946BF /* LibrarySyncPopupVC.swift */; };
@@ -537,18 +537,18 @@
 		638920F02C8C8E9000932EE8 /* SettingsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638920EF2C8C8E9000932EE8 /* SettingsList.swift */; };
 		63DCDB7A2C674B5D00522F68 /* SettingsSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DCDB792C674B5D00522F68 /* SettingsSceneDelegate.swift */; };
 		641708592C13BF5100BA2619 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641708582C13BF5100BA2619 /* Haptics.swift */; };
-		89DD420BA0CA9A235EC3A9B7 /* DeejAICoverArtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8044F98805BAEEDFCC5AFE /* DeejAICoverArtView.swift */; };
-		8C4A4BE5B47200CA82A9184C /* DeejAIApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8641427181EE4179E8E941BE /* DeejAIApi.swift */; };
-		A1F34551ABE8D70894BEECEB /* DeejAIFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474A4D3CA62F9E9597E1AF07 /* DeejAIFonts.swift */; };
+		89DD420BA0CA9A235EC3A9B7 /* OpenDJCoverArtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8044F98805BAEEDFCC5AFE /* OpenDJCoverArtView.swift */; };
+		8C4A4BE5B47200CA82A9184C /* OpenDJApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8641427181EE4179E8E941BE /* OpenDJApi.swift */; };
+		A1F34551ABE8D70894BEECEB /* OpenDJFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474A4D3CA62F9E9597E1AF07 /* OpenDJFonts.swift */; };
 		B5A5CE010000000000000001 /* ShareSongActionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A5CE010000000000000002 /* ShareSongActionTest.swift */; };
 		C0A1B0032EEE000000000003 /* MacWindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A1B0022EEE000000000002 /* MacWindowHelper.swift */; };
-		C4B348899E574B96E876D5AD /* DeejAISyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A245C791B42C706E0CB13C /* DeejAISyncer.swift */; };
-		D0EE4C2997CCFF0135302852 /* DeejAIHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F945859819E461ED53BF58 /* DeejAIHomeView.swift */; };
-		D93C42E393827BC5CA081DC0 /* DeejAIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9984433E9DA062BC1735A994 /* DeejAIModels.swift */; };
-		DCD34E648E3AB9D7E416CFC8 /* DeejAIPlayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6194D798255CEEFC13AB674 /* DeejAIPlayerState.swift */; };
+		C4B348899E574B96E876D5AD /* OpenDJSyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A245C791B42C706E0CB13C /* OpenDJSyncer.swift */; };
+		D0EE4C2997CCFF0135302852 /* OpenDJHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F945859819E461ED53BF58 /* OpenDJHomeView.swift */; };
+		D93C42E393827BC5CA081DC0 /* OpenDJModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9984433E9DA062BC1735A994 /* OpenDJModels.swift */; };
+		DCD34E648E3AB9D7E416CFC8 /* OpenDJPlayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6194D798255CEEFC13AB674 /* OpenDJPlayerState.swift */; };
 		DE4E47C997B96231AB0EF3AC /* NunitoVF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B8774603A2E0AAA98AE846A8 /* NunitoVF.ttf */; };
-		E1614CE08C953882B1DB3D7E /* DeejAIForYouView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDBE49869E7605A90652DE54 /* DeejAIForYouView.swift */; };
-		F1E2D3C4B5A67890FEDCBA01 /* DeejAILibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F67890ABCDEF01 /* DeejAILibraryView.swift */; };
+		E1614CE08C953882B1DB3D7E /* OpenDJForYouView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDBE49869E7605A90652DE54 /* OpenDJForYouView.swift */; };
+		F1E2D3C4B5A67890FEDCBA01 /* OpenDJLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F67890ABCDEF01 /* OpenDJLibraryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -611,9 +611,9 @@
 /* Begin PBXFileReference section */
 		"'50RA71NG2F5A01230085CBB3'" = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 		09EB5F0D2F93B65400B1C71C /* ShareSongAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSongAction.swift; sourceTree = "<group>"; };
-		20F945859819E461ED53BF58 /* DeejAIHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIHomeView.swift; path = Amperfy/SwiftUI/DeejAIHome/DeejAIHomeView.swift; sourceTree = "<group>"; };
+		20F945859819E461ED53BF58 /* OpenDJHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenDJHomeView.swift; path = Amperfy/SwiftUI/OpenDJHome/OpenDJHomeView.swift; sourceTree = "<group>"; };
 		43FBE27E250D4DFD00D5F9B3 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		474A4D3CA62F9E9597E1AF07 /* DeejAIFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIFonts.swift; path = Amperfy/SwiftUI/DeejAINowPlaying/DeejAIFonts.swift; sourceTree = SOURCE_ROOT; };
+		474A4D3CA62F9E9597E1AF07 /* OpenDJFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenDJFonts.swift; path = Amperfy/SwiftUI/OpenDJNowPlaying/OpenDJFonts.swift; sourceTree = SOURCE_ROOT; };
 		5002565625E69DC700674CE1 /* SpinnerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinnerViewController.swift; sourceTree = "<group>"; };
 		5003D8F62678DD39006946BF /* SsAlbumParserPreCreatedArtistsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SsAlbumParserPreCreatedArtistsTest.swift; sourceTree = "<group>"; };
 		5003D8FA267B3390006946BF /* LibrarySyncPopupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarySyncPopupVC.swift; sourceTree = "<group>"; };
@@ -1157,9 +1157,9 @@
 		50FE808D26A55CEA00CB434D /* DownloadMO+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DownloadMO+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		50FF31192BBB27AC00C2C3B9 /* Amperfy v36.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v36.xcdatamodel"; sourceTree = "<group>"; };
 		50FF311A2BBC4D8000C2C3B9 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
-		51E3433886040AC9C2EEDBFE /* DeejAIAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIAppearance.swift; path = Amperfy/Screens/DeejAIAppearance.swift; sourceTree = SOURCE_ROOT; };
-		A1B2C3D4E5F67890ABCDEF01 /* DeejAILibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAILibraryView.swift; path = Amperfy/SwiftUI/DeejAILibrary/DeejAILibraryView.swift; sourceTree = "<group>"; };
-		5BB342E8AEB852C8FBFCB3BA /* DeejAINowPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAINowPlayingView.swift; path = Amperfy/SwiftUI/DeejAINowPlaying/DeejAINowPlayingView.swift; sourceTree = "<group>"; };
+		51E3433886040AC9C2EEDBFE /* OpenDJAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenDJAppearance.swift; path = Amperfy/Screens/OpenDJAppearance.swift; sourceTree = SOURCE_ROOT; };
+		A1B2C3D4E5F67890ABCDEF01 /* OpenDJLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenDJLibraryView.swift; path = Amperfy/SwiftUI/OpenDJLibrary/OpenDJLibraryView.swift; sourceTree = "<group>"; };
+		5BB342E8AEB852C8FBFCB3BA /* OpenDJNowPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenDJNowPlayingView.swift; path = Amperfy/SwiftUI/OpenDJNowPlaying/OpenDJNowPlayingView.swift; sourceTree = "<group>"; };
 		60BB41D19872A2407DE5FEA5 /* LoraVF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file.ttf; name = LoraVF.ttf; path = Amperfy/Resources/Fonts/LoraVF.ttf; sourceTree = "<group>"; };
 		631C166A2C6D3D9A0085F62E /* SettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRow.swift; sourceTree = "<group>"; };
 		631C166C2C6D61110085F62E /* NavigationTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationTarget.swift; sourceTree = "<group>"; };
@@ -1173,17 +1173,17 @@
 		641708582C13BF5100BA2619 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		643A04712CD29AB20012DEA3 /* Amperfy v39.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v39.xcdatamodel"; sourceTree = "<group>"; };
 		64C433822E1391FA0082A165 /* Amperfy v46.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v46.xcdatamodel"; sourceTree = "<group>"; };
-		6D8044F98805BAEEDFCC5AFE /* DeejAICoverArtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAICoverArtView.swift; path = Amperfy/SwiftUI/DeejAICoverArt/DeejAICoverArtView.swift; sourceTree = SOURCE_ROOT; };
-		809647C395BA4C47828ADC05 /* DeejAIColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIColors.swift; path = Amperfy/SwiftUI/DeejAINowPlaying/DeejAIColors.swift; sourceTree = "<group>"; };
+		6D8044F98805BAEEDFCC5AFE /* OpenDJCoverArtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenDJCoverArtView.swift; path = Amperfy/SwiftUI/OpenDJCoverArt/OpenDJCoverArtView.swift; sourceTree = SOURCE_ROOT; };
+		809647C395BA4C47828ADC05 /* OpenDJColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenDJColors.swift; path = Amperfy/SwiftUI/OpenDJNowPlaying/OpenDJColors.swift; sourceTree = "<group>"; };
 		82DF48A893F7ACE224EAF028 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RatingView.swift; path = Amperfy/Screens/View/RatingView.swift; sourceTree = "<group>"; };
-		8641427181EE4179E8E941BE /* DeejAIApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIApi.swift; path = AmperfyKit/Api/DeejAI/DeejAIApi.swift; sourceTree = "<group>"; };
-		87A245C791B42C706E0CB13C /* DeejAISyncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAISyncer.swift; path = AmperfyKit/Player/DeejAISyncer.swift; sourceTree = "<group>"; };
-		9984433E9DA062BC1735A994 /* DeejAIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIModels.swift; path = AmperfyKit/Api/DeejAI/DeejAIModels.swift; sourceTree = "<group>"; };
-		A6194D798255CEEFC13AB674 /* DeejAIPlayerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIPlayerState.swift; path = Amperfy/SwiftUI/DeejAINowPlaying/DeejAIPlayerState.swift; sourceTree = "<group>"; };
+		8641427181EE4179E8E941BE /* OpenDJApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenDJApi.swift; path = AmperfyKit/Api/OpenDJ/OpenDJApi.swift; sourceTree = "<group>"; };
+		87A245C791B42C706E0CB13C /* OpenDJSyncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenDJSyncer.swift; path = AmperfyKit/Player/OpenDJSyncer.swift; sourceTree = "<group>"; };
+		9984433E9DA062BC1735A994 /* OpenDJModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenDJModels.swift; path = AmperfyKit/Api/OpenDJ/OpenDJModels.swift; sourceTree = "<group>"; };
+		A6194D798255CEEFC13AB674 /* OpenDJPlayerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenDJPlayerState.swift; path = Amperfy/SwiftUI/OpenDJNowPlaying/OpenDJPlayerState.swift; sourceTree = "<group>"; };
 		B5A5CE010000000000000002 /* ShareSongActionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSongActionTest.swift; sourceTree = "<group>"; };
 		B8774603A2E0AAA98AE846A8 /* NunitoVF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file.ttf; name = NunitoVF.ttf; path = Amperfy/Resources/Fonts/NunitoVF.ttf; sourceTree = "<group>"; };
 		C0A1B0022EEE000000000002 /* MacWindowHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacWindowHelper.swift; sourceTree = "<group>"; };
-		FDBE49869E7605A90652DE54 /* DeejAIForYouView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeejAIForYouView.swift; path = Amperfy/SwiftUI/DeejAIForYou/DeejAIForYouView.swift; sourceTree = "<group>"; };
+		FDBE49869E7605A90652DE54 /* OpenDJForYouView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenDJForYouView.swift; path = Amperfy/SwiftUI/OpenDJForYou/OpenDJForYouView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1476,21 +1476,21 @@
 				50C9D614284FA847007F18D0 /* AmperfyKitTests */,
 				508385E521C5965B00C4BB32 /* Products */,
 				5091857E23A753C800A8891E /* Frameworks */,
-				8641427181EE4179E8E941BE /* DeejAIApi.swift */,
-				9984433E9DA062BC1735A994 /* DeejAIModels.swift */,
-				87A245C791B42C706E0CB13C /* DeejAISyncer.swift */,
-				809647C395BA4C47828ADC05 /* DeejAIColors.swift */,
-				5BB342E8AEB852C8FBFCB3BA /* DeejAINowPlayingView.swift */,
+				8641427181EE4179E8E941BE /* OpenDJApi.swift */,
+				9984433E9DA062BC1735A994 /* OpenDJModels.swift */,
+				87A245C791B42C706E0CB13C /* OpenDJSyncer.swift */,
+				809647C395BA4C47828ADC05 /* OpenDJColors.swift */,
+				5BB342E8AEB852C8FBFCB3BA /* OpenDJNowPlayingView.swift */,
 				82DF48A893F7ACE224EAF028 /* RatingView.swift */,
-				A6194D798255CEEFC13AB674 /* DeejAIPlayerState.swift */,
-				FDBE49869E7605A90652DE54 /* DeejAIForYouView.swift */,
+				A6194D798255CEEFC13AB674 /* OpenDJPlayerState.swift */,
+				FDBE49869E7605A90652DE54 /* OpenDJForYouView.swift */,
 				60BB41D19872A2407DE5FEA5 /* LoraVF.ttf */,
 				B8774603A2E0AAA98AE846A8 /* NunitoVF.ttf */,
-				20F945859819E461ED53BF58 /* DeejAIHomeView.swift */,
-				474A4D3CA62F9E9597E1AF07 /* DeejAIFonts.swift */,
-				6D8044F98805BAEEDFCC5AFE /* DeejAICoverArtView.swift */,
-				51E3433886040AC9C2EEDBFE /* DeejAIAppearance.swift */,
-				A1B2C3D4E5F67890ABCDEF01 /* DeejAILibraryView.swift */,
+				20F945859819E461ED53BF58 /* OpenDJHomeView.swift */,
+				474A4D3CA62F9E9597E1AF07 /* OpenDJFonts.swift */,
+				6D8044F98805BAEEDFCC5AFE /* OpenDJCoverArtView.swift */,
+				51E3433886040AC9C2EEDBFE /* OpenDJAppearance.swift */,
+				A1B2C3D4E5F67890ABCDEF01 /* OpenDJLibraryView.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2678,15 +2678,15 @@
 				50AB3B3C2F01D5AC00556CE4 /* OpenAppWithConfigurationIntent.swift in Sources */,
 				50C171482D10644600C0C53A /* PlaylistAddAlbumDetailVC.swift in Sources */,
 				50DE29EB2B8FCEB700ABA78E /* LibraryNavigatorConfigurator.swift in Sources */,
-				27F043D0B278D38815F214A1 /* DeejAIColors.swift in Sources */,
-				375545738DEDCA9FA7F7C7E7 /* DeejAINowPlayingView.swift in Sources */,
-				DCD34E648E3AB9D7E416CFC8 /* DeejAIPlayerState.swift in Sources */,
-				E1614CE08C953882B1DB3D7E /* DeejAIForYouView.swift in Sources */,
-				F1E2D3C4B5A67890FEDCBA01 /* DeejAILibraryView.swift in Sources */,
-				D0EE4C2997CCFF0135302852 /* DeejAIHomeView.swift in Sources */,
-				A1F34551ABE8D70894BEECEB /* DeejAIFonts.swift in Sources */,
-				89DD420BA0CA9A235EC3A9B7 /* DeejAICoverArtView.swift in Sources */,
-				0C7643A3B7BEAC1B0CF401F3 /* DeejAIAppearance.swift in Sources */,
+				27F043D0B278D38815F214A1 /* OpenDJColors.swift in Sources */,
+				375545738DEDCA9FA7F7C7E7 /* OpenDJNowPlayingView.swift in Sources */,
+				DCD34E648E3AB9D7E416CFC8 /* OpenDJPlayerState.swift in Sources */,
+				E1614CE08C953882B1DB3D7E /* OpenDJForYouView.swift in Sources */,
+				F1E2D3C4B5A67890FEDCBA01 /* OpenDJLibraryView.swift in Sources */,
+				D0EE4C2997CCFF0135302852 /* OpenDJHomeView.swift in Sources */,
+				A1F34551ABE8D70894BEECEB /* OpenDJFonts.swift in Sources */,
+				89DD420BA0CA9A235EC3A9B7 /* OpenDJCoverArtView.swift in Sources */,
+				0C7643A3B7BEAC1B0CF401F3 /* OpenDJAppearance.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2887,9 +2887,9 @@
 				50C9D6A4284FAA77007F18D0 /* MappingModelV10toV11.xcmappingmodel in Sources */,
 				50C9D697284FAA6C007F18D0 /* PlaylistMO+CoreDataProperties.swift in Sources */,
 				50C9D6D9284FAB88007F18D0 /* EmbeddedArtworkExtractor.swift in Sources */,
-				8C4A4BE5B47200CA82A9184C /* DeejAIApi.swift in Sources */,
-				D93C42E393827BC5CA081DC0 /* DeejAIModels.swift in Sources */,
-				C4B348899E574B96E876D5AD /* DeejAISyncer.swift in Sources */,
+				8C4A4BE5B47200CA82A9184C /* OpenDJApi.swift in Sources */,
+				D93C42E393827BC5CA081DC0 /* OpenDJModels.swift in Sources */,
+				C4B348899E574B96E876D5AD /* OpenDJSyncer.swift in Sources */,
 				48CE41CB989BF7903C1EA60D /* RatingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

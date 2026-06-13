@@ -1,5 +1,5 @@
 //
-//  DeejAIPlayerState.swift
+//  OpenDJPlayerState.swift
 //  Amperfy
 //
 //  Created by Hermes Agent.
@@ -13,7 +13,7 @@ import Combine
 /// Bridges the Amperfy PlayerFacade to SwiftUI.
 /// Implements MusicPlayable to receive real-time updates from the audio engine.
 @MainActor
-class DeejAIPlayerState: NSObject, ObservableObject, MusicPlayable {
+class OpenDJPlayerState: NSObject, ObservableObject, MusicPlayable {
     
     @Published var currentTrackTitle: String = "Not Playing"
     @Published var currentArtistName: String = ""

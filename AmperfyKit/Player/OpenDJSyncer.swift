@@ -1,5 +1,5 @@
 //
-//  DeejAISyncer.swift
+//  OpenDJSyncer.swift
 //  AmperfyKit
 //
 //  Created by Hermes Agent.
@@ -22,15 +22,15 @@
 import Foundation
 import os.log
 
-// MARK: - DeejAISyncer
+// MARK: - OpenDJSyncer
 
-/// Reports play/skip events to the DeejAI recommendation engine.
+/// Reports play/skip events to the OpenDJ recommendation engine.
 /// Hooks into the same MusicPlayable notifications as ScrobbleSyncer.
 @MainActor
-public class DeejAISyncer {
-  private let log = OSLog(subsystem: "Amperfy", category: "DeejAISyncer")
+public class OpenDJSyncer {
+  private let log = OSLog(subsystem: "Amperfy", category: "OpenDJSyncer")
   private let player: PlayerFacade
-  private let api: DeejAIApi
+  private let api: OpenDJApi
 
   // Track play state
   private var currentTrackStart: Date?
@@ -43,7 +43,7 @@ public class DeejAISyncer {
   // Skip threshold — if played less than this fraction, count as skip
   private let skipThreshold: Double = 0.7
 
-  public init(player: PlayerFacade, api: DeejAIApi) {
+  public init(player: PlayerFacade, api: OpenDJApi) {
     self.player = player
     self.api = api
   }
@@ -85,7 +85,7 @@ public class DeejAISyncer {
     let context = getContext()
 
     os_log(
-      "Reporting to DeejAI: %s by %s — %dms, completed=%d, ctx=%s",
+      "Reporting to OpenDJ: %s by %s — %dms, completed=%d, ctx=%s",
       log: log,
       type: .info,
       currentTrackTitle,
@@ -107,10 +107,10 @@ public class DeejAISyncer {
     Task {
       do {
         try await api.reportPlayed(event)
-        os_log("DeejAI play event reported successfully", log: self.log, type: .debug)
+        os_log("OpenDJ play event reported successfully", log: self.log, type: .debug)
       } catch {
         os_log(
-          "DeejAI play report failed: %s",
+          "OpenDJ play report failed: %s",
           log: self.log,
           type: .error,
           error.localizedDescription
@@ -152,7 +152,7 @@ public class DeejAISyncer {
 
 // MARK: - MusicPlayable
 
-extension DeejAISyncer: MusicPlayable {
+extension OpenDJSyncer: MusicPlayable {
   public func didStartPlayingFromBeginning() {
     // New track — report the previous one as stopped (completed or skipped)
     if currentTrackStart != nil {
