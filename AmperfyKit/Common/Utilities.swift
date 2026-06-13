@@ -336,10 +336,11 @@ extension UIColor {
   }
 
   public static var labelColor: UIColor {
-    if #available(iOS 13.0, *) {
-      return UIColor.label
-    } else {
-      return UIColor.black
+    // OpenDJ MCM primary text — adaptive. Mirrors OpenDJColors.textPrimary.
+    // Light: warm dark brown #38291E; Dark: cream #F5EFE2.
+    UIColor { $0.userInterfaceStyle == .dark
+      ? UIColor(red: 0.96, green: 0.94, blue: 0.88, alpha: 1.0)
+      : UIColor(red: 0.22, green: 0.16, blue: 0.12, alpha: 1.0)
     }
   }
 
@@ -356,10 +357,11 @@ extension UIColor {
   }
 
   public static var secondaryLabelColor: UIColor {
-    if #available(iOS 13.0, *) {
-      return UIColor.secondaryLabel
-    } else {
-      return UIColor.systemGray
+    // OpenDJ MCM secondary text — adaptive. Mirrors OpenDJColors.textSecondary.
+    // Light: medium brown #665240; Dark: warm cream #E0D6C2.
+    UIColor { $0.userInterfaceStyle == .dark
+      ? UIColor(red: 0.88, green: 0.84, blue: 0.76, alpha: 1.0)
+      : UIColor(red: 0.40, green: 0.32, blue: 0.25, alpha: 1.0)
     }
   }
 

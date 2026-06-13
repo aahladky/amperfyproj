@@ -48,8 +48,10 @@ class GenericTableCell: BasicTableCell {
     self.rootView = rootView
     selectionStyle = .none
     titleLabel.text = container.name
+    titleLabel.textColor = .labelColor          // MCM primary (xib default is system .label)
     subtitleLabel.isHidden = container.subtitle == nil
     subtitleLabel.text = container.subtitle
+    subtitleLabel.textColor = .secondaryLabelColor
     entityImage.display(
       theme: appDelegate.storage.settings.accounts.getSetting(container.account?.info).read
         .themePreference,
@@ -61,6 +63,7 @@ class GenericTableCell: BasicTableCell {
     )
     infoLabel.isHidden = infoText.isEmpty
     infoLabel.text = infoText
+    infoLabel.textColor = .secondaryLabelColor
     infoLabel.textAlignment = (traitCollection.horizontalSizeClass == .regular) ? .right : .left
     favoriteIconImage.isHidden = !container.isFavorite
     favoriteIconImage.tintColor = .red

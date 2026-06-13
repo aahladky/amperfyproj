@@ -323,6 +323,7 @@ class PlayableTableCell: BasicTableCell {
   func refresh() {
     guard let playable = playable else { return }
     titleLabel.text = playable.title
+    titleLabel.textColor = .labelColor  // MCM primary text (xib default is system .label)
     artistLabel.text = playable.creatorName
 
     configureStyle(
