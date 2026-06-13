@@ -89,14 +89,23 @@ enum TabNavigatorItem: Int, Hashable, CaseIterable {
   func getController(account: Account) -> UIViewController {
     switch self {
     case .home:
+      // Home = the audio/embedding plane: sound-station rails from /api/home,
+      // with a seed-track resolver for cover art. The OpenDJ shell has no nav-bar
+      // account button, so the Home gear is the only entry to Settings — present
+      // the existing SettingsHostVC from here.
+      let homeApi = OpenDJApi(baseURL: OpenDJApi.defaultBaseURL, apiKey: "")
       let hostingController = UIHostingController(rootView: OpenDJHomeView())
-      // The OpenDJ shell has no nav-bar account button, so the Home gear is the
-      // only entry to Settings. Present the existing SettingsHostVC from here.
-      hostingController.rootView = OpenDJHomeView(onOpenSettings: { [weak hostingController] in
-        let nav = AppStoryboard.Main.segueToSettings()
-        nav.modalPresentationStyle = .formSheet
-        hostingController?.present(nav, animated: true)
-      })
+      hostingController.rootView = OpenDJHomeView(
+        homeProvider: { try await homeApi.home() },
+        resolveEntity: { trackId in
+          AmperKit.shared.storage.main.library.getSong(for: account, id: trackId)
+        },
+        onOpenSettings: { [weak hostingController] in
+          let nav = AppStoryboard.Main.segueToSettings()
+          nav.modalPresentationStyle = .formSheet
+          hostingController?.present(nav, animated: true)
+        }
+      )
       hostingController.view.backgroundColor = .clear
       return hostingController
     case .search:

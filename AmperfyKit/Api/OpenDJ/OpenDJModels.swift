@@ -105,77 +105,10 @@ public struct PlayedRequest: Codable, Sendable {
     }
 }
 
-// MARK: - Home Response
+// MARK: - Rails (For You + Home)
 
-/// Payload for the home screen.
-public struct HomeResponse: Codable, Sendable {
-    /// User's top artists.
-    public let topArtists: [TopArtist]
-    /// Suggested tracks.
-    public let suggested: [SuggestedTrack]
-    /// Recently played tracks.
-    public let recent: [RecentPlay]
-
-    enum CodingKeys: String, CodingKey {
-        case topArtists = "top_artists"
-        case suggested, recent
-    }
-}
-
-/// An artist ranked by play count.
-public struct TopArtist: Codable, Sendable {
-    /// Artist name.
-    public let artist: String
-    /// Number of plays.
-    public let playCount: Int
-    /// A representative track id by this artist (for resolving artist artwork). Optional.
-    public let trackId: String?
-
-    enum CodingKeys: String, CodingKey {
-        case artist
-        case playCount = "play_count"
-        case trackId = "track_id"
-    }
-}
-
-/// A suggested track for the home screen.
-public struct SuggestedTrack: Codable, Sendable {
-    /// Navidrome track id (for resolving local artwork). Optional.
-    public let trackId: String?
-    public let artist: String
-    public let title: String
-    public let album: String?
-    public let score: Double?
-
-    enum CodingKeys: String, CodingKey {
-        case artist, title, album, score
-        case trackId = "track_id"
-    }
-}
-
-/// A recently played track.
-public struct RecentPlay: Codable, Sendable {
-    /// Navidrome track id (for resolving local artwork). Optional.
-    public let trackId: String?
-    /// Artist name.
-    public let artist: String
-    /// Track title.
-    public let title: String
-    /// Album name (optional).
-    public let album: String?
-    /// ISO 8601 timestamp of when the track was played.
-    public let playedAt: String?
-
-    enum CodingKeys: String, CodingKey {
-        case artist, title, album
-        case trackId = "track_id"
-        case playedAt = "played_at"
-    }
-}
-
-// MARK: - For You Rails
-
-/// The For You screen payload: a list of behavioral/contextual rails.
+/// The rails payload shared by `/api/foryou` (behavioral plane) and `/api/home`
+/// (audio/embedding plane): a list of startable rails.
 public struct ForYouResponse: Codable, Sendable {
     public let rails: [Rail]
 }

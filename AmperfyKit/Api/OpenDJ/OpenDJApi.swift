@@ -190,11 +190,11 @@ public final class OpenDJApi: Sendable {
         let _: EmptyResponse = try await post(path: "/api/played", encodable: request)
     }
 
-    /// Fetches the home-screen payload.
+    /// Fetches the Home payload: audio / embedding sound-station rails.
     ///
-    /// `GET /api/home`
-    /// - Returns: ``HomeResponse`` with top artists, suggestions, and recent plays.
-    public func home() async throws -> HomeResponse {
+    /// `GET /api/home` — shares the rails schema with `/api/foryou`.
+    /// - Returns: ``ForYouResponse`` with a list of startable rails.
+    public func home() async throws -> ForYouResponse {
         try await get(path: "/api/home")
     }
 

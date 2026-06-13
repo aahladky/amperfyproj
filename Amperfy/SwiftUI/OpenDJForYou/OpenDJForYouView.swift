@@ -3,10 +3,13 @@
 //
 // The behavioral / contextual plane: horizontal rails of startable album "mix"
 // tiles, lifted from the reward log (recent rotation, rediscover, …). Each tile
-// is an album with a seed track that drives the cover art and — next increment —
-// tap-to-start-radio. This replaces the old top-artists / suggested-track-list /
-// recently-played layout, which mixed all-time stats and single-track rows onto a
-// top-level screen.
+// is an album with a seed track that drives the cover art and tap-to-start-radio.
+//
+// This file also hosts the SHARED rails UI (OpenDJRail / OpenDJRailTile /
+// OpenDJRailsList / OpenDJRailsStatus) reused by the Home screen, so both the
+// behavioral plane (For You) and the audio/embedding plane (Home) render with
+// one identical rails component. (The Xcode project isn't using synchronized
+// file groups, so the shared component lives here rather than in its own file.)
 //
 // Copyright © 2026 aahladky and contributors.
 // Licensed under the GNU General Public License v3.0 (GPLv3).
@@ -45,16 +48,10 @@ struct OpenDJForYouView: View {
 
     // MARK: State
 
-    @State private var rails: [DisplayRail] = []
+    @State private var rails: [OpenDJRail] = []
     @State private var isLoading = false
     @State private var loadFailed = false
     @State private var loadErrorDetail: String?
-
-    // MARK: Layout constants
-
-    private let tileSize: CGFloat = 150
-    private let railSpacing: CGFloat = 16
-    private let edgePadding: CGFloat = 20
 
     // MARK: Body
 
@@ -67,13 +64,13 @@ struct OpenDJForYouView: View {
                 ProgressView()
                     .tint(OpenDJColors.accentPrimaryColor)
             } else if loadFailed && rails.isEmpty {
-                statusView(
+                OpenDJRailsStatus(
                     icon: "wifi.exclamationmark",
                     title: "Couldn't reach OpenDJ",
                     detail: loadErrorDetail ?? "Your stations will appear here once the server responds."
                 )
             } else if rails.isEmpty {
-                statusView(
+                OpenDJRailsStatus(
                     icon: "music.note.list",
                     title: "Nothing here yet",
                     detail: "Play some music and your stations will start to build."
@@ -89,20 +86,19 @@ struct OpenDJForYouView: View {
     private var content: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, spacing: 0) {
+                OpenDJGreetingHeader(
+                    title: greetingText,
+                    subtitle: "Stations built from how you've been listening."
+                )
+                .padding(.horizontal, 20)
+                .padding(.top, 8)
+                .padding(.bottom, 24)
 
-                greetingHeader
-                    .padding(.horizontal, edgePadding)
-                    .padding(.top, 8)
-                    .padding(.bottom, 24)
-
-                ForEach(rails) { rail in
-                    sectionLabel(rail.title.uppercased())
-                        .padding(.horizontal, edgePadding)
-                        .padding(.bottom, 12)
-
-                    railScroll(rail)
-                        .padding(.bottom, 32)
-                }
+                OpenDJRailsList(
+                    rails: rails,
+                    showAlbumArt: showAlbumArt,
+                    startRadio: startRadio
+                )
 
                 Spacer(minLength: 20)
             }
@@ -118,21 +114,7 @@ struct OpenDJForYouView: View {
         loadFailed = false
         do {
             let response = try await forYouProvider()
-            rails = response.rails.map { rail in
-                DisplayRail(
-                    id: rail.id,
-                    title: rail.title,
-                    tiles: rail.items.map { item in
-                        DisplayTile(
-                            id: item.id,
-                            title: item.title,
-                            subtitle: item.subtitle,
-                            seedTrackId: item.seedTrackId,
-                            entity: item.seedTrackId.flatMap { resolveEntity?($0) }
-                        )
-                    }
-                )
-            }
+            rails = OpenDJRail.from(response.rails, resolveEntity: resolveEntity)
         } catch {
             loadErrorDetail = String(describing: error)
             loadFailed = true
@@ -140,9 +122,74 @@ struct OpenDJForYouView: View {
         isLoading = false
     }
 
-    // MARK: - Rails
+    private var greetingText: String { OpenDJGreeting.text(name: "Aaron") }
+}
 
-    private func railScroll(_ rail: DisplayRail) -> some View {
+// MARK: - Shared Rails UI (reused by Home)
+
+/// A rail resolved for display: title + tiles with their library entities attached.
+struct OpenDJRail: Identifiable {
+    let id: String
+    let title: String
+    let tiles: [OpenDJRailTile]
+
+    /// Build display rails from the decoded API rails, resolving each tile's seed
+    /// track id to a local entity for cover art.
+    @MainActor
+    static func from(
+        _ apiRails: [Rail],
+        resolveEntity: (@MainActor (String) -> AbstractLibraryEntity?)?
+    ) -> [OpenDJRail] {
+        apiRails.map { rail in
+            OpenDJRail(
+                id: rail.id,
+                title: rail.title,
+                tiles: rail.items.map { item in
+                    OpenDJRailTile(
+                        id: item.id,
+                        title: item.title,
+                        subtitle: item.subtitle,
+                        seedTrackId: item.seedTrackId,
+                        entity: item.seedTrackId.flatMap { resolveEntity?($0) }
+                    )
+                }
+            )
+        }
+    }
+}
+
+/// A tile resolved for display: an album mix with its seed-track entity (for cover art).
+struct OpenDJRailTile: Identifiable {
+    let id: String
+    let title: String
+    let subtitle: String
+    let seedTrackId: String?
+    let entity: AbstractLibraryEntity?
+}
+
+/// Vertical stack of horizontal rails of startable cover-art tiles.
+/// Shared by For You (behavioral plane) and Home (audio/embedding plane).
+struct OpenDJRailsList: View {
+    let rails: [OpenDJRail]
+    let showAlbumArt: Bool
+    let startRadio: (@MainActor (String) -> Void)?
+
+    private let tileSize: CGFloat = 150
+    private let railSpacing: CGFloat = 16
+    private let edgePadding: CGFloat = 20
+
+    var body: some View {
+        ForEach(rails) { rail in
+            sectionLabel(rail.title.uppercased())
+                .padding(.horizontal, edgePadding)
+                .padding(.bottom, 12)
+
+            railScroll(rail)
+                .padding(.bottom, 32)
+        }
+    }
+
+    private func railScroll(_ rail: OpenDJRail) -> some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(alignment: .top, spacing: railSpacing) {
                 ForEach(rail.tiles) { tile in
@@ -153,7 +200,7 @@ struct OpenDJForYouView: View {
         }
     }
 
-    private func tileView(_ tile: DisplayTile) -> some View {
+    private func tileView(_ tile: OpenDJRailTile) -> some View {
         Button {
             if let seed = tile.seedTrackId {
                 startRadio?(seed)
@@ -166,12 +213,11 @@ struct OpenDJForYouView: View {
                             OpenDJCoverArtView(entity: tile.entity, cornerRadius: 14)
                         } else {
                             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .fill(tileGradient(for: tile.title))
+                                .fill(OpenDJTileGradient.gradient(for: tile.title))
                         }
                     }
                     .frame(width: tileSize, height: tileSize)
 
-                    // Play affordance — these tiles start radio.
                     VStack {
                         Spacer()
                         HStack {
@@ -206,26 +252,40 @@ struct OpenDJForYouView: View {
         .buttonStyle(.plain)
     }
 
-    private func tileGradient(for key: String) -> LinearGradient {
-        let hash = abs(key.hashValue)
-        let palette: [(Color, Color)] = [
-            (OpenDJColors.accentSecondaryColor, OpenDJColors.accentSecondaryMutedColor),
-            (OpenDJColors.accentPrimaryColor, OpenDJColors.accentPrimaryDarkColor),
-            (OpenDJColors.textSecondaryColor, OpenDJColors.accentSecondaryColor),
-            (OpenDJColors.accentSecondaryMutedColor, OpenDJColors.accentPrimaryColor),
-            (OpenDJColors.textPrimaryColor, OpenDJColors.accentSecondaryColor)
-        ]
-        let pair = palette[hash % palette.count]
-        return LinearGradient(
-            colors: [pair.0, pair.1],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
+    private func sectionLabel(_ text: String) -> some View {
+        Text(text)
+            .font(OpenDJFonts.sansCaption)
+            .tracking(2.5)
+            .foregroundStyle(OpenDJColors.textTertiaryColor)
     }
+}
 
-    // MARK: - Status View (loading failure / empty)
+/// A greeting block (serif title + sans subtitle) shared by both rails screens.
+struct OpenDJGreetingHeader: View {
+    let title: String
+    let subtitle: String
 
-    private func statusView(icon: String, title: String, detail: String) -> some View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(OpenDJFonts.serifDisplay)
+                .foregroundStyle(OpenDJColors.textPrimaryColor)
+
+            Text(subtitle)
+                .font(OpenDJFonts.sansBody)
+                .foregroundStyle(OpenDJColors.textTertiaryColor)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+/// Centered status block for loading-failure / empty states.
+struct OpenDJRailsStatus: View {
+    let icon: String
+    let title: String
+    let detail: String
+
+    var body: some View {
         VStack(spacing: 12) {
             Image(systemName: icon)
                 .font(OpenDJFonts.serifDisplay)
@@ -242,55 +302,34 @@ struct OpenDJForYouView: View {
         }
         .padding(.horizontal, 48)
     }
+}
 
-    // MARK: - Greeting Header
-
-    private var greetingHeader: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(greetingText)
-                .font(OpenDJFonts.serifDisplay)
-                .foregroundStyle(OpenDJColors.textPrimaryColor)
-
-            Text("Stations built from how you've been listening.")
-                .font(OpenDJFonts.sansBody)
-                .foregroundStyle(OpenDJColors.textTertiaryColor)
-        }
+/// Deterministic MCM gradient used when album art is hidden.
+enum OpenDJTileGradient {
+    static func gradient(for key: String) -> LinearGradient {
+        let hash = abs(key.hashValue)
+        let palette: [(Color, Color)] = [
+            (OpenDJColors.accentSecondaryColor, OpenDJColors.accentSecondaryMutedColor),
+            (OpenDJColors.accentPrimaryColor, OpenDJColors.accentPrimaryDarkColor),
+            (OpenDJColors.textSecondaryColor, OpenDJColors.accentSecondaryColor),
+            (OpenDJColors.accentSecondaryMutedColor, OpenDJColors.accentPrimaryColor),
+            (OpenDJColors.textPrimaryColor, OpenDJColors.accentSecondaryColor)
+        ]
+        let pair = palette[hash % palette.count]
+        return LinearGradient(colors: [pair.0, pair.1],
+                              startPoint: .topLeading, endPoint: .bottomTrailing)
     }
+}
 
-    private var greetingText: String {
+/// Time-of-day greeting shared by both rails screens.
+enum OpenDJGreeting {
+    static func text(name: String) -> String {
         let hour = Calendar.current.component(.hour, from: .now)
         switch hour {
-        case 5..<12:  return "Good morning, Aaron"
-        case 12..<17: return "Good afternoon, Aaron"
-        case 17..<21: return "Good evening, Aaron"
-        default:      return "Good night, Aaron"
+        case 5..<12:  return "Good morning, \(name)"
+        case 12..<17: return "Good afternoon, \(name)"
+        case 17..<21: return "Good evening, \(name)"
+        default:      return "Good night, \(name)"
         }
     }
-
-    // MARK: - Section Label
-
-    private func sectionLabel(_ text: String) -> some View {
-        Text(text)
-            .font(OpenDJFonts.sansCaption)
-            .tracking(2.5)
-            .foregroundStyle(OpenDJColors.textTertiaryColor)
-    }
-}
-
-// MARK: - Display Models
-
-/// A rail resolved for display: title + tiles with their library entities attached.
-private struct DisplayRail: Identifiable {
-    let id: String
-    let title: String
-    let tiles: [DisplayTile]
-}
-
-/// A tile resolved for display: an album mix with its seed-track entity (for cover art).
-private struct DisplayTile: Identifiable {
-    let id: String
-    let title: String
-    let subtitle: String
-    let seedTrackId: String?
-    let entity: AbstractLibraryEntity?
 }
