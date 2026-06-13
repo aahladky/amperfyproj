@@ -132,3 +132,21 @@ public struct RailItem: Codable, Sendable, Identifiable {
         case seedTrackId = "seed_track_id"
     }
 }
+
+// MARK: - Similar (radio)
+
+/// A personalized similar track from the sidecar reranker (`GET /similar`).
+/// `itemId` is the Navidrome/AudioMuse track id, resolvable to a local Song.
+public struct SimilarTrack: Codable, Sendable {
+    public let itemId: String
+    public let title: String?
+    public let author: String?
+    public let album: String?
+    public let score: Double?
+    public let source: String?
+
+    enum CodingKeys: String, CodingKey {
+        case title, author, album, score, source
+        case itemId = "item_id"
+    }
+}

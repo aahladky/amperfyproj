@@ -206,6 +206,14 @@ public final class OpenDJApi: Sendable {
         try await get(path: "/api/foryou")
     }
 
+    /// Fetches personalized similar tracks for a seed (the radio queue).
+    ///
+    /// `GET /similar?id=<seed>&n=<count>` — served by the sidecar reranker.
+    /// - Returns: ranked ``SimilarTrack`` neighbors (may be empty if the model is cold).
+    public func similar(seedTrackId: String, n: Int = 40) async throws -> [SimilarTrack] {
+        try await get(path: "/similar", queryItems: ["id": seedTrackId, "n": String(n)])
+    }
+
     // MARK: - Private Helpers
 
     /// Builds an authenticated URL request for the given path and method.
