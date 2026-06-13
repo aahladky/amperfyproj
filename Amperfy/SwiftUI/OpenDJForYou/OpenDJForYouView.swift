@@ -261,21 +261,17 @@ struct OpenDJForYouView: View {
 
     private func topArtistCard(_ artist: TopArtistCard) -> some View {
         VStack(spacing: 12) {
-            // Initial circle as the base; real artist artwork overlays only when one exists.
-            ZStack {
-                Circle()
-                    .fill(artistGradient(for: artist.name))
-                    .overlay(
-                        Text(String(artist.name.prefix(1)).uppercased())
-                            .font(OpenDJFonts.serifDisplay)
-                            .foregroundStyle(OpenDJColors.surfaceColor.opacity(0.85))
-                    )
-
-                if showAlbumArt, let entity = artist.entity {
-                    OpenDJCoverArtView(entity: entity, cornerRadius: 44, realArtOnly: true)
-                }
-            }
-            .frame(width: 88, height: 88)
+            // Artist initial. (Navidrome serves a generic star as the "artist image" and
+            // marks it a real CustomImage, so artist artwork is indistinguishable from a
+            // real photo and not worth showing — the initial reads cleaner.)
+            Circle()
+                .fill(artistGradient(for: artist.name))
+                .frame(width: 88, height: 88)
+                .overlay(
+                    Text(String(artist.name.prefix(1)).uppercased())
+                        .font(OpenDJFonts.serifDisplay)
+                        .foregroundStyle(OpenDJColors.surfaceColor.opacity(0.85))
+                )
 
             Text(artist.name)
                 .font(OpenDJFonts.serifSubheadline)
