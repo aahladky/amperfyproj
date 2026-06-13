@@ -89,8 +89,14 @@ enum TabNavigatorItem: Int, Hashable, CaseIterable {
   func getController(account: Account) -> UIViewController {
     switch self {
     case .home:
-      let OpenDJHomeView = OpenDJHomeView()
-      let hostingController = UIHostingController(rootView: OpenDJHomeView)
+      let hostingController = UIHostingController(rootView: OpenDJHomeView())
+      // The OpenDJ shell has no nav-bar account button, so the Home gear is the
+      // only entry to Settings. Present the existing SettingsHostVC from here.
+      hostingController.rootView = OpenDJHomeView(onOpenSettings: { [weak hostingController] in
+        let nav = AppStoryboard.Main.segueToSettings()
+        nav.modalPresentationStyle = .formSheet
+        hostingController?.present(nav, animated: true)
+      })
       hostingController.view.backgroundColor = .clear
       return hostingController
     case .search:

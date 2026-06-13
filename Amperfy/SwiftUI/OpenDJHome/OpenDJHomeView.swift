@@ -15,6 +15,15 @@ import AmperfyKit
 /// No browsing, no grid, no wall of options — just "here's what you should play."
 struct OpenDJHomeView: View {
 
+    // MARK: Dependencies
+
+    /// Presents the Settings screen. Wired by the hosting controller; nil = no-op.
+    let onOpenSettings: (() -> Void)?
+
+    init(onOpenSettings: (() -> Void)? = nil) {
+        self.onOpenSettings = onOpenSettings
+    }
+
     // MARK: State
 
     /// Placeholder hero pick — the one thing OpenDJ decided for you.
@@ -104,6 +113,11 @@ struct OpenDJHomeView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .overlay(alignment: .topTrailing) {
+            settingsButton
+                .padding(.top, 4)
+                .padding(.trailing, 20)
+        }
         .onAppear {
             withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
                 heroScale = 1.0
@@ -116,6 +130,24 @@ struct OpenDJHomeView: View {
     }
 
     // MARK: - Components
+
+    /// Settings entry point — the OpenDJ shell has no nav-bar account button,
+    /// so this gear is the app's only door to Settings. Presents SettingsHostVC
+    /// via the hosting controller (see LibraryNavigatorConfigurator).
+    private var settingsButton: some View {
+        Button {
+            onOpenSettings?()
+        } label: {
+            Image(systemName: "gearshape.fill")
+                .font(.title3)
+                .foregroundStyle(OpenDJColors.textSecondaryColor)
+                .frame(width: 44, height: 44)
+                .background(Circle().fill(OpenDJColors.surfaceElevatedColor))
+                .shadow(color: Color.black.opacity(0.12), radius: 8, x: 0, y: 2)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Settings")
+    }
 
     private var backgroundGradient: some View {
         RadialGradient(
