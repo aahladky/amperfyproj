@@ -162,6 +162,11 @@ class LibraryElementDetailTableHeaderView: UIView {
     )
     playShuffledButton.layer.cornerRadius = 10.0
     playShuffledButton.isHidden = configuration.isShuffleHidden
+    // MCM accent — the xib styles these system blue.
+    for button in [playAllButton, playShuffledButton] {
+      button?.tintColor = OpenDJColors.accentPrimary
+      button?.setTitleColor(OpenDJColors.accentPrimary, for: .normal)
+    }
     activate()
     registerForTraitChanges(
       [UITraitUserInterfaceStyle.self, UITraitHorizontalSizeClass.self],
