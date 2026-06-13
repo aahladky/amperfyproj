@@ -126,16 +126,10 @@ public class MetaManager {
     return scrobbleSyncer!
   }
 
-  private var openDJSyncer: OpenDJSyncer?
-  internal func createOpenDJSyncer(
-    player: PlayerFacade
-  ) -> OpenDJSyncer {
-    if let openDJSyncer { return openDJSyncer }
-    // OpenDJ server config — shared default (move to settings later)
-    let api = OpenDJApi(baseURL: OpenDJApi.defaultBaseURL, apiKey: "")
-    openDJSyncer = OpenDJSyncer(player: player, api: api)
-    return openDJSyncer!
-  }
+  // OpenDJSyncer (client-side play/skip reporting to POST /api/played) was removed:
+  // plays are captured canonically by the Navidrome plugin (/scrobble + /nowplaying)
+  // with real track_ids and completion/skip labels. The client path was redundant,
+  // reported by title (not track_id), and hit an endpoint the sidecar never served.
 
   public lazy var playableDownloadManager: DownloadManageable = {
     let getDownloadDelegateCB = { @MainActor in
@@ -295,8 +289,6 @@ public class MetaManager {
     backgroundLibrarySyncer.start()
     let scrobbler = createScrobbleSyncer(player: player)
     player.addNotifier(notifier: scrobbler)
-    let OpenDJ = createOpenDJSyncer(player: player)
-    player.addNotifier(notifier: OpenDJ)
   }
 
   public func startManagerForNormalOperation(player: PlayerFacade) {
@@ -308,8 +300,6 @@ public class MetaManager {
     let scrobbler = createScrobbleSyncer(player: player)
     player.addNotifier(notifier: scrobbler)
     scrobbler.start()
-    let OpenDJ = createOpenDJSyncer(player: player)
-    player.addNotifier(notifier: OpenDJ)
   }
 
   public func stopManager() {
