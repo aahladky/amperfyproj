@@ -128,10 +128,13 @@ public struct TopArtist: Codable, Sendable {
     public let artist: String
     /// Number of plays.
     public let playCount: Int
+    /// A representative track id by this artist (for resolving artist artwork). Optional.
+    public let trackId: String?
 
     enum CodingKeys: String, CodingKey {
         case artist
         case playCount = "play_count"
+        case trackId = "track_id"
     }
 }
 

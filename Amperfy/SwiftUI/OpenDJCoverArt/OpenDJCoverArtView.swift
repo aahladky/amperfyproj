@@ -162,12 +162,25 @@ struct OpenDJCoverArtView: View {
         }
 
         // 3. If we have an artwork reference but it's not cached on disk,
-        //    trigger a download via Amperfy's infrastructure
+        //    trigger a download and poll the on-disk path so the art appears
+        //    as soon as the download finishes (no global-notification dependency).
         if triggersDownload, let artwork = entity.artwork,
            let accountInfo = entity.account?.info {
-            let artworkId = artwork.id
             let meta = AmperKit.shared.getMeta(accountInfo)
             meta.artworkDownloadManager.download(object: artwork)
+
+            for _ in 0 ..< 15 {
+                try? await Task.sleep(nanoseconds: 1_000_000_000)  // 1s
+                if Task.isCancelled { return }
+                if let path = entity.imagePath(setting: .preferServerArtwork),
+                   let img = UIImage(contentsOfFile: path) {
+                    let decoded = await img.byPreparingForDisplay() ?? img
+                    OpenDJCoverArtCache.shared.setImage(decoded, forKey: path)
+                    loadedImage = decoded
+                    isLoading = false
+                    return
+                }
+            }
         }
 
         isLoading = false

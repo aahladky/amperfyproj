@@ -121,7 +121,10 @@ struct OpenDJForYouView: View {
         loadFailed = false
         do {
             let home = try await homeProvider()
-            topArtists = home.topArtists.map { TopArtistCard(name: $0.artist, plays: $0.playCount) }
+            topArtists = home.topArtists.map { a in
+                let artistEntity = (a.trackId.flatMap { resolveEntity?($0) } as? Song)?.artist
+                return TopArtistCard(name: a.artist, plays: a.playCount, entity: artistEntity)
+            }
             suggestedTracks = home.suggested.map {
                 SuggestedTrackCard(
                     artist: $0.artist, title: $0.title, score: $0.score,
@@ -258,16 +261,21 @@ struct OpenDJForYouView: View {
 
     private func topArtistCard(_ artist: TopArtistCard) -> some View {
         VStack(spacing: 12) {
-            // Placeholder circle with initial
-            ZStack {
-                Circle()
-                    .fill(artistGradient(for: artist.name))
-                    .frame(width: 88, height: 88)
-
-                Text(String(artist.name.prefix(1)).uppercased())
-                    .font(OpenDJFonts.serifDisplay)
-                    .foregroundStyle(OpenDJColors.surfaceColor.opacity(0.85))
+            // Real artist artwork (toggle on + resolved) or the initial circle
+            Group {
+                if showAlbumArt, let entity = artist.entity {
+                    OpenDJCoverArtView(entity: entity, cornerRadius: 44)
+                } else {
+                    Circle()
+                        .fill(artistGradient(for: artist.name))
+                        .overlay(
+                            Text(String(artist.name.prefix(1)).uppercased())
+                                .font(OpenDJFonts.serifDisplay)
+                                .foregroundStyle(OpenDJColors.surfaceColor.opacity(0.85))
+                        )
+                }
             }
+            .frame(width: 88, height: 88)
 
             Text(artist.name)
                 .font(OpenDJFonts.serifSubheadline)
@@ -467,6 +475,7 @@ private struct TopArtistCard: Identifiable {
     let id = UUID()
     let name: String
     let plays: Int
+    let entity: AbstractLibraryEntity?
 }
 
 private struct SuggestedTrackCard: Identifiable {

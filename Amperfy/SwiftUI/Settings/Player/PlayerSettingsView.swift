@@ -28,6 +28,10 @@ struct PlayerSettingsView: View {
   @EnvironmentObject
   private var settings: Settings
 
+  /// OpenDJ For You screen: real artwork vs minimalist color blocks.
+  @AppStorage("opendjShowAlbumArt")
+  private var showAlbumArt = true
+
   private func updateBitrate(
     wifi: StreamingMaxBitratePreference? = nil,
     cellular: StreamingMaxBitratePreference? = nil
@@ -117,6 +121,16 @@ struct PlayerSettingsView: View {
             )
           },
           footer: "When the queue ends, automatically continue playback using Instant Mix to find similar songs."
+        )
+
+        SettingsSection(
+          content: {
+            SettingsCheckBoxRow(
+              title: "Show Album Art (For You)",
+              isOn: $showAlbumArt
+            )
+          },
+          footer: "Show real album and artist artwork on the For You screen instead of minimalist color blocks."
         )
 
         // Streaming Format Settings
