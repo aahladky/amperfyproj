@@ -65,8 +65,8 @@ struct OpenDJForYouView: View {
 
                 // 1. Greeting header
                 greetingHeader
-                    .padding(.top, 24)
-                    .padding(.bottom, 28)
+                    .padding(.top, 8)
+                    .padding(.bottom, 16)
 
                 // 2. Mix cards (hidden until the sidecar serves mixes)
                 if !mixes.isEmpty {

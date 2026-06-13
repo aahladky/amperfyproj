@@ -71,12 +71,12 @@ struct OpenDJHomeView: View {
 
                         // 3. Context header
                         contextHeader
-                            .padding(.top, 28)
-                            .padding(.bottom, 12)
+                            .padding(.top, 8)
+                            .padding(.bottom, 8)
 
                         // 4. "Your next listen" label
                         yourNextListenLabel
-                            .padding(.bottom, 20)
+                            .padding(.bottom, 12)
 
                         // 5. Hero album art
                         heroAlbumArt
