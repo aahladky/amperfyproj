@@ -54,7 +54,7 @@ public class AudioPlayer: NSObject, BackendAudioPlayerNotifiable {
   }
 
   var isShouldPauseAfterFinishedPlaying = false
-  var autoInstantMixCB: ((Song) async throws -> [Song])?
+  var autoInstantMixCB: (@MainActor (Song) async throws -> [Song])?
 
   private var playerStatus: PlayerStatusPersistent
   private var queueHandler: PlayQueueHandler
