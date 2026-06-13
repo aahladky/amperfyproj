@@ -261,18 +261,18 @@ struct OpenDJForYouView: View {
 
     private func topArtistCard(_ artist: TopArtistCard) -> some View {
         VStack(spacing: 12) {
-            // Real artist artwork (toggle on + resolved) or the initial circle
-            Group {
+            // Initial circle as the base; real artist artwork overlays only when one exists.
+            ZStack {
+                Circle()
+                    .fill(artistGradient(for: artist.name))
+                    .overlay(
+                        Text(String(artist.name.prefix(1)).uppercased())
+                            .font(OpenDJFonts.serifDisplay)
+                            .foregroundStyle(OpenDJColors.surfaceColor.opacity(0.85))
+                    )
+
                 if showAlbumArt, let entity = artist.entity {
-                    OpenDJCoverArtView(entity: entity, cornerRadius: 44)
-                } else {
-                    Circle()
-                        .fill(artistGradient(for: artist.name))
-                        .overlay(
-                            Text(String(artist.name.prefix(1)).uppercased())
-                                .font(OpenDJFonts.serifDisplay)
-                                .foregroundStyle(OpenDJColors.surfaceColor.opacity(0.85))
-                        )
+                    OpenDJCoverArtView(entity: entity, cornerRadius: 44, realArtOnly: true)
                 }
             }
             .frame(width: 88, height: 88)

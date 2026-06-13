@@ -57,6 +57,10 @@ struct OpenDJCoverArtView: View {
     /// when the artwork isn't cached on disk yet.
     let triggersDownload: Bool
 
+    /// When true, only render a real (server `CustomImage`) cover; stay transparent
+    /// otherwise so a caller-provided fallback (e.g. an artist initial) shows through.
+    let realArtOnly: Bool
+
     // MARK: State
 
     @State private var loadedImage: UIImage?
@@ -78,12 +82,14 @@ struct OpenDJCoverArtView: View {
             OpenDJColors.accentPrimaryDarkColor,
             OpenDJColors.textPrimaryColor
         ],
-        triggersDownload: Bool = true
+        triggersDownload: Bool = true,
+        realArtOnly: Bool = false
     ) {
         self.entity = entity
         self.cornerRadius = cornerRadius
         self.placeholderColors = placeholderColors
         self.triggersDownload = triggersDownload
+        self.realArtOnly = realArtOnly
     }
 
     // MARK: Body
@@ -94,6 +100,9 @@ struct OpenDJCoverArtView: View {
                 Image(uiImage: loadedImage)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
+            } else if realArtOnly {
+                // No real server cover — stay transparent so the caller's fallback shows through.
+                Color.clear
             } else {
                 // MCM gradient placeholder
                 LinearGradient(
@@ -135,35 +144,39 @@ struct OpenDJCoverArtView: View {
             return
         }
 
-        // 1. Try to get the cached image path from the artwork's local file
-        let imagePath = entity.imagePath(
-            setting: .preferServerArtwork
-        )
-
-        if let imagePath, let cachedImage = OpenDJCoverArtCache.shared.image(forKey: imagePath) {
-            // Fast path: already in our in-memory cache
-            loadedImage = cachedImage
-            isLoading = false
-            return
-        }
-
-        if let imagePath {
-            // 2. Try to load from disk (Amperfy already saved it here)
-            if let diskImage = UIImage(contentsOfFile: imagePath) {
-                // Decode for display on background thread
-                let decoded = await diskImage.byPreparingForDisplay()
-                if let decoded {
-                    OpenDJCoverArtCache.shared.setImage(decoded, forKey: imagePath)
-                    loadedImage = decoded
-                    isLoading = false
-                    return
-                }
+        // realArtOnly: bail to the caller's fallback unless a real custom image exists or
+        // might still arrive (NotChecked). Never display Amperfy's default image.
+        if realArtOnly {
+            let s = entity.artwork?.status
+            if s != .CustomImage && s != .NotChecked {
+                isLoading = false
+                return
             }
         }
 
-        // 3. If we have an artwork reference but it's not cached on disk,
-        //    trigger a download and poll the on-disk path so the art appears
-        //    as soon as the download finishes (no global-notification dependency).
+        let isRealArt = entity.artwork?.status == .CustomImage
+
+        // 1. Cached path from the artwork's local file
+        let imagePath = entity.imagePath(setting: .preferServerArtwork)
+
+        // 1+2. In-memory cache / on-disk file — in realArtOnly mode only for a confirmed real image
+        if (!realArtOnly || isRealArt), let imagePath {
+            if let cachedImage = OpenDJCoverArtCache.shared.image(forKey: imagePath) {
+                loadedImage = cachedImage
+                isLoading = false
+                return
+            }
+            if let diskImage = UIImage(contentsOfFile: imagePath) {
+                let decoded = await diskImage.byPreparingForDisplay() ?? diskImage
+                OpenDJCoverArtCache.shared.setImage(decoded, forKey: imagePath)
+                loadedImage = decoded
+                isLoading = false
+                return
+            }
+        }
+
+        // 3. Trigger a download and poll the on-disk path so art appears as soon as it
+        //    downloads (no global-notification dependency).
         if triggersDownload, let artwork = entity.artwork,
            let accountInfo = entity.account?.info {
             let meta = AmperKit.shared.getMeta(accountInfo)
@@ -172,6 +185,11 @@ struct OpenDJCoverArtView: View {
             for _ in 0 ..< 15 {
                 try? await Task.sleep(nanoseconds: 1_000_000_000)  // 1s
                 if Task.isCancelled { return }
+                if realArtOnly {
+                    let s = entity.artwork?.status
+                    if s == .IsDefaultImage || s == .FetchError { return }  // no real art → fallback
+                    if s != .CustomImage { continue }                       // still NotChecked → wait
+                }
                 if let path = entity.imagePath(setting: .preferServerArtwork),
                    let img = UIImage(contentsOfFile: path) {
                     let decoded = await img.byPreparingForDisplay() ?? img
