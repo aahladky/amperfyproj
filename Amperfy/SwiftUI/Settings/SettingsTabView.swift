@@ -46,7 +46,7 @@ struct SettingsTabView: View {
         }
         .background(
           selectedMenu == menuElement
-            ? Color.accentColor
+            ? OpenDJColors.accentPrimaryColor
             : Color.clear
         )
         .cornerRadius(8)
@@ -61,5 +61,7 @@ struct SettingsTabView: View {
         AnyView(selectedMenu.view())
       }
     }
+    // MCM accent across all Settings controls (was system blue, e.g. picker values).
+    .tint(OpenDJColors.accentPrimaryColor)
   }
 }

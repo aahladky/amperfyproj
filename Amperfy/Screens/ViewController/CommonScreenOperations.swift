@@ -129,8 +129,7 @@ extension UIViewController {
       pointSize: 24,
       weight: .regular
     )).withTintColor(
-      appDelegate.storage.settings.accounts.getSetting(currentAccount.info).read
-        .themePreference.asColor,
+      OpenDJColors.accentPrimary,  // MCM accent (was the theme color, default system blue)
       renderingMode: .alwaysTemplate
     )
 
