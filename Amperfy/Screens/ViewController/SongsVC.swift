@@ -248,6 +248,8 @@ class SongsVC: SingleFetchedResultsTableViewController<SongMO> {
       return 0.0
     case .starredDate:
       return 0.0
+    case .year:
+      return 0.0
     }
   }
 
@@ -271,6 +273,8 @@ class SongsVC: SingleFetchedResultsTableViewController<SongMO> {
     case .duration:
       return nil
     case .starredDate:
+      return nil
+    case .year:
       return nil
     }
   }
