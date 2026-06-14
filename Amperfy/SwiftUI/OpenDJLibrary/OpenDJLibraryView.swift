@@ -166,19 +166,22 @@ struct OpenDJLibraryView: View {
                 // 2. Sort + filter bar
                 controlBar
                     .padding(.horizontal, 20)
+                    .padding(.top, 6)
                     .padding(.bottom, 8)
 
-                // 3. Filter row — simple pills for Artists/Albums, active metadata
-                //    chips for Songs.
-                Group {
-                    if selectedSegment == .songs {
+                // 3. Filter row — simple pills for Artists/Albums; for Songs, active
+                //    metadata chips only when set (no empty "No filters" row taking space).
+                if selectedSegment == .songs {
+                    if songFilter.isActive {
                         songFilterChips
-                    } else {
-                        filterChips
+                            .padding(.horizontal, 20)
+                            .padding(.bottom, 10)
                     }
+                } else {
+                    filterChips
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 10)
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 12)
 
                 // 4. Content (embedded UIKit VC with built-in search + A-Z scrubber)
                 contentView
@@ -246,12 +249,7 @@ struct OpenDJLibraryView: View {
     // MARK: - Sort + Filter Control Bar
 
     private var controlBar: some View {
-        HStack(spacing: 12) {
-            // Current filter label
-            Text(filterLabel)
-                .font(OpenDJFonts.sansSubheadline)
-                .foregroundStyle(OpenDJColors.textTertiaryColor)
-
+        HStack(spacing: 8) {
             Spacer()
 
             // Filter button (Songs only) — opens the metadata sheet.
@@ -310,17 +308,6 @@ struct OpenDJLibraryView: View {
         }
     }
 
-    private var filterLabel: String {
-        let segment = selectedSegment.rawValue
-        if selectedSegment == .songs {
-            return songFilter.isActive ? "Filtered \(segment)" : "All \(segment)"
-        }
-        switch selectedFilter {
-        case .all: return "All \(segment)"
-        case .favorites: return "Favorite \(segment)"
-        }
-    }
-
     // MARK: - Filter Chips
 
     private var filterChips: some View {
@@ -367,12 +354,6 @@ struct OpenDJLibraryView: View {
     private var songFilterChips: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
-                if !songFilter.isActive {
-                    Text("No filters")
-                        .font(OpenDJFonts.sansCaption)
-                        .foregroundStyle(OpenDJColors.textQuaternaryColor)
-                        .padding(.vertical, 7)
-                }
                 if songFilter.onlyFavorites {
                     removableChip("Favorites", icon: "heart.fill") { songFilter.onlyFavorites = false }
                 }
