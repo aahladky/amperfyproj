@@ -120,12 +120,15 @@ struct SettingsView: View {
       }
       .navigationTitle("General")
       .navigationBarTitleDisplayMode(.inline)
+      .tint(OpenDJColors.accentPrimaryColor)
     #else
       NavigationView {
         list
           .navigationTitle("Settings")
       }
       .navigationViewStyle(.stack)
+      // MCM accent across Settings controls (menu values like "Never", links) — was system blue.
+      .tint(OpenDJColors.accentPrimaryColor)
     #endif
   }
 }
