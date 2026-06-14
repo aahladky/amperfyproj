@@ -111,6 +111,7 @@ public enum SongElementSortType: Int, Sendable, Codable {
   case addedDate = 2
   case duration = 3
   case starredDate = 4
+  case year = 5
 
   public static let defaultValue: SongElementSortType = .name
   public static let defaultValueForFavorite: SongElementSortType = .starredDate
@@ -127,6 +128,8 @@ public enum SongElementSortType: Int, Sendable, Codable {
       return .durationSong
     case .starredDate:
       return .none
+    case .year:
+      return .none
     }
   }
 
@@ -142,7 +145,54 @@ public enum SongElementSortType: Int, Sendable, Codable {
       return true
     case .starredDate:
       return false
+    case .year:
+      return false
     }
+  }
+}
+
+// MARK: - SongMetadataFilter
+
+/// Local-metadata filter facets for the Library (Plexamp-style). Each is optional and
+/// they AND together. Backed entirely by on-device Core Data attributes — no sidecar.
+public struct SongMetadataFilter: Equatable, Sendable {
+  public var genres: [String]
+  /// Decade start years, e.g. [1990, 2010]. Each matches year in [start, start+9].
+  public var decades: [Int]
+  public var minRating: Int
+  public var onlyFavorites: Bool
+
+  public init(genres: [String] = [], decades: [Int] = [],
+              minRating: Int = 0, onlyFavorites: Bool = false) {
+    self.genres = genres
+    self.decades = decades
+    self.minRating = minRating
+    self.onlyFavorites = onlyFavorites
+  }
+
+  public var isActive: Bool {
+    !genres.isEmpty || !decades.isEmpty || minRating > 0 || onlyFavorites
+  }
+
+  /// Core Data predicate for the active facets, or nil if none are set.
+  public var predicate: NSPredicate? {
+    var subs: [NSPredicate] = []
+    if !genres.isEmpty {
+      subs.append(NSPredicate(format: "genre.name IN %@", genres))
+    }
+    if !decades.isEmpty {
+      let ranges = decades.map {
+        NSPredicate(format: "year >= %d AND year <= %d", $0, $0 + 9)
+      }
+      subs.append(NSCompoundPredicate(orPredicateWithSubpredicates: ranges))
+    }
+    if minRating > 0 {
+      subs.append(NSPredicate(format: "rating >= %d", minRating))
+    }
+    if onlyFavorites {
+      subs.append(NSPredicate(format: "starredDate != nil"))
+    }
+    return subs.isEmpty ? nil : NSCompoundPredicate(andPredicateWithSubpredicates: subs)
   }
 }
 
@@ -749,6 +799,8 @@ public class SongsFetchedResultsController: CachedFetchedResultsController<SongM
       fetchRequest = SongMO.durationSortedFetchRequest
     case .starredDate:
       fetchRequest = SongMO.starredDateSortedFetchRequest
+    case .year:
+      fetchRequest = SongMO.yearSortedFetchRequest
     }
     fetchRequest.fetchLimit = fetchLimit ?? 0
     fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
@@ -773,14 +825,31 @@ public class SongsFetchedResultsController: CachedFetchedResultsController<SongM
     onlyCachedSongs: Bool,
     displayFilter: DisplayCategoryFilter
   ) {
-    if !searchText.isEmpty || onlyCachedSongs || displayFilter != .all {
-      let predicate = coreDataCompanion.library.getSearchSongsPredicate(
+    search(searchText: searchText, onlyCachedSongs: onlyCachedSongs,
+           displayFilter: displayFilter, metadata: SongMetadataFilter())
+  }
+
+  /// Search + local-metadata filtering (genre / decade / rating / favorite). The
+  /// metadata predicate ANDs onto the base search/displayFilter predicate.
+  public func search(
+    searchText: String,
+    onlyCachedSongs: Bool,
+    displayFilter: DisplayCategoryFilter,
+    metadata: SongMetadataFilter
+  ) {
+    let metaPredicate = metadata.predicate
+    if !searchText.isEmpty || onlyCachedSongs || displayFilter != .all || metaPredicate != nil {
+      let base = coreDataCompanion.library.getSearchSongsPredicate(
         for: account,
         searchText: searchText,
         onlyCached: onlyCachedSongs,
         displayFilter: displayFilter
       )
-      search(predicate: predicate)
+      if let metaPredicate {
+        search(predicate: NSCompoundPredicate(andPredicateWithSubpredicates: [base, metaPredicate]))
+      } else {
+        search(predicate: base)
+      }
     } else {
       showAllResults()
     }

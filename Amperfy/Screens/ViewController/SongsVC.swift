@@ -36,6 +36,8 @@ class SongsVC: SingleFetchedResultsTableViewController<SongMO> {
   private var optionsButton: UIBarButtonItem!
   public var displayFilter: DisplayCategoryFilter = .all
   var sortType: SongElementSortType = .name
+  /// Local-metadata facets (genre / decade / rating / favorite) applied on top of search + filter.
+  public var metadataFilter = SongMetadataFilter()
   private var filterTitle = "Songs"
 
   private static var maxPlayContextCount = 40
@@ -295,6 +297,8 @@ class SongsVC: SingleFetchedResultsTableViewController<SongMO> {
 
   override func updateSearchResults(for searchController: UISearchController) {
     guard let searchText = searchController.searchBar.text else { return }
+    let onlyCached = searchController.searchBar.selectedScopeButtonIndex == 1
+    // Kick off a remote search only when the user is actively typing (online scope).
     if !searchText.isEmpty, searchController.searchBar.selectedScopeButtonIndex == 0 {
       Task { @MainActor in do {
         try await self.appDelegate.getMeta(self.account.info).librarySyncer
@@ -302,26 +306,15 @@ class SongsVC: SingleFetchedResultsTableViewController<SongMO> {
       } catch {
         self.appDelegate.eventLogger.report(topic: "Songs Search", error: error)
       }}
-      fetchedResultsController.search(
-        searchText: searchText,
-        onlyCachedSongs: false,
-        displayFilter: displayFilter
-      )
-    } else if searchController.searchBar.selectedScopeButtonIndex == 1 {
-      fetchedResultsController.search(
-        searchText: searchText,
-        onlyCachedSongs: true,
-        displayFilter: displayFilter
-      )
-    } else if displayFilter != .all {
-      fetchedResultsController.search(
-        searchText: searchText,
-        onlyCachedSongs: searchController.searchBar.selectedScopeButtonIndex == 1,
-        displayFilter: displayFilter
-      )
-    } else {
-      fetchedResultsController.showAllResults()
     }
+    // One path for everything: the metadata-aware search internally falls back to
+    // showAllResults when there's no search text, no filter, and no metadata facets.
+    fetchedResultsController.search(
+      searchText: searchText,
+      onlyCachedSongs: onlyCached,
+      displayFilter: displayFilter,
+      metadata: metadataFilter
+    )
     tableView.reloadData()
     detailHeaderView?.refresh()
     updateContentUnavailable()

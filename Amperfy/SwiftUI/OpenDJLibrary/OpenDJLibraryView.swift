@@ -27,11 +27,12 @@ enum LibrarySegment: String, CaseIterable, Identifiable {
 
 // MARK: - Filter Chips
 
-/// Filter chips available across all segments.
+/// Simple filter chips for the Artists/Albums segments. (Songs uses the richer
+/// metadata filter sheet instead.) "Recently Played" was removed — it was a no-op on
+/// Artists and unsupported on Songs, and For You's "On heavy rotation" already covers it.
 enum LibraryFilter: String, CaseIterable, Identifiable {
     case all = "All"
     case favorites = "Favorites"
-    case recentlyPlayed = "Recently Played"
 
     var id: String { rawValue }
 
@@ -39,7 +40,6 @@ enum LibraryFilter: String, CaseIterable, Identifiable {
         switch self {
         case .all: return "line.3.horizontal.decrease"
         case .favorites: return "heart.fill"
-        case .recentlyPlayed: return "clock.arrow.circlepath"
         }
     }
 
@@ -48,7 +48,6 @@ enum LibraryFilter: String, CaseIterable, Identifiable {
         switch self {
         case .all: return .all
         case .favorites: return .favorites
-        case .recentlyPlayed: return .all
         }
     }
 
@@ -57,9 +56,20 @@ enum LibraryFilter: String, CaseIterable, Identifiable {
         switch self {
         case .all: return .all
         case .favorites: return .favorites
-        case .recentlyPlayed: return .recent
         }
     }
+}
+
+// MARK: - Decade (Songs metadata filter)
+
+/// Decade buckets for the Songs filter sheet. Each rawValue is the decade-start year,
+/// matching year in [start, start+9] — the model SongMetadataFilter.decades expects.
+enum LibraryDecade: Int, CaseIterable, Identifiable {
+    case y2020 = 2020, y2010 = 2010, y2000 = 2000, y1990 = 1990
+    case y1980 = 1980, y1970 = 1970, y1960 = 1960, y1950 = 1950
+
+    var id: Int { rawValue }
+    var label: String { "\(rawValue)s" }
 }
 
 // MARK: - Sort Options
@@ -70,6 +80,15 @@ enum LibrarySortOption: String, CaseIterable {
     case newest = "Date Added"
     case recent = "Recently Played"
     case rating = "Rating"
+    case year = "Year"
+
+    /// Sort options offered per segment (Year is Songs-only for now).
+    static func options(for segment: LibrarySegment) -> [LibrarySortOption] {
+        switch segment {
+        case .songs: return [.name, .year, .newest, .rating]
+        default:     return [.name, .newest, .rating]
+        }
+    }
 
     var systemImage: String {
         switch self {
@@ -77,6 +96,7 @@ enum LibrarySortOption: String, CaseIterable {
         case .newest: return "clock"
         case .recent: return "clock.arrow.circlepath"
         case .rating: return "star.fill"
+        case .year: return "calendar"
         }
     }
 
@@ -87,6 +107,7 @@ enum LibrarySortOption: String, CaseIterable {
         case .newest: return .newest
         case .recent: return .name
         case .rating: return .rating
+        case .year: return .name
         }
     }
 
@@ -97,6 +118,7 @@ enum LibrarySortOption: String, CaseIterable {
         case .newest: return .newest
         case .recent: return .recent
         case .rating: return .rating
+        case .year: return .name
         }
     }
 
@@ -107,6 +129,7 @@ enum LibrarySortOption: String, CaseIterable {
         case .newest: return .addedDate
         case .recent: return .starredDate
         case .rating: return .rating
+        case .year: return .year
         }
     }
 }
@@ -121,6 +144,10 @@ struct OpenDJLibraryView: View {
     @State private var selectedSegment: LibrarySegment = .artists
     @State private var selectedSort: LibrarySortOption = .name
     @State private var selectedFilter: LibraryFilter = .all
+    // Songs-only metadata filter (genre / decade / rating / favorite), Plexamp-style.
+    @State private var songFilter = SongMetadataFilter()
+    @State private var showFilterSheet = false
+    @State private var availableGenres: [String] = []
     @Namespace private var namespace
 
     var body: some View {
@@ -141,14 +168,31 @@ struct OpenDJLibraryView: View {
                     .padding(.horizontal, 20)
                     .padding(.bottom, 8)
 
-                // 3. Filter chips
-                filterChips
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 12)
+                // 3. Filter row — simple pills for Artists/Albums, active metadata
+                //    chips for Songs.
+                Group {
+                    if selectedSegment == .songs {
+                        songFilterChips
+                    } else {
+                        filterChips
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 12)
 
                 // 4. Content (embedded UIKit VC with built-in search + A-Z scrubber)
                 contentView
             }
+        }
+        .sheet(isPresented: $showFilterSheet) {
+            SongFilterSheet(filter: $songFilter, availableGenres: availableGenres)
+        }
+        .task {
+            availableGenres = AmperKit.shared.storage.main.library
+                .getGenres(for: account)
+                .compactMap { $0.name }
+                .filter { !$0.isEmpty }
+                .sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending }
         }
     }
 
@@ -160,6 +204,10 @@ struct OpenDJLibraryView: View {
                 Button {
                     withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                         selectedSegment = segment
+                    }
+                    // Drop a sort option the new segment doesn't offer (e.g. Year on Artists).
+                    if !LibrarySortOption.options(for: segment).contains(selectedSort) {
+                        selectedSort = .name
                     }
                 } label: {
                     Text(segment.rawValue)
@@ -206,9 +254,37 @@ struct OpenDJLibraryView: View {
 
             Spacer()
 
+            // Filter button (Songs only) — opens the metadata sheet.
+            if selectedSegment == .songs {
+                Button {
+                    showFilterSheet = true
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: songFilter.isActive
+                              ? "line.3.horizontal.decrease.circle.fill"
+                              : "line.3.horizontal.decrease.circle")
+                            .font(OpenDJFonts.sansCaption)
+                        Text("Filter")
+                            .font(OpenDJFonts.sansCaption)
+                    }
+                    .foregroundStyle(songFilter.isActive
+                                     ? OpenDJColors.accentPrimaryColor
+                                     : OpenDJColors.accentSecondaryColor)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(
+                        Capsule().fill(
+                            (songFilter.isActive ? OpenDJColors.accentPrimaryColor
+                                                 : OpenDJColors.accentSecondaryColor).opacity(0.10)
+                        )
+                    )
+                }
+                .buttonStyle(.plain)
+            }
+
             // Sort menu
             Menu {
-                ForEach(LibrarySortOption.allCases, id: \.self) { option in
+                ForEach(LibrarySortOption.options(for: selectedSegment), id: \.self) { option in
                     Button {
                         selectedSort = option
                     } label: {
@@ -236,10 +312,12 @@ struct OpenDJLibraryView: View {
 
     private var filterLabel: String {
         let segment = selectedSegment.rawValue
+        if selectedSegment == .songs {
+            return songFilter.isActive ? "Filtered \(segment)" : "All \(segment)"
+        }
         switch selectedFilter {
         case .all: return "All \(segment)"
         case .favorites: return "Favorite \(segment)"
-        case .recentlyPlayed: return "Recent \(segment)"
         }
     }
 
@@ -283,6 +361,52 @@ struct OpenDJLibraryView: View {
         }
     }
 
+    // MARK: - Songs Active-Filter Chips
+
+    @ViewBuilder
+    private var songFilterChips: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                if !songFilter.isActive {
+                    Text("No filters")
+                        .font(OpenDJFonts.sansCaption)
+                        .foregroundStyle(OpenDJColors.textQuaternaryColor)
+                        .padding(.vertical, 7)
+                }
+                if songFilter.onlyFavorites {
+                    removableChip("Favorites", icon: "heart.fill") { songFilter.onlyFavorites = false }
+                }
+                ForEach(songFilter.genres, id: \.self) { g in
+                    removableChip(g, icon: "guitars") { songFilter.genres.removeAll { $0 == g } }
+                }
+                ForEach(songFilter.decades.sorted(by: >), id: \.self) { d in
+                    removableChip("\(d)s", icon: "calendar") { songFilter.decades.removeAll { $0 == d } }
+                }
+                if songFilter.minRating > 0 {
+                    removableChip("\(songFilter.minRating)★+", icon: "star.fill") { songFilter.minRating = 0 }
+                }
+            }
+        }
+    }
+
+    private func removableChip(_ label: String, icon: String,
+                               remove: @escaping () -> Void) -> some View {
+        Button {
+            withAnimation(.spring(response: 0.25, dampingFraction: 0.8)) { remove() }
+        } label: {
+            HStack(spacing: 6) {
+                Image(systemName: icon).font(OpenDJFonts.sansCaption)
+                Text(label).font(OpenDJFonts.sansCaption)
+                Image(systemName: "xmark").font(OpenDJFonts.sansCaption)
+            }
+            .foregroundStyle(OpenDJColors.surfaceColor)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 7)
+            .background(Capsule().fill(OpenDJColors.accentPrimaryColor))
+        }
+        .buttonStyle(.plain)
+    }
+
     // MARK: - Content View (Embedded UIKit VC)
 
     @ViewBuilder
@@ -307,10 +431,88 @@ struct OpenDJLibraryView: View {
         case .songs:
             SongsListContainer(
                 account: account,
-                filter: selectedFilter,
+                metadata: songFilter,
                 sort: selectedSort
             )
             .ignoresSafeArea(edges: .bottom)
+        }
+    }
+}
+
+// MARK: - Song Filter Sheet (Plexamp-style metadata facets)
+
+struct SongFilterSheet: View {
+    @Binding var filter: SongMetadataFilter
+    let availableGenres: [String]
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    Toggle("Favorites only", isOn: $filter.onlyFavorites)
+                }
+
+                Section("Minimum rating") {
+                    Picker("Minimum rating", selection: $filter.minRating) {
+                        Text("Any").tag(0)
+                        ForEach(1 ... 5, id: \.self) { Text("\($0)★").tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+                }
+
+                Section("Decade") {
+                    ForEach(LibraryDecade.allCases) { decade in
+                        toggleRow(decade.label, isOn: filter.decades.contains(decade.rawValue)) {
+                            toggleMember(&filter.decades, decade.rawValue)
+                        }
+                    }
+                }
+
+                if !availableGenres.isEmpty {
+                    Section("Genre") {
+                        ForEach(availableGenres, id: \.self) { genre in
+                            toggleRow(genre, isOn: filter.genres.contains(genre)) {
+                                toggleMember(&filter.genres, genre)
+                            }
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Filter Songs")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Clear") { filter = SongMetadataFilter() }
+                        .disabled(!filter.isActive)
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { dismiss() }
+                }
+            }
+        }
+    }
+
+    private func toggleRow(_ label: String, isOn: Bool,
+                           action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack {
+                Text(label)
+                    .foregroundStyle(OpenDJColors.textPrimaryColor)
+                Spacer()
+                if isOn {
+                    Image(systemName: "checkmark")
+                        .foregroundStyle(OpenDJColors.accentPrimaryColor)
+                }
+            }
+        }
+    }
+
+    private func toggleMember<T: Equatable>(_ array: inout [T], _ value: T) {
+        if let idx = array.firstIndex(of: value) {
+            array.remove(at: idx)
+        } else {
+            array.append(value)
         }
     }
 }
@@ -401,12 +603,13 @@ struct AlbumsListContainer: UIViewControllerRepresentable {
 /// built-in search, and A-Z scrubber.
 struct SongsListContainer: UIViewControllerRepresentable {
     let account: Account
-    let filter: LibraryFilter
+    let metadata: SongMetadataFilter
     let sort: LibrarySortOption
 
     func makeUIViewController(context: Context) -> UINavigationController {
         let vc = SongsVC(account: account)
-        vc.displayFilter = filter.toDisplayCategoryFilter
+        vc.displayFilter = .all                 // favorites is folded into metadata
+        vc.metadataFilter = metadata
         vc.change(sortType: sort.toSongSortType)
         // Suppress the VC's own large title (see ArtistsListContainer).
         vc.navigationItem.largeTitleDisplayMode = .never
@@ -417,19 +620,18 @@ struct SongsListContainer: UIViewControllerRepresentable {
 
     func updateUIViewController(_ nav: UINavigationController, context: Context) {
         guard let vc = nav.viewControllers.first as? SongsVC else { return }
-        let newFilter = filter.toDisplayCategoryFilter
         let newSort = sort.toSongSortType
         var changed = false
         if vc.sortType != newSort {
             vc.change(sortType: newSort)  // recreates the FRC (Songs path doesn't fetch here)
             changed = true
         }
-        if vc.displayFilter != newFilter {
-            vc.displayFilter = newFilter
+        if vc.metadataFilter != metadata {
+            vc.metadataFilter = metadata
             changed = true
         }
-        // Required: SongsVC.change(sortType:) never fetches, so only updateSearchResults
-        // populates the list (and applies the filter). Without it, Songs goes empty.
+        // SongsVC.change(sortType:) never fetches, so updateSearchResults is what
+        // populates the list and applies the metadata filter.
         if changed {
             vc.updateSearchResults(for: vc.searchController)
         }
