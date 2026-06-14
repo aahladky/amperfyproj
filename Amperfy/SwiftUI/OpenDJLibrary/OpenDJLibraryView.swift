@@ -339,12 +339,23 @@ struct ArtistsListContainer: UIViewControllerRepresentable {
 
     func updateUIViewController(_ nav: UINavigationController, context: Context) {
         guard let vc = nav.viewControllers.first as? ArtistsVC else { return }
-        if vc.displayFilter != filter.toArtistCategoryFilter {
-            vc.displayFilter = filter.toArtistCategoryFilter
-            vc.change(sortType: vc.sortType)
+        let newFilter = filter.toArtistCategoryFilter
+        let newSort = sort.toArtistSortType
+        var changed = false
+        if vc.sortType != newSort {
+            vc.change(sortType: newSort)  // recreates the FRC with the new sort
+            changed = true
         }
-        if vc.sortType != sort.toArtistSortType {
-            vc.change(sortType: sort.toArtistSortType)
+        if vc.displayFilter != newFilter {
+            vc.displayFilter = newFilter
+            changed = true
+        }
+        // updateSearchResults is the ONLY path that reads displayFilter and routes to
+        // search/showAllResults. change(sortType:) ignores the filter, so without this
+        // a filter change shows the wrong (unfiltered) set and a sort change silently
+        // drops an active filter.
+        if changed {
+            vc.updateSearchResults(for: vc.searchController)
         }
     }
 }
@@ -369,12 +380,19 @@ struct AlbumsListContainer: UIViewControllerRepresentable {
 
     func updateUIViewController(_ nav: UINavigationController, context: Context) {
         guard let vc = nav.viewControllers.first as? AlbumsVC else { return }
-        if vc.displayFilter != filter.toDisplayCategoryFilter {
-            vc.displayFilter = filter.toDisplayCategoryFilter
-            vc.common.change(sortType: vc.common.sortType)
+        let newFilter = filter.toDisplayCategoryFilter
+        let newSort = sort.toAlbumSortType
+        var changed = false
+        if vc.common.sortType != newSort {
+            vc.common.change(sortType: newSort)
+            changed = true
         }
-        if vc.common.sortType != sort.toAlbumSortType {
-            vc.common.change(sortType: sort.toAlbumSortType)
+        if vc.displayFilter != newFilter {
+            vc.displayFilter = newFilter
+            changed = true
+        }
+        if changed {
+            vc.updateSearchResults(for: vc.searchController)
         }
     }
 }
@@ -399,12 +417,21 @@ struct SongsListContainer: UIViewControllerRepresentable {
 
     func updateUIViewController(_ nav: UINavigationController, context: Context) {
         guard let vc = nav.viewControllers.first as? SongsVC else { return }
-        if vc.displayFilter != filter.toDisplayCategoryFilter {
-            vc.displayFilter = filter.toDisplayCategoryFilter
-            vc.change(sortType: vc.sortType)
+        let newFilter = filter.toDisplayCategoryFilter
+        let newSort = sort.toSongSortType
+        var changed = false
+        if vc.sortType != newSort {
+            vc.change(sortType: newSort)  // recreates the FRC (Songs path doesn't fetch here)
+            changed = true
         }
-        if vc.sortType != sort.toSongSortType {
-            vc.change(sortType: sort.toSongSortType)
+        if vc.displayFilter != newFilter {
+            vc.displayFilter = newFilter
+            changed = true
+        }
+        // Required: SongsVC.change(sortType:) never fetches, so only updateSearchResults
+        // populates the list (and applies the filter). Without it, Songs goes empty.
+        if changed {
+            vc.updateSearchResults(for: vc.searchController)
         }
     }
 }
