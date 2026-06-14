@@ -36,6 +36,8 @@ class SongsVC: SingleFetchedResultsTableViewController<SongMO> {
   private var optionsButton: UIBarButtonItem!
   public var displayFilter: DisplayCategoryFilter = .all
   var sortType: SongElementSortType = .name
+  /// Whether the current sort is reversed from its natural direction.
+  public var sortDescending = false
   /// Local-metadata facets (genre / decade / rating / favorite) applied on top of search + filter.
   public var metadataFilter = SongMetadataFilter()
   private var filterTitle = "Songs"
@@ -155,7 +157,8 @@ class SongsVC: SingleFetchedResultsTableViewController<SongMO> {
     fetchedResultsController = SongsFetchedResultsController(
       coreDataCompanion: appDelegate.storage.main, account: account,
       sortType: sortType,
-      isGroupedInAlphabeticSections: sortType.hasSectionTitles
+      isGroupedInAlphabeticSections: sortType.hasSectionTitles,
+      descending: sortDescending
     )
     fetchedResultsController.fetchResultsController.sectionIndexType = sortType.asSectionIndexType
     singleFetchedResultsController = fetchedResultsController

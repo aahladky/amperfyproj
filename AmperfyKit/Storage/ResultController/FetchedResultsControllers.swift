@@ -784,6 +784,7 @@ public class SongsFetchedResultsController: CachedFetchedResultsController<SongM
     account: Account,
     sortType: SongElementSortType,
     isGroupedInAlphabeticSections: Bool,
+    descending: Bool = false,
     fetchLimit: Int? = nil
   ) {
     self.sortType = sortType
@@ -801,6 +802,14 @@ public class SongsFetchedResultsController: CachedFetchedResultsController<SongM
       fetchRequest = SongMO.starredDateSortedFetchRequest
     case .year:
       fetchRequest = SongMO.yearSortedFetchRequest
+    }
+    // Flip the primary sort key for a descending toggle (tiebreakers kept stable).
+    if descending, let descs = fetchRequest.sortDescriptors, let primary = descs.first {
+      var flipped = descs
+      flipped[0] = NSSortDescriptor(
+        key: primary.key, ascending: !primary.ascending, selector: primary.selector
+      )
+      fetchRequest.sortDescriptors = flipped
     }
     fetchRequest.fetchLimit = fetchLimit ?? 0
     fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [

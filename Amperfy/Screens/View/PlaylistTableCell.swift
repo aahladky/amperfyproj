@@ -39,6 +39,8 @@ class PlaylistTableCell: BasicTableCell {
     self.playlist = playlist
     self.rootView = rootView
     nameLabel.text = playlist.name
+    nameLabel.textColor = .labelColor
+    nameLabel.font = OpenDJFonts.serifHeadlineUIFont
     entityImage.display(
       theme: appDelegate.storage.settings.accounts.getSetting(playlist.account?.info).read
         .themePreference,
@@ -48,6 +50,7 @@ class PlaylistTableCell: BasicTableCell {
       for: playlist.account?.apiType.asServerApiType,
       details: DetailInfoType(type: .short, settings: appDelegate.storage.settings)
     )
+    infoLabel.textColor = .secondaryLabelColor
     infoLabel.textAlignment = (traitCollection.horizontalSizeClass == .regular) ? .right : .left
     accessoryType = .disclosureIndicator
     backgroundColor = .backgroundColor

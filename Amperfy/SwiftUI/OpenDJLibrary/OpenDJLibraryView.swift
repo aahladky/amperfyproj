@@ -146,6 +146,7 @@ struct OpenDJLibraryView: View {
     @State private var selectedFilter: LibraryFilter = .all
     // Songs-only metadata filter (genre / decade / rating / favorite), Plexamp-style.
     @State private var songFilter = SongMetadataFilter()
+    @State private var songSortDescending = false
     @State private var showFilterSheet = false
     @State private var availableGenres: [String] = []
     @Namespace private var namespace
@@ -305,6 +306,21 @@ struct OpenDJLibraryView: View {
                         .fill(OpenDJColors.accentSecondaryColor.opacity(0.10))
                 )
             }
+
+            // Ascending/descending toggle (Songs only).
+            if selectedSegment == .songs {
+                Button {
+                    songSortDescending.toggle()
+                } label: {
+                    Image(systemName: songSortDescending ? "arrow.down" : "arrow.up")
+                        .font(OpenDJFonts.sansCaption)
+                        .foregroundStyle(OpenDJColors.accentSecondaryColor)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 6)
+                        .background(Capsule().fill(OpenDJColors.accentSecondaryColor.opacity(0.10)))
+                }
+                .buttonStyle(.plain)
+            }
         }
     }
 
@@ -413,7 +429,8 @@ struct OpenDJLibraryView: View {
             SongsListContainer(
                 account: account,
                 metadata: songFilter,
-                sort: selectedSort
+                sort: selectedSort,
+                descending: songSortDescending
             )
             .ignoresSafeArea(edges: .bottom)
         }
@@ -586,11 +603,13 @@ struct SongsListContainer: UIViewControllerRepresentable {
     let account: Account
     let metadata: SongMetadataFilter
     let sort: LibrarySortOption
+    let descending: Bool
 
     func makeUIViewController(context: Context) -> UINavigationController {
         let vc = SongsVC(account: account)
         vc.displayFilter = .all                 // favorites is folded into metadata
         vc.metadataFilter = metadata
+        vc.sortDescending = descending
         vc.change(sortType: sort.toSongSortType)
         // Suppress the VC's own large title (see ArtistsListContainer).
         vc.navigationItem.largeTitleDisplayMode = .never
@@ -603,7 +622,8 @@ struct SongsListContainer: UIViewControllerRepresentable {
         guard let vc = nav.viewControllers.first as? SongsVC else { return }
         let newSort = sort.toSongSortType
         var changed = false
-        if vc.sortType != newSort {
+        if vc.sortType != newSort || vc.sortDescending != descending {
+            vc.sortDescending = descending
             vc.change(sortType: newSort)  // recreates the FRC (Songs path doesn't fetch here)
             changed = true
         }

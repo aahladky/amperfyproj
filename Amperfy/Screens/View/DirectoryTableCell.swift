@@ -99,6 +99,8 @@ class DirectoryTableCell: BasicTableCell {
       infoLabel.text = folder.name
       iconImage.isHidden = false
     }
+    infoLabel.textColor = .labelColor
+    infoLabel.font = OpenDJFonts.serifHeadlineUIFont
     accessoryType = .disclosureIndicator
     backgroundColor = .backgroundColor
   }

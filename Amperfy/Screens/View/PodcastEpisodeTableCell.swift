@@ -80,6 +80,8 @@ class PodcastEpisodeTableCell: BasicTableCell {
       configurePlayEpisodeButton()
     }
     podcastEpisodeLabel.text = episode.title
+    podcastEpisodeLabel.textColor = .labelColor
+    podcastEpisodeLabel.font = OpenDJFonts.serifHeadlineUIFont
     entityImage.display(
       theme: appDelegate.storage.settings.accounts.getSetting(episode.account?.info).read
         .themePreference,
@@ -87,7 +89,9 @@ class PodcastEpisodeTableCell: BasicTableCell {
     )
 
     infoLabel.text = "\(episode.publishDate.asShortDayMonthString)"
+    infoLabel.textColor = .secondaryLabelColor
     descriptionLabel.text = episode.depiction ?? ""
+    descriptionLabel.textColor = .secondaryLabelColor
 
     var progressText = ""
     if let remainingTime = episode.remainingTimeInSec,
