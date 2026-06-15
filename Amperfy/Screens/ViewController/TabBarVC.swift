@@ -107,6 +107,12 @@ class TabBarVC: UITabBarController {
     delegate = self
     tabs = fixTabs
 
+    // The iOS 26 floating tab bar tints its selected item from the controller view's
+    // tintColor — NOT from UITabBarAppearance.selected.iconColor (which the proxy sets for
+    // the legacy bar). Set it explicitly so the selected tab is MCM terracotta, not system
+    // blue. This also cascades to the mini-player accessory's tinted glyphs.
+    view.tintColor = OpenDJColors.accentPrimary
+
     tabBarMinimizeBehavior = .onScrollDown
 
     miniPlayer = MiniPlayerView(player: appDelegate.player)

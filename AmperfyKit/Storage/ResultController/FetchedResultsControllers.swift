@@ -181,8 +181,13 @@ public struct SongMetadataFilter: Equatable, Sendable {
       subs.append(NSPredicate(format: "genre.name IN %@", genres))
     }
     if !decades.isEmpty {
+      // Match the album's release year, not the song file's `year` tag. Navidrome reports a
+      // song's `year` as the file/edition date (e.g. a 1997 remaster of a 1968 album), while
+      // the album carries the original release year — which is what the UI shows and what a
+      // decade filter should mean. Filtering on `album.year` keeps the filter consistent with
+      // the displayed metadata.
       let ranges = decades.map {
-        NSPredicate(format: "year >= %d AND year <= %d", $0, $0 + 9)
+        NSPredicate(format: "album.year >= %d AND album.year <= %d", $0, $0 + 9)
       }
       subs.append(NSCompoundPredicate(orPredicateWithSubpredicates: ranges))
     }

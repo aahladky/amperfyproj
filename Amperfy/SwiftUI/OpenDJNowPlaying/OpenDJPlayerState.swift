@@ -24,6 +24,7 @@ class OpenDJPlayerState: NSObject, ObservableObject, MusicPlayable {
     @Published var durationText: String = "0:00"
     @Published var nextTrackTitle: String = ""
     @Published var nextArtistName: String = ""
+    @Published var nextPlayable: AbstractPlayable?
     @Published var isFavorite: Bool = false
     @Published var isRadioMode: Bool = false
     @Published var currentPlayable: AbstractPlayable?
@@ -88,9 +89,11 @@ class OpenDJPlayerState: NSObject, ObservableObject, MusicPlayable {
         if player.nextQueueCount > 0, let next = player.getNextQueueItems(from: 0, to: 1).first {
             nextTrackTitle = next.title
             nextArtistName = next.creatorName
+            nextPlayable = next
         } else {
             nextTrackTitle = ""
             nextArtistName = ""
+            nextPlayable = nil
         }
     }
     

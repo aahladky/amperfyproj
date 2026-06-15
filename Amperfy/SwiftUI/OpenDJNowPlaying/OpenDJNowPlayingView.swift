@@ -262,9 +262,9 @@ struct OpenDJNowPlayingView: View {
                     .foregroundStyle(OpenDJColors.textTertiaryColor)
 
                 HStack(spacing: 16) {
-                    RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .fill(OpenDJColors.accentSecondaryColor)
+                    OpenDJCoverArtView(entity: state.nextPlayable, cornerRadius: 8)
                         .frame(width: 52, height: 52)
+                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
 
                     VStack(alignment: .leading, spacing: 4) {
                         Text(state.nextTrackTitle)
