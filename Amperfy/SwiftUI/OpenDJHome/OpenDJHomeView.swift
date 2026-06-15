@@ -54,6 +54,7 @@ struct OpenDJHomeView: View {
     @State private var isLoading = false
     @State private var loadFailed = false
     @State private var loadErrorDetail: String?
+    @State private var didInitialLoad = false
 
     // MARK: Body
 
@@ -87,7 +88,13 @@ struct OpenDJHomeView: View {
                 .padding(.top, 4)
                 .padding(.trailing, 20)
         }
-        .task { await loadHome() }
+        .task {
+            if !didInitialLoad { didInitialLoad = true; await loadHome() }
+        }
+        // Re-fetch each time the tab is shown again so lanes reflect recent listening.
+        .onAppear {
+            if didInitialLoad { Task { await loadHome(silent: !rails.isEmpty) } }
+        }
     }
 
     private var content: some View {
@@ -112,23 +119,29 @@ struct OpenDJHomeView: View {
                 Spacer(minLength: 20)
             }
         }
+        .refreshable { await loadHome(silent: true) }
     }
 
     // MARK: - Data Loading
 
+    /// Loads the lanes. When `silent`, doesn't toggle the loading/error chrome — used for
+    /// background refreshes (tab re-appear, pull-to-refresh) so existing content stays put
+    /// and a transient failure doesn't replace good lanes with an error screen.
     @MainActor
-    private func loadHome() async {
+    private func loadHome(silent: Bool = false) async {
         guard let homeProvider else { return }
-        isLoading = true
-        loadFailed = false
+        if !silent { isLoading = true; loadFailed = false }
         do {
             let response = try await homeProvider()
             rails = OpenDJRail.from(response.rails, resolveEntity: resolveEntity)
+            loadFailed = false
         } catch {
-            loadErrorDetail = String(describing: error)
-            loadFailed = true
+            if !silent {
+                loadErrorDetail = String(describing: error)
+                loadFailed = true
+            }
         }
-        isLoading = false
+        if !silent { isLoading = false }
     }
 
     // MARK: - Settings Button

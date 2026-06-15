@@ -52,6 +52,7 @@ struct OpenDJForYouView: View {
     @State private var isLoading = false
     @State private var loadFailed = false
     @State private var loadErrorDetail: String?
+    @State private var didInitialLoad = false
 
     // MARK: Body
 
@@ -80,7 +81,13 @@ struct OpenDJForYouView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .task { await loadForYou() }
+        .task {
+            if !didInitialLoad { didInitialLoad = true; await loadForYou() }
+        }
+        // Re-fetch each time the tab is shown again so stations reflect recent listening.
+        .onAppear {
+            if didInitialLoad { Task { await loadForYou(silent: !rails.isEmpty) } }
+        }
     }
 
     private var content: some View {
@@ -103,23 +110,29 @@ struct OpenDJForYouView: View {
                 Spacer(minLength: 20)
             }
         }
+        .refreshable { await loadForYou(silent: true) }
     }
 
     // MARK: - Data Loading
 
+    /// Loads the rails. When `silent`, doesn't toggle the loading/error chrome — used for
+    /// background refreshes (tab re-appear, pull-to-refresh) so existing content stays put
+    /// and a transient failure doesn't replace good rails with an error screen.
     @MainActor
-    private func loadForYou() async {
+    private func loadForYou(silent: Bool = false) async {
         guard let forYouProvider else { return }
-        isLoading = true
-        loadFailed = false
+        if !silent { isLoading = true; loadFailed = false }
         do {
             let response = try await forYouProvider()
             rails = OpenDJRail.from(response.rails, resolveEntity: resolveEntity)
+            loadFailed = false
         } catch {
-            loadErrorDetail = String(describing: error)
-            loadFailed = true
+            if !silent {
+                loadErrorDetail = String(describing: error)
+                loadFailed = true
+            }
         }
-        isLoading = false
+        if !silent { isLoading = false }
     }
 
     private var greetingText: String { OpenDJGreeting.text(name: "Aaron") }
