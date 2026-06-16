@@ -93,7 +93,7 @@ enum TabNavigatorItem: Int, Hashable, CaseIterable {
       // with a seed-track resolver for cover art. The OpenDJ shell has no nav-bar
       // account button, so the Home gear is the only entry to Settings — present
       // the existing SettingsHostVC from here.
-      let homeApi = OpenDJApi(baseURL: OpenDJApi.defaultBaseURL, apiKey: "")
+      let homeApi = OpenDJApi(baseURL: OpenDJApi.defaultBaseURL, apiKey: openDJRecommenderToken(account: account))
       let hostingController = UIHostingController(rootView: OpenDJHomeView())
       hostingController.rootView = OpenDJHomeView(
         homeProvider: { try await homeApi.home() },
@@ -115,7 +115,7 @@ enum TabNavigatorItem: Int, Hashable, CaseIterable {
       // Build a sidecar client and hand the view an async loader for /api/foryou
       // (behavioral rails), plus a resolver that maps a seed track id to a local
       // Song for cover art. Tap-to-start-radio is wired in the next increment.
-      let forYouApi = OpenDJApi(baseURL: OpenDJApi.defaultBaseURL, apiKey: "")
+      let forYouApi = OpenDJApi(baseURL: OpenDJApi.defaultBaseURL, apiKey: openDJRecommenderToken(account: account))
       let forYouView = OpenDJForYouView(
         forYouProvider: { try await forYouApi.forYou() },
         resolveEntity: { trackId in
@@ -128,6 +128,16 @@ enum TabNavigatorItem: Int, Hashable, CaseIterable {
       return hostingController
     }
   }
+}
+
+/// Bearer token for the OpenDJ recommender. Reuses the account's Navidrome password —
+/// already the security boundary for the public endpoint — so no separate secret is
+/// stored. Caddy checks this against RECOMMENDER_TOKEN (set to the same password) before
+/// proxying to the recommender. Empty if no credentials are stored (e.g. offline).
+@MainActor
+private func openDJRecommenderToken(account: Account) -> String {
+  AmperKit.shared.storage.settings.accounts
+    .getSetting(account.info).read.loginCredentials?.password ?? ""
 }
 
 /// Builds the "tap a tile → start radio from this seed" handler shared by the Home
@@ -152,7 +162,7 @@ private func openDJStartRadio(account: Account) -> (@MainActor (String) -> Void)
     // Fill the radio queue behind it with personalized similar tracks.
     Task { @MainActor in
       do {
-        let api = OpenDJApi(baseURL: OpenDJApi.defaultBaseURL, apiKey: "")
+        let api = OpenDJApi(baseURL: OpenDJApi.defaultBaseURL, apiKey: openDJRecommenderToken(account: account))
         let similar = try await api.similar(seedTrackId: seedTrackId, n: 40)
         let songs: [Song] = similar.compactMap { library.getSong(for: account, id: $0.itemId) }
         if !songs.isEmpty {

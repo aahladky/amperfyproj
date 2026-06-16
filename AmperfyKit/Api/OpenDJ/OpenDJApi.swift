@@ -75,16 +75,20 @@ public final class OpenDJApi: Sendable {
     ///   WireGuard tunnel, so an `ssh -L` forward on the Mac maps 127.0.0.1:8050 → the
     ///   recommender. Must be 127.0.0.1, not "localhost" (localhost resolves to IPv6 ::1
     ///   first, which the IPv4-only forward refuses).
-    /// - **Real device (incl. TestFlight):** reach the recommender directly on the home
-    ///   Wi-Fi LAN at the desktop's address (recommender is published on 0.0.0.0:8050).
-    ///   Only works on the home network; revisit (WireGuard / reverse proxy) for off-LAN.
+    /// - **Real device (incl. TestFlight):** reach the recommender over the public HTTPS
+    ///   front door at `dj.myhouse.fyi`, which Caddy reverse-proxies to the recommender
+    ///   (reads-only; writes are blocked at the edge) and gates behind a bearer token.
+    ///   This works both on the home Wi-Fi and off-LAN — no VPN needed. The token is the
+    ///   account's Navidrome password (see the client construction sites).
     ///
-    /// Plain HTTP is allowed via Info.plist NSAllowsArbitraryLoads.
+    /// Plain HTTP is allowed via Info.plist NSAllowsArbitraryLoads (used only by the
+    /// simulator loopback path below).
     public static let defaultBaseURL: URL = {
         #if targetEnvironment(simulator)
+        // Sim shares the Mac's loopback via an `ssh -L 8050` forward (no auth needed locally).
         return URL(string: "http://127.0.0.1:8050")!
         #else
-        return URL(string: "http://192.168.0.184:8050")!
+        return URL(string: "https://dj.myhouse.fyi")!
         #endif
     }()
 
